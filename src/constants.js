@@ -1,3 +1,3 @@
-const DB_NAME = "spare_parts_managemanet_system"
+const DB_NAME = "spms"
 
 export {DB_NAME}
