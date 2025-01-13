@@ -15,6 +15,14 @@ const partsSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "Shelf",
     },
+    MRP: {
+      type: Number,
+      required: true,
+    },
+    Qty: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
