@@ -5,10 +5,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, fullName } = req.body;
+  const { username, email, password, fermName } = req.body;
 
   if (
-    [username, email, password, fullName].some(
+    [username, email, password, fermName].some(
       (feilds) => feilds?.trim() === ""
     )
   ) {
@@ -26,28 +26,25 @@ const registerUser = asyncHandler(async (req, res) => {
     );
   }
 
-  const avatarLocalPath = req.file?.path;
-  console.log(avatarLocalPath);
+  const logoLocalPath = req.file?.path;
+  console.log(logoLocalPath);
 
-  if (!avatarLocalPath) {
-    throw new ApiError(401, "Avatar image is required");
+  if (!logoLocalPath) {
+    throw new ApiError(401, "logo is required");
   }
 
-  const avatar = await uploadOnCloudinary(avatarLocalPath);
+  const logo = await uploadOnCloudinary(logoLocalPath);
 
-  if (!avatar) {
-    throw new ApiError(
-      501,
-      "Something went wrong while uploading avatar image"
-    );
+  if (!logo) {
+    throw new ApiError(501, "Something went wrong while uploading logo");
   }
 
   const user = await User.create({
     username: username.toLowerCase(),
     email,
     password,
-    fullName,
-    avatar: avatar?.url || "",
+    fermName,
+    logo: logo?.url || "",
   });
 
   const createUser = await User.findById(user._id).select("-password");

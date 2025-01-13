@@ -21,12 +21,12 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    fullName: {
+    fermName: {
       type: String,
       required: true,
       trim: true,
     },
-    avatar: {
+    logo: {
       type: String, // cloudinary url
       required: true,
     },
