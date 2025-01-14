@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const shelvesSchema = Schema(
+const shelvesSchema = new Schema(
   {
     shelfName: {
       type: String,
