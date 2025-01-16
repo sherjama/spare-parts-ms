@@ -3,6 +3,7 @@ import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
+import jwt from "jsonwebtoken";
 
 const options = {
   httpOnly: true,
@@ -86,8 +87,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
+  console.log(username, email, password);
 
-  if (!(email || password)) {
+  if (!email || !password) {
     throw new ApiError(401, "All feilds are required");
   }
 
@@ -110,7 +112,7 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   const loggedInUser = await User.findById(user._id).select(
-    "-password refreshToken"
+    "-password -refreshToken"
   );
 
   res
@@ -131,7 +133,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  const user = await User.findByIdAndUpdate(
+  await User.findByIdAndUpdate(
     req.user._id,
     {
       $unset: {
@@ -175,7 +177,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 
     const { accessToken, newRefreshtoken } =
-      await generateAccessAndRefereshTokens(user?._id);
+      await generateAccessAndRefreshToken(user?._id);
 
     return res
       .status(201)
@@ -236,7 +238,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  const { username, email, fullName } = req.body;
+  const { username, email, fermName } = req.body;
 
   const user = await User.findByIdAndUpdate(
     req.user?._id,
@@ -244,7 +246,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
       $set: {
         username,
         email,
-        fullName,
+        fermName,
       },
     },
     {

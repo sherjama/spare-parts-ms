@@ -2,15 +2,15 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Parts } from "../models/parts.models.js";
-import mongoose from "mongoose";
+import { Shelf } from "../models/shelves.models.js";
 
 const createPart = asyncHandler(async (req, res) => {
   const { partNumber, partName, shelfName, MRP, Qty } = req.body;
 
-  const shelf = new mongoose.Types.ObjectId(shelfName);
+  console.log(partName, partNumber, shelfName, MRP, Qty);
 
   if (
-    [partName, partNumber, shelf, MRP, Qty].some(
+    [partName, partNumber, shelfName, MRP, Qty].some(
       (val) => String(val).trim() === ""
     )
   ) {
@@ -21,8 +21,14 @@ const createPart = asyncHandler(async (req, res) => {
     $or: [{ partNumber }],
   });
 
+  const shelf = await Shelf.findOne({ shelfName });
+
+  if (!shelf) {
+    throw new ApiError(401, "Shelf Name dosn't exist");
+  }
+
   if (isPartExisted) {
-    throw new ApiError(401, "part number is already created");
+    throw new ApiError(401, "Part number is already created");
   }
 
   const part = await Parts.create({
@@ -30,7 +36,7 @@ const createPart = asyncHandler(async (req, res) => {
     partNumber,
     MRP,
     Qty,
-    shelf,
+    shelf: shelf?._id,
   });
 
   const createdPart = await Parts.findById(part._id);
@@ -46,6 +52,8 @@ const createPart = asyncHandler(async (req, res) => {
 
 const addQty = asyncHandler(async (req, res) => {
   const { partNumber, Qty } = req.body;
+
+  console.log(partNumber, Qty);
 
   const part = await Parts.find({ partNumber });
 
