@@ -23,6 +23,10 @@ const partsSchema = new Schema(
       type: Number,
       required: true,
     },
+    CreatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
