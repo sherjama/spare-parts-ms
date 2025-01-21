@@ -18,10 +18,11 @@ const createPart = asyncHandler(async (req, res) => {
   }
 
   const isPartExisted = await Parts.findOne({
-    $or: [{ partNumber }],
+    partNumber,
+    CreatedBy: req.user?._id,
   });
 
-  const shelf = await Shelf.findOne({ shelfName });
+  const shelf = await Shelf.findOne({ shelfName, CreatedBy: req.user?._id });
 
   if (!shelf) {
     throw new ApiError(401, "Shelf Name dosn't exist");
@@ -61,7 +62,7 @@ const updatePart = asyncHandler(async (req, res) => {
   }
 
   const updatedPart = await Parts.findOneAndUpdate(
-    { partNumber },
+    { partNumber, CreatedBy: req.user?._id },
     {
       partName,
       shelf,
@@ -84,7 +85,7 @@ const updatePart = asyncHandler(async (req, res) => {
 const addQty = asyncHandler(async (req, res) => {
   const { partNumber, Qty } = req.body;
 
-  const part = await Parts.findOne({ partNumber });
+  const part = await Parts.findOne({ partNumber, CreatedBy: req.user?._id });
 
   if (!part) {
     throw new ApiError(401, "Part with this part number is not Exist");
@@ -108,7 +109,7 @@ const addQty = asyncHandler(async (req, res) => {
 const deletePart = asyncHandler(async (req, res) => {
   const { partNumber } = req.body;
 
-  await Parts.findOneAndDelete({ partNumber });
+  await Parts.findOneAndDelete({ partNumber, CreatedBy: req.user?._id });
 
   res
     .status(201)
@@ -128,6 +129,11 @@ const getAllParts = asyncHandler(async (req, res) => {
     throw new ApiError(401, "User Id is required");
   }
 
+  const isValidRequest = userId == req.user?._id;
+  if (!isValidRequest) {
+    throw new ApiError(401, "Unauthorized Request");
+  }
+
   const partsCreatedByUser = await Parts.aggregate([
     {
       $match: {
@@ -139,8 +145,50 @@ const getAllParts = asyncHandler(async (req, res) => {
   res
     .status(201)
     .json(
-      new ApiResponse(201, partsCreatedByUser, `Parts by created by ${userId}`)
+      new ApiResponse(201, partsCreatedByUser, `Parts created by ${userId}`)
     );
 });
 
-export { createPart, updatePart, addQty, deletePart, getAllParts };
+const getPartsOfShelf = asyncHandler(async (req, res) => {
+  const { shelfName } = req.body;
+
+  if (!shelfName) {
+    throw new ApiError(401, "Shelf name is required");
+  }
+
+  const shelf = await Shelf.findOne({
+    shelfName,
+    CreatedBy: req.user?._id,
+  });
+
+  if (!shelf) {
+    throw new ApiError(401, "Shelf is not Exist");
+  }
+
+  const partsList = await Parts.aggregate([
+    {
+      $match: {
+        shelf: shelf?._id,
+      },
+    },
+  ]);
+
+  res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        partsList,
+        `The Parts in ${shelfName} Shelf is fetched successfully `
+      )
+    );
+});
+
+export {
+  createPart,
+  updatePart,
+  addQty,
+  deletePart,
+  getAllParts,
+  getPartsOfShelf,
+};

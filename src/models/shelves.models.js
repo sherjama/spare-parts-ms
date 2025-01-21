@@ -6,7 +6,7 @@ const shelvesSchema = new Schema(
       type: String,
       required: true,
     },
-    createdBy: {
+    CreatedBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
