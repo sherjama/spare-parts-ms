@@ -51,6 +51,8 @@ const registerUser = asyncHandler(async (req, res) => {
     );
   }
 
+  console.log("user controller :", req.file);
+
   const logoLocalPath = req.file?.path;
   console.log(logoLocalPath);
 
