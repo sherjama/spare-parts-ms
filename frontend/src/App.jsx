@@ -1,109 +1,120 @@
-import React, { useState } from "react";
-import authservice from "./services/auth.service.js";
-import { useForm } from "react-hook-form";
-import axios from "axios";
+import React from "react";
 
-const App = () => {
-  const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
-  const [File, setFile] = useState(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const getUserDetails = async (data) => {
-    const formData = new FormData();
-    formData.append("logo", data.logo[0]);
-    formData.append("username", data.username);
-    formData.append("email", data.email);
-    formData.append("password", data.password);
-    formData.append("fermName", data.fermName);
-
-    try {
-      await authservice
-        .CreateAccount(formData)
-        .then((res) => setResponse(res.data));
-    } catch (error) {
-      console.log("App.jsx getUserDetails :", error);
-    }
-  };
-
+function App() {
   return (
-    <div>
-      <form onSubmit={handleSubmit(getUserDetails)}>
-        <div>
-          <label>Username:</label>
-          <input
-            {...register("username", { required: "Username is required" })}
-            type="text"
-          />
-          {errors.username && <p>{errors.username.message}</p>}
+    <div className="min-h-screen bg-gray-100 p-6">
+      <header className="bg-white shadow p-4">
+        <h1 className="text-xl font-semibold">Spare Parts Management System</h1>
+      </header>
+
+      <main className="mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-lg font-semibold mb-4">Create Part</h2>
+            <form>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Part Name
+                </label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Part Number
+                </label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              >
+                Create Part
+              </button>
+            </form>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-lg font-semibold mb-4">Create Shelf</h2>
+            <form>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Shelf Name
+                </label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Shelf Location
+                </label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              >
+                Create Shelf
+              </button>
+            </form>
+          </div>
         </div>
 
-        <div>
-          <label>Email:</label>
-          <input
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                message: "Invalid email address",
-              },
-            })}
-            type="email"
-          />
-          {errors.email && <p>{errors.email.message}</p>}
+        <div className="mt-6 bg-white p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold mb-4">Sale History</h2>
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Type here to search"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Part Name
+                </th>
+                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Part Number
+                </th>
+                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Quantity
+                </th>
+                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 whitespace-nowrap">Part A</td>
+                <td className="px-6 py-4 whitespace-nowrap">12345</td>
+                <td className="px-6 py-4 whitespace-nowrap">10</td>
+                <td className="px-6 py-4 whitespace-nowrap">2023-10-01</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 whitespace-nowrap">Part B</td>
+                <td className="px-6 py-4 whitespace-nowrap">67890</td>
+                <td className="px-6 py-4 whitespace-nowrap">5</td>
+                <td className="px-6 py-4 whitespace-nowrap">2023-10-02</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-
-        <div>
-          <label>Password:</label>
-          <input
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters long",
-              },
-            })}
-            type="password"
-          />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
-
-        <div>
-          <label>Firm Name:</label>
-          <input
-            {...register("fermName", { required: "Firm name is required" })}
-            type="text"
-          />
-          {errors.fermName && <p>{errors.fermName.message}</p>}
-        </div>
-
-        <div>
-          <label>Logo:</label>
-          <input
-            name="logo"
-            {...register("logo", { required: "Logo is required" })}
-            type="file"
-          />
-          {errors.logo && <p>{errors.logo.message}</p>}
-        </div>
-
-        <button type="submit">Submit</button>
-      </form>
-
-      {error && (
-        <div className="w-full mt-8 bg-red-700 text-white">Error: {error}</div>
-      )}
-      {response && (
-        <div className="w-full mt-8 bg-green-700 text-white">
-          Response: {JSON.stringify(response)}
-        </div>
-      )}
+      </main>
     </div>
   );
-};
+}
 
 export default App;
