@@ -4,17 +4,23 @@ import { Header, Footer } from "./index.js";
 
 const App = () => {
   return (
-    <>
-      <header>
+    <div
+      id="main-container"
+      className="w-screen h-screen bg-gray-300 flex items-center justify-center"
+    >
+      <div
+        id="container"
+        className="w-[98%] h-[98%] bg-slate-50 rounded-3xl flex items-center justify-between flex-col"
+      >
         <Header />
-      </header>
-      <main>
-        <Outlet />
-      </main>
-      <footer>
+
+        <main>
+          <Outlet />
+        </main>
+
         <Footer />
-      </footer>
-    </>
+      </div>
+    </div>
   );
 };
 
