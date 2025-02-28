@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import store from "./store/store.js";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+import { AuthPage } from "./index.js";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -13,6 +15,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/auth/:any",
+        element: <AuthPage />,
       },
     ],
   },
