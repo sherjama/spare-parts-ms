@@ -4,5 +4,7 @@ import Login from "./components/Auth/Login.jsx";
 import Signup from "./components/Auth/Signup.jsx";
 import Button from "./components/Button.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
+import ContactPage from "./pages/Contact.jsx";
+import Input from "./components/Input.jsx";
 
-export { Header, Footer, Login, Signup, Button, AuthPage };
+export { Header, Footer, Login, Signup, Button, AuthPage, ContactPage, Input };

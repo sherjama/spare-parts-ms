@@ -14,7 +14,7 @@ const App = () => {
       >
         <Header />
 
-        <main>
+        <main className="w-full flex items-center justify-center">
           <Outlet />
         </main>
 

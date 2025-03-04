@@ -4,13 +4,13 @@ const Button = ({
   className,
   children,
   text = "submit",
-  bgColor = "",
-  textColor = "",
+  bgColor = "bg-white",
+  textColor = "text-slate-700",
 }) => {
   return (
     <div>
       <button
-        className={`${className}  ${bgColor} ${textColor} px-4 py-2 rounded-md border border-black bg-white text-black text-sm `}
+        className={`${className}  ${bgColor} ${textColor} px-3 py-1 rounded-2xl border border-slate-700 text-md flex items-center justify-center`}
       >
         {text}
         {children}
