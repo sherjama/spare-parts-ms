@@ -6,11 +6,13 @@ const Button = ({
   text = "submit",
   bgColor = "bg-white",
   textColor = "text-slate-700",
+  ...params
 }) => {
   return (
     <div>
       <button
-        className={`${className}  ${bgColor} ${textColor} px-3 py-1 rounded-2xl border border-slate-700 text-md flex items-center justify-center`}
+        className={`${className}  ${bgColor} ${textColor} font-nexar1 px-8 py-2 rounded-full  border-2 border-slate-200 text-md flex items-center justify-center`}
+        {...params}
       >
         {text}
         {children}
