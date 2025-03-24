@@ -15,18 +15,25 @@ const Header = () => {
           <nav className="h-full flex items-center ">
             <ul className="flex space-x-10 uppercase font-medium text-gray-700">
               <li>
-                <NavLink className="Link_Animation font-nexar2">home</NavLink>
+                <NavLink className="Link_Animation font-nexar2 no-underline">
+                  home
+                </NavLink>
               </li>
               <li>
-                <NavLink className="Link_Animation font-nexar2">
+                <NavLink className="Link_Animation font-nexar2 no-underline">
                   pricing
                 </NavLink>
               </li>
               <li>
-                <NavLink className="Link_Animation font-nexar2">about</NavLink>
+                <NavLink className="Link_Animation font-nexar2 no-underline">
+                  about
+                </NavLink>
               </li>
               <li>
-                <NavLink to={"/contact"} className="Link_Animation font-nexar2">
+                <NavLink
+                  to={"/contact"}
+                  className="Link_Animation font-nexar2 no-underline"
+                >
                   contact
                 </NavLink>
               </li>
