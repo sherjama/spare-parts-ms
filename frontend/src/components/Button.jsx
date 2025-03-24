@@ -1,6 +1,7 @@
 import React from "react";
 
 const Button = ({
+  isActive = false,
   className,
   children,
   text = "submit",
@@ -11,7 +12,9 @@ const Button = ({
   return (
     <div>
       <button
-        className={`${className}  ${bgColor} ${textColor} font-nexar1 px-8 py-2 rounded-full  border-2 border-slate-200 text-md flex items-center justify-center`}
+        className={`${
+          isActive ? "bg-black text-white border-none" : null
+        } ${className}  ${bgColor} ${textColor} font-nexar1 px-8 py-2 rounded-full  border-2 border-slate-200 text-md flex items-center justify-center`}
         {...params}
       >
         {text}

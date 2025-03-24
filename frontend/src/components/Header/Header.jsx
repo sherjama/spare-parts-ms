@@ -1,8 +1,10 @@
 import React from "react";
 import { Button } from "../../index.js";
 import { useNavigate, NavLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Header = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   return (
     <>
@@ -41,8 +43,20 @@ const Header = () => {
           </nav>
 
           <div className="flex space-x-2">
-            <Button text="Login" onClick={() => navigate("/auth")} />
-            <Button text="Signup" />
+            <Button
+              text="Login"
+              bgColor=" "
+              textColor=" "
+              isActive={location.pathname == "/auth/login" ? true : false}
+              onClick={() => navigate("/auth/login")}
+            />
+            <Button
+              text="Signup"
+              bgColor=" "
+              textColor=" "
+              isActive={location.pathname == "/auth/signup" ? true : false}
+              onClick={() => navigate("/auth/signup")}
+            />
           </div>
         </div>
       </div>
