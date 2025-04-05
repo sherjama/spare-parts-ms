@@ -239,17 +239,19 @@ const AuthPage = () => {
           </div>
         </div>
       </div>
-      <div className="font-nexar1 text-[12px] leading-4 text-gray-500 mt-10">
-        <p>
-          * By signing up, you agree to our <a href="#">Terms of Use</a> and
-          acknowledge you’ve read our <a href="#">Privacy Policy</a>.
-        </p>
-        <p>
-          This site is protected by reCAPTCHA Enterprise.
-          <a href="#">Google's Privacy Policy</a> and
-          <a href="#">Terms of Service</a> apply.
-        </p>
-      </div>
+      {isSignUp && (
+        <div className="font-nexar1 text-[12px] leading-4 text-gray-500 mt-10">
+          <p>
+            * By signing up, you agree to our <a href="#">Terms of Use</a> and
+            acknowledge you’ve read our <a href="#">Privacy Policy</a>.
+          </p>
+          <p>
+            This site is protected by reCAPTCHA Enterprise.
+            <a href="#">Google's Privacy Policy</a> and
+            <a href="#">Terms of Service</a> apply.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
