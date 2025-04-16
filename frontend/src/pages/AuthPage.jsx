@@ -38,12 +38,12 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="w-[60vw] mx-auto p-6 bg-white rounded-xl shadow-lg flex flex-col items-center justify-center">
+    <div className="w-[60vw] mt-12 h-min mx-auto p-6 bg-white rounded-xl shadow-md flex flex-col items-center justify-center">
       <div>
-        <h1 className="text-5xl font-nexar3 text-center mb-4 ">
+        <h1 className="lg:text-5xl text-2xl font-nexar3 text-center mb-4 ">
           Sign Up to Nexar
         </h1>
-        <p className="text-center mb-6">
+        <p className="text-center mb-6 ">
           {isSignUp ? "Already have an account?" : "Don't have an account?"}
           <NavLink
             className="text-blue-500 pl-2"
@@ -54,7 +54,7 @@ const AuthPage = () => {
         </p>
       </div>
 
-      <div className="flex w-full justify-evenly items-center flex-wrap gap-4">
+      <div className="flex w-full justify-evenly items-center flex-wrap gap-4 lg:gap-1">
         {isSignUp && (
           <form
             onSubmit={handleSubmit(onSubmit)}

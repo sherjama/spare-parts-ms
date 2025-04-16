@@ -6,10 +6,12 @@
   font-family: "Font1";
   src: url("../public/assets/Font/font1.ttf");
 }
+
 @font-face {
   font-family: "Font2";
   src: url("../public/assets/Font/font2.ttf");
 }
+
 @font-face {
   font-family: "Font3";
   src: url("../public/assets/Font/font3.ttf");
@@ -20,6 +22,7 @@ input::placeholder {
   font-size: 14px;
   color: gray;
 }
+
 input:focus {
   outline: none;
 }
@@ -38,7 +41,7 @@ input:focus {
   position: absolute;
   width: 100%;
   height: 3px;
-  background: #000;
+  background: #f4f4f4;
   transition: transform 0.2s ease-in-out;
   transform: scale(0);
 }
