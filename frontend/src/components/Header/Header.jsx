@@ -10,7 +10,7 @@ const Header = () => {
 
   return (
     <>
-      <div id="main-container" className="w-[95%] h-16 bg-white fixed">
+      <div id="main-container" className="w-[95%] h-16 bg-[#f6f6f6] fixed">
         <div className="w-full h-full flex items-center justify-between">
           <NavLink
             to={"/"}
@@ -20,32 +20,38 @@ const Header = () => {
             NEXAR
           </NavLink>
 
-          <nav
-            className={`h-full flex items-center bg-black px-20 rounded-b-full ${
-              path == "/auth/signup" || path == "/auth/login" ? "hidden" : ""
-            }`}
-          >
-            <ul className="flex space-x-10 uppercase font-medium text-gray-200">
-              <li>
-                <NavLink className="Link_Animation font-nexar2 no-underline">
-                  pricing
-                </NavLink>
-              </li>
-              <li>
-                <NavLink className="Link_Animation font-nexar2 no-underline">
-                  about
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to={"/contact"}
-                  className="Link_Animation font-nexar2 no-underline"
-                >
-                  contact
-                </NavLink>
-              </li>
-            </ul>
-          </nav>
+          <div className="flex items-center justify-center w-min h-full">
+            <div className="h-1 w-44 bg-[#191919]"></div>
+
+            <nav
+              className={`h-full flex items-center bg-[#191919] px-20 rounded-b-full ${
+                path == "/auth/signup" || path == "/auth/login" ? "hidden" : ""
+              }`}
+            >
+              <ul className="flex space-x-10 uppercase font-medium text-gray-200">
+                <li>
+                  <NavLink className="Link_Animation font-nexar2 no-underline">
+                    pricing
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="Link_Animation font-nexar2 no-underline">
+                    about
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={"/contact"}
+                    className="Link_Animation font-nexar2 no-underline"
+                  >
+                    contact
+                  </NavLink>
+                </li>
+              </ul>
+            </nav>
+
+            <div className="h-1 w-44 bg-[#191919]"></div>
+          </div>
 
           <div className="flex space-x-2 ">
             <Button
@@ -53,7 +59,7 @@ const Header = () => {
                 path == "/auth/signup" || path == "/auth/login" ? "hidden" : ""
               }`}
               text="Get started"
-              bgColor="bg-black"
+              bgColor="bg-[#191919]"
               textColor="text-gray-200"
               isActive={location.pathname == "/auth/signup" ? true : false}
               onClick={() => navigate("/auth/signup")}
