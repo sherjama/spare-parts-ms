@@ -87,17 +87,17 @@ const AuthPage = () => {
                 Confirm Email
               </label>
               <input
-                id="confirmEmail"
-                type="email"
-                {...register("confirmEmail", {
-                  required: "Confirm email is required",
+                id="username"
+                type="text"
+                {...register("username", {
+                  required: "username is required",
                 })}
                 className="w-full p-2 border-b focus:border-b-blue-500"
-                placeholder="Confirm Email"
+                placeholder="Username"
               />
-              {errors.confirmEmail && (
+              {errors.username && (
                 <p className="text-red-500 text-sm">
-                  {errors.confirmEmail.message}
+                  {errors.username.message}
                 </p>
               )}
             </div>
@@ -145,6 +145,31 @@ const AuthPage = () => {
                 </p>
               )}
             </div>
+
+            <div className="mb-8">
+              <label
+                htmlFor="email"
+                className="Auth-label text-sm font-nexar1 text-gray-500"
+              >
+                Confirm password
+              </label>
+              <input
+                id="fermname"
+                type="text"
+                {...register("fermName", {
+                  required: "Ferm Name is required",
+                })}
+                className="w-full p-2 border-b focus:border-b-blue-500"
+                placeholder="Ferm Name"
+              />
+              {errors.fermName && (
+                <p className="text-red-500 text-sm">
+                  {errors.fermName.message}
+                </p>
+              )}
+            </div>
+
+            <input type="file" />
 
             <Button
               textColor="text-blue-400"
