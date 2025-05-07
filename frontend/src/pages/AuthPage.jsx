@@ -38,12 +38,12 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="w-[60vw] mt-12 h-min mx-auto p-6 bg-white rounded-xl shadow-md flex flex-col items-center justify-center">
+    <div className="w-[60vw] mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center">
       <div>
-        <h1 className="lg:text-5xl text-2xl font-nexar3 text-center mb-4 ">
+        <h1 className="lg:text-5xl text-2xl font-nexar3 text-center mb-4 text-slate-200">
           Sign Up to Nexar
         </h1>
-        <p className="text-center mb-6 ">
+        <p className="text-center mb-6 text-slate-200">
           {isSignUp ? "Already have an account?" : "Don't have an account?"}
           <NavLink
             className="text-blue-500 pl-2"
@@ -63,7 +63,7 @@ const AuthPage = () => {
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="Auth-label text-sm font-nexar1 text-gray-500"
+                className="Auth-label text-sm font-nexar1  "
               >
                 Email
               </label>
@@ -71,7 +71,7 @@ const AuthPage = () => {
                 id="email"
                 type="email"
                 {...register("email", { required: "Email is required" })}
-                className="w-full p-2 border-b focus:border-b-blue-500"
+                className="w-full p-2 border-b focus:border-b-blue-500 text-slate-200"
                 placeholder="Email"
               />
               {errors.email && (
@@ -168,8 +168,6 @@ const AuthPage = () => {
                 </p>
               )}
             </div>
-
-            <input type="file" />
 
             <Button
               textColor="text-blue-400"

@@ -57,3 +57,13 @@ input:focus {
 a {
   text-decoration: underline;
 }
+
+input {
+  background-color: transparent;
+  border: 0 0 1px 0 solid white;
+  color: #e2e8f0;
+}
+
+input::placeholder {
+  color: #f4f4f4;
+}

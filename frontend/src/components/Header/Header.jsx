@@ -10,25 +10,25 @@ const Header = () => {
 
   return (
     <>
-      <div id="main-container" className="w-[95%] h-16 bg-[#f6f6f6] fixed">
-        <div className="w-full h-full flex items-center justify-between">
+      <div id="main-container" className="w-[95%] bg-transparent h-16 fixed">
+        <div className="w-full h-full flex items-center justify-between ">
           <NavLink
             to={"/"}
             id="left-nav"
-            className="font-nexar3 text-2xl no-underline border-b-2 border-red-500 rounded-lg p-[2px]"
+            className="font-nexar3 text-2xl no-underline border-b-2 rounded-lg p-[2px] text-slate-200"
           >
             NEXAR
           </NavLink>
 
           <div className="flex items-center justify-center w-min h-full ]">
-            <div className="h-1 w-44 bg-[#191919] max-xl:hidden"></div>
+            <div className="h-1 w-44 bg-slate-200 max-xl:hidden"></div>
 
             <nav
-              className={`h-full flex items-center bg-[#191919] px-20  rounded-b-full max-md:hidden ${
+              className={`h-full flex items-center bg-[#191919] px-20  rounded-b-full border-2 border-slate-200 max-md:hidden ${
                 path == "/auth/signup" || path == "/auth/login" ? "hidden" : ""
               }`}
             >
-              <ul className="flex space-x-10 uppercase font-medium text-gray-200">
+              <ul className="flex space-x-10 uppercase font-medium text-gray-200 ">
                 <li>
                   <NavLink className="Link_Animation font-nexar2 no-underline">
                     pricing
@@ -50,7 +50,7 @@ const Header = () => {
               </ul>
             </nav>
 
-            <div className="h-1 w-44 bg-[#191919] max-xl:hidden"></div>
+            <div className="h-1 w-44 bg-slate-200 max-xl:hidden"></div>
           </div>
 
           <div className="flex space-x-2 max-md:hidden">
