@@ -20,11 +20,11 @@ const Header = () => {
             NEXAR
           </NavLink>
 
-          <div className="flex items-center justify-center w-min h-full">
-            <div className="h-1 w-44 bg-[#191919]"></div>
+          <div className="flex items-center justify-center w-min h-full ]">
+            <div className="h-1 w-44 bg-[#191919] max-xl:hidden"></div>
 
             <nav
-              className={`h-full flex items-center bg-[#191919] px-20 rounded-b-full ${
+              className={`h-full flex items-center bg-[#191919] px-20  rounded-b-full max-md:hidden ${
                 path == "/auth/signup" || path == "/auth/login" ? "hidden" : ""
               }`}
             >
@@ -50,14 +50,14 @@ const Header = () => {
               </ul>
             </nav>
 
-            <div className="h-1 w-44 bg-[#191919]"></div>
+            <div className="h-1 w-44 bg-[#191919] max-xl:hidden"></div>
           </div>
 
-          <div className="flex space-x-2 ">
+          <div className="flex space-x-2 max-md:hidden">
             <Button
               className={`p-2 ${
                 path == "/auth/signup" || path == "/auth/login" ? "hidden" : ""
-              }`}
+              } `}
               text="Get started"
               bgColor="bg-[#191919]"
               textColor="text-gray-200"

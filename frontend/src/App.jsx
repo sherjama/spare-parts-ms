@@ -6,7 +6,7 @@ const App = () => {
   return (
     <div
       id="container"
-      className="w-[98%] min-h-screen bg-[#f6f6f6] flex items-center justify-between flex-col"
+      className="w-full min-h-screen bg-[#f6f6f6] flex items-center justify-between flex-col"
     >
       <Header />
 
