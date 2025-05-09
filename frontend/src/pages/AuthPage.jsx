@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { RiFacebookFill } from "react-icons/ri";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "../index.js";
 import { NavLink, useParams } from "react-router-dom";
+
+import authservice from "../services/auth.service.js";
 
 const AuthPage = () => {
   const {
@@ -11,9 +13,15 @@ const AuthPage = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    getValues,
   } = useForm();
+
+  const inputFeilds = watch();
+
   const [isLogin, setisLogin] = useState();
   const [isSignUp, setisSignUp] = useState();
+  const [passMismatch, setPassMismatch] = useState();
   const param = useParams();
   useEffect(() => {
     checkLoginSignUp();
@@ -33,8 +41,18 @@ const AuthPage = () => {
     }
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    if (data.password !== data.confirmPassword) {
+      setPassMismatch(true);
+      return;
+    }
+
+    try {
+      await authservice.CreateAccount();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -63,7 +81,9 @@ const AuthPage = () => {
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="Auth-label text-sm font-nexar1  "
+                className={`${
+                  inputFeilds.email ? " " : "hidden"
+                } Auth-label text-sm font-nexar1 text-gray-500 `}
               >
                 Email
               </label>
@@ -82,9 +102,11 @@ const AuthPage = () => {
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="Auth-label text-sm font-nexar1 text-gray-500"
+                className={`${
+                  inputFeilds.username ? " " : "hidden"
+                } Auth-label text-sm font-nexar1 text-gray-500`}
               >
-                Confirm Email
+                Username
               </label>
               <input
                 id="username"
@@ -105,7 +127,9 @@ const AuthPage = () => {
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="Auth-label text-sm font-nexar1 text-gray-500"
+                className={`${
+                  inputFeilds.password ? " " : "hidden"
+                } Auth-label text-sm font-nexar1 text-gray-500`}
               >
                 Choose a password
               </label>
@@ -126,7 +150,9 @@ const AuthPage = () => {
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="Auth-label text-sm font-nexar1 text-gray-500"
+                className={`${
+                  inputFeilds.confirmPassword ? " " : "hidden"
+                } Auth-label text-sm font-nexar1 text-gray-500`}
               >
                 Confirm password
               </label>
@@ -144,14 +170,19 @@ const AuthPage = () => {
                   {errors.confirmPassword.message}
                 </p>
               )}
+              {passMismatch && (
+                <p className="text-red-500 text-sm">Password mismatch</p>
+              )}
             </div>
 
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="Auth-label text-sm font-nexar1 text-gray-500"
+                className={`${
+                  inputFeilds.fermName ? " " : "hidden"
+                } Auth-label text-sm font-nexar1 text-gray-500`}
               >
-                Confirm password
+                Ferm name
               </label>
               <input
                 id="fermname"

@@ -25,6 +25,7 @@ input::placeholder {
 
 input:focus {
   outline: none;
+  background-color: transparent;
 }
 
 * {
@@ -51,7 +52,7 @@ input:focus {
 }
 
 .Auth-label {
-  display: none;
+  /* display: none; */
 }
 
 a {
