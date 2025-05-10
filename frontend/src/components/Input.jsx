@@ -14,7 +14,7 @@ const Input = React.forwardRef(function Input(
   return (
     <>
       {label && (
-        <label className={`${labelStyle} `} htmlFor={id}>
+        <label className={`${labelStyle} text-slate-50`} htmlFor={id}>
           {label}
         </label>
       )}

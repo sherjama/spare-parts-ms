@@ -47,10 +47,10 @@ const Contact = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-2/3 ">
-      <div className="flex-1 p-10">
-        <h1 className="text-9xl font-bold">SK</h1>
-        <div className="mt-10 space-y-4">
+    <div className="flex flex-col md:flex-row w-2/3 bg-white/10 border border-white/30 rounded-xl shadow-lg pr-3">
+      <div className="flex-1 p-10 ">
+        <h1 className="text-[9rem] font-bold text-slate-50">SK</h1>
+        <div className="mt-10 space-y-4 text-slate-50">
           <div>
             <p>+91 8769214377</p>
             <p>sherjama8769214377@gmail.com</p>
@@ -60,7 +60,7 @@ const Contact = () => {
             <p>Rajasthan, India</p>
           </div>
         </div>
-        <div className="mt-10 flex space-x-4">
+        <div className="mt-10 flex space-x-4 text-slate-50">
           <a href="https://github.com/sherjama" className="underline">
             Github
           </a>
@@ -78,7 +78,7 @@ const Contact = () => {
           </a>
         </div>
       </div>
-      <div className="flex-1 bg-white rounded-lg p-10">
+      <div className="flex-1 text-slate-50">
         <h2 className="text-3xl font-bold font-Secondary mt-10">
           Share your Experience
         </h2>
@@ -90,7 +90,7 @@ const Contact = () => {
                 errors.name ? "border-red-500" : "border-gray-300"
               } `}
               type="text"
-              label="name"
+              label="Name"
               {...register("name", { required: "Name is required" })}
             />
           </div>
@@ -100,7 +100,7 @@ const Contact = () => {
                 errors.email ? "border-red-500" : "border-gray-300"
               } `}
               type="email"
-              label="email"
+              label="Email"
               {...register("email", { required: "Email is required" })}
             />
           </div>
@@ -108,7 +108,7 @@ const Contact = () => {
             <Input
               className={`${
                 errors.message ? "border-red-500" : "border-gray-300"
-              } `}
+              }`}
               type="textarea"
               label="Message"
               {...register("message", { required: "Message is required" })}

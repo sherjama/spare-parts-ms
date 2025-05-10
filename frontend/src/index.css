@@ -51,8 +51,10 @@ input:focus {
   transform: scale(1);
 }
 
-.Auth-label {
-  /* display: none; */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #191919 inset !important;
+  box-shadow: 0 0 0px 1000px #191919 inset !important;
+  -webkit-text-fill-color: #e2e8f0 !important;
 }
 
 a {

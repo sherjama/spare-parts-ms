@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { FaCamera } from "react-icons/fa";
 import { RiFacebookFill } from "react-icons/ri";
 import { useForm, useWatch } from "react-hook-form";
 import { Button } from "../index.js";
@@ -14,7 +15,6 @@ const AuthPage = () => {
     formState: { errors },
     reset,
     watch,
-    getValues,
   } = useForm();
 
   const inputFeilds = watch();
@@ -56,7 +56,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="w-[60vw] mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center">
+    <div className="w-[60vw] mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center backdrop-blur-md bg-white/10 border border-white/30  ">
       <div>
         <h1 className="lg:text-5xl text-2xl font-nexar3 text-center mb-4 text-slate-200">
           Sign Up to Nexar
@@ -76,8 +76,27 @@ const AuthPage = () => {
         {isSignUp && (
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="w-full sm:w-1/2 lg:w-1/3"
+            className="w-full sm:w-1/2 lg:w-1/3 "
           >
+            <div className="w-full  flex items-center justify-center flex-col mb-10">
+              <label className="size-40 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-full cursor-pointer hover:border-blue-500 ">
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/png, image/jpg, image/jpeg, image/gif"
+                  // onChange={handleImageChange}
+                  {...register("logo", { required: "Ferm Logo is required" })}
+                />
+                <span className="text-gray-400 flex items-center justify-center flex-col-reverse">
+                  Ferm logo
+                  <FaCamera size={50} />
+                </span>
+              </label>
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.logo.message}</p>
+              )}
+            </div>
+
             <div className="mb-8">
               <label
                 htmlFor="email"
@@ -216,7 +235,9 @@ const AuthPage = () => {
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="Auth-label text-sm font-nexar1 text-gray-500"
+                className={`${
+                  inputFeilds.email ? " " : "hidden"
+                } Auth-label text-sm font-nexar1 text-gray-500`}
               >
                 Email
               </label>
@@ -235,7 +256,9 @@ const AuthPage = () => {
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="Auth-label text-sm font-nexar1 text-gray-500"
+                className={`${
+                  inputFeilds.password ? " " : "hidden"
+                } Auth-label text-sm font-nexar1 text-gray-500`}
               >
                 password
               </label>
