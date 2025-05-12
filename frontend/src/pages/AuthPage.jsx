@@ -4,7 +4,7 @@ import { FaCamera } from "react-icons/fa";
 import { RiFacebookFill } from "react-icons/ri";
 import { useForm, useWatch } from "react-hook-form";
 import { Button } from "../index.js";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
 
 import authservice from "../services/auth.service.js";
 
@@ -17,11 +17,16 @@ const AuthPage = () => {
     watch,
   } = useForm();
 
+  const navigate = useNavigate();
+
   const inputFeilds = watch();
 
   const [isLogin, setisLogin] = useState();
   const [isSignUp, setisSignUp] = useState();
   const [passMismatch, setPassMismatch] = useState();
+  const [PrevImage, setPrevImage] = useState();
+  const [image, setImage] = useState();
+
   const param = useParams();
   useEffect(() => {
     checkLoginSignUp();
@@ -30,6 +35,18 @@ const AuthPage = () => {
   useEffect(() => {
     reset();
   }, [isLogin, isSignUp]);
+
+  const handleImageChange = (e) => {
+    console.log(e);
+
+    const file = e.target.files[0];
+
+    console.log(file);
+
+    setImage(file ? file : null);
+
+    setPrevImage(file ? URL.createObjectURL(file) : null);
+  };
 
   const checkLoginSignUp = () => {
     if (param?.slug == "login") {
@@ -49,7 +66,17 @@ const AuthPage = () => {
     }
 
     try {
-      await authservice.CreateAccount();
+      const user = {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        fermName: data.fermName,
+        logo: Image,
+      };
+      const isSigned = await authservice.CreateAccount(user);
+
+      if (isSigned) {
+      }
     } catch (error) {
       console.log(error);
     }
@@ -79,18 +106,32 @@ const AuthPage = () => {
             className="w-full sm:w-1/2 lg:w-1/3 "
           >
             <div className="w-full  flex items-center justify-center flex-col mb-10">
-              <label className="size-40 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-full cursor-pointer hover:border-blue-500 ">
-                <input
-                  type="file"
-                  className="hidden"
-                  accept="image/png, image/jpg, image/jpeg, image/gif"
-                  // onChange={handleImageChange}
-                  {...register("logo", { required: "Ferm Logo is required" })}
-                />
-                <span className="text-gray-400 flex items-center justify-center flex-col-reverse">
-                  Ferm logo
-                  <FaCamera size={50} />
-                </span>
+              <label
+                className={`size-40 flex items-center justify-center ${
+                  !image ? "border-2 border-dashed border-gray-300" : " "
+                } rounded-full cursor-pointer hover:border-blue-500`}
+              >
+                {!image ? (
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/png, image/jpg, image/jpeg, image/gif"
+                    onChange={handleImageChange}
+                    // {...register("logo", { required: "Ferm Logo is required" })}
+                  />
+                ) : (
+                  <img
+                    src={PrevImage}
+                    alt="Preview"
+                    className="size-40 rounded-full object-cover mb-4 hover:backdrop-blur-3xl hover:opacity-50"
+                  />
+                )}
+                {!image && (
+                  <span className="text-gray-400 flex items-center justify-center flex-col-reverse">
+                    Ferm logo
+                    <FaCamera size={50} />
+                  </span>
+                )}
               </label>
               {errors.email && (
                 <p className="text-red-500 text-sm">{errors.logo.message}</p>
@@ -112,6 +153,7 @@ const AuthPage = () => {
                 {...register("email", { required: "Email is required" })}
                 className="w-full p-2 border-b focus:border-b-blue-500 text-slate-200"
                 placeholder="Email"
+                onChange={handleImageChange}
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
