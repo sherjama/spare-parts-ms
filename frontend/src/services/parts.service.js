@@ -18,6 +18,7 @@ class Parts {
       });
     } catch (error) {
       console.log("createPart :", error);
+      return error;
     }
   }
 
@@ -31,6 +32,7 @@ class Parts {
       });
     } catch (error) {
       console.log("updatePart :", error);
+      return error;
     }
   }
 
@@ -42,6 +44,7 @@ class Parts {
       });
     } catch (error) {
       console.log("addQuantity :", error);
+      return error;
     }
   }
 
@@ -52,6 +55,7 @@ class Parts {
       });
     } catch (error) {
       console.log("deletePart :", error);
+      return error;
     }
   }
 
@@ -62,6 +66,7 @@ class Parts {
       });
     } catch (error) {
       console.log("getAllParts :", error);
+      return error;
     }
   }
 
@@ -72,6 +77,7 @@ class Parts {
       });
     } catch (error) {
       console.log("getShelfParts :", error);
+      return error;
     }
   }
 }

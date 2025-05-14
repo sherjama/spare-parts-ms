@@ -15,6 +15,7 @@ const AuthPage = () => {
     formState: { errors },
     reset,
     watch,
+    setValue,
   } = useForm();
 
   const navigate = useNavigate();
@@ -37,13 +38,10 @@ const AuthPage = () => {
   }, [isLogin, isSignUp]);
 
   const handleImageChange = (e) => {
-    console.log(e);
-
     const file = e.target.files[0];
 
-    console.log(file);
-
     setImage(file ? file : null);
+    setValue("logo", file);
 
     setPrevImage(file ? URL.createObjectURL(file) : null);
   };
@@ -59,7 +57,6 @@ const AuthPage = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     if (data.password !== data.confirmPassword) {
       setPassMismatch(true);
       return;
@@ -71,11 +68,12 @@ const AuthPage = () => {
         email: data.email,
         password: data.password,
         fermName: data.fermName,
-        logo: Image,
+        logo: data.logo,
       };
       const isSigned = await authservice.CreateAccount(user);
 
       if (isSigned) {
+        console.log(isSigned);
       }
     } catch (error) {
       console.log(error);

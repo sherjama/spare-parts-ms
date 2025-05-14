@@ -14,6 +14,7 @@ class Shelves {
       });
     } catch (error) {
       console.log("createShelve :", error);
+      return error;
     }
   }
 
@@ -25,6 +26,7 @@ class Shelves {
       });
     } catch (error) {
       console.log("updateShelveName :", error);
+      return error;
     }
   }
 
@@ -35,6 +37,7 @@ class Shelves {
       });
     } catch (error) {
       console.log("deleteShelve :", error);
+      return error;
     }
   }
 }
