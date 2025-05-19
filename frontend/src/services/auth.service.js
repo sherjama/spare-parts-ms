@@ -24,7 +24,7 @@ class AuthService {
       );
     } catch (error) {
       console.log("CreateAccount : ", error);
-      return error;
+      throw error;
     }
   }
 
@@ -43,7 +43,7 @@ class AuthService {
       );
     } catch (error) {
       console.log("Login : ", error);
-      return error;
+      throw error;
     }
   }
 
@@ -52,7 +52,7 @@ class AuthService {
       return await axios.post(`${this.userRoute}/logout-user`);
     } catch (error) {
       console.log("Logout : ", error);
-      return error;
+      throw error;
     }
   }
 
@@ -64,7 +64,7 @@ class AuthService {
       });
     } catch (error) {
       console.log("ChangePassword : ", error);
-      return error;
+      throw error;
     }
   }
 
@@ -77,7 +77,7 @@ class AuthService {
       });
     } catch (error) {
       console.log("UpdateUserDetail : ", error);
-      return error;
+      throw error;
     }
   }
 
@@ -92,7 +92,7 @@ class AuthService {
       );
     } catch (error) {
       console.log("ChangeLogo : ", error);
-      return error;
+      throw error;
     }
   }
 
@@ -101,7 +101,7 @@ class AuthService {
       return await axios.post(`${this.userRoute}/refresh-token`);
     } catch (error) {
       console.log("RefreshToken : ", error);
-      return error;
+      throw error;
     }
   }
 
@@ -110,7 +110,7 @@ class AuthService {
       return await axios.get(`${this.userRoute}/get-current-user`);
     } catch (error) {
       console.log("getCurrentUser : ", error);
-      return error;
+      throw error;
     }
   }
 }

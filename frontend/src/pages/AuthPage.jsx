@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaCamera } from "react-icons/fa";
 import { RiFacebookFill } from "react-icons/ri";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "../index.js";
 import { NavLink, useParams, useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice.js";
 import authservice from "../services/auth.service.js";
 
 const AuthPage = () => {
+  // react hook form
   const {
     register,
     handleSubmit,
@@ -17,26 +20,39 @@ const AuthPage = () => {
     watch,
     setValue,
   } = useForm();
-
-  const navigate = useNavigate();
-
   const inputFeilds = watch();
 
+  // react router
+  const navigate = useNavigate();
+  const param = useParams();
+
+  // redux
+  const dispatch = useDispatch();
+
+  // States
   const [isLogin, setisLogin] = useState();
   const [isSignUp, setisSignUp] = useState();
   const [passMismatch, setPassMismatch] = useState();
   const [PrevImage, setPrevImage] = useState();
   const [image, setImage] = useState();
 
-  const param = useParams();
+  // For check Login or SignUp
   useEffect(() => {
-    checkLoginSignUp();
+    if (param?.slug == "login") {
+      setisLogin(true);
+      setisSignUp(false);
+    } else {
+      setisSignUp(true);
+      setisLogin(false);
+    }
   });
 
+  // For reset values of form
   useEffect(() => {
     reset();
   }, [isLogin, isSignUp]);
 
+  // for Logo Image
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -46,17 +62,8 @@ const AuthPage = () => {
     setPrevImage(file ? URL.createObjectURL(file) : null);
   };
 
-  const checkLoginSignUp = () => {
-    if (param?.slug == "login") {
-      setisLogin(true);
-      setisSignUp(false);
-    } else {
-      setisSignUp(true);
-      setisLogin(false);
-    }
-  };
-
-  const onSubmit = async (data) => {
+  // Authentication for signing up
+  const signUp = async (data) => {
     if (data.password !== data.confirmPassword) {
       setPassMismatch(true);
       return;
@@ -73,18 +80,48 @@ const AuthPage = () => {
       const isSigned = await authservice.CreateAccount(user);
 
       if (isSigned) {
-        console.log(isSigned);
+        dispatch(login(isSigned?.data));
+        navigate("/contact");
       }
     } catch (error) {
-      console.log(error);
+      toast.info(error.response.data.message, {
+        position: "top-center",
+      });
     }
   };
 
+  // Authentication of user login
+  const login = async (data) => {
+    try {
+    } catch (error) {}
+  };
+
+  // After Submiting A form
+  const onSubmit = async (data) => {
+    if (isLogin) {
+      await login(data);
+    }
+
+    if (isSignUp) {
+      await signUp(data);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      reset();
+      setPassMismatch(Boolean);
+      setPrevImage("");
+      setImage("");
+    };
+  }, [isLogin]);
+
   return (
     <div className="w-[60vw] mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center backdrop-blur-md bg-white/10 border border-white/30  ">
+      <ToastContainer />
       <div>
         <h1 className="lg:text-5xl text-2xl font-nexar3 text-center mb-4 text-slate-200">
-          Sign Up to Nexar
+          Sign {isLogin ? "In" : "Up"} to Nexar
         </h1>
         <p className="text-center mb-6 text-slate-200">
           {isSignUp ? "Already have an account?" : "Don't have an account?"}
