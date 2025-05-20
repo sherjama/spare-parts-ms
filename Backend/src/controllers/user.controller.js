@@ -54,7 +54,6 @@ const registerUser = asyncHandler(async (req, res) => {
   console.log("user controller :", req.file);
 
   const logoLocalPath = req.file?.path;
-  console.log(logoLocalPath);
 
   if (!logoLocalPath) {
     throw new ApiError(401, "logo is required");
@@ -89,7 +88,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
-  console.log(username, email, password);
 
   if (!email || !password) {
     throw new ApiError(401, "All feilds are required");
