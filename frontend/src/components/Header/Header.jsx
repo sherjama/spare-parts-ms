@@ -25,7 +25,14 @@ const Header = () => {
             NEXAR
           </NavLink>
 
-          <div className="flex items-center justify-center w-min h-full ]">
+          <div
+            className={`${path == "/landing" ? "w-min justify-center" : " "}
+             ${
+               path == "/auth/signup" || path == "/auth/login"
+                 ? " w-full justify-end"
+                 : ""
+             } flex items-center h-full bg-slate-50]`}
+          >
             {/* <div className="h-1 w-44 bg-slate-200 max-xl:hidden"></div> */}
 
             <nav
@@ -55,7 +62,21 @@ const Header = () => {
               </ul>
             </nav>
 
-            {/* <div className="h-1 w-44 bg-slate-200 max-xl:hidden"></div> */}
+            <div
+              className={`${
+                path == "/auth/signup" || path == "/auth/login" ? " " : "hidden"
+              } w-[80%] flex justify-end items-center font-nexar3 pr-10`}
+            >
+              <span
+                className=" text-md 
+              text-slate-200 tracking-widest"
+              >
+                {path == "/auth/signup" &&
+                  "Sign Up Today – Stay Ahead with Nexar"}
+                {path == "/auth/login" &&
+                  "Welcome Back! Let’s Organize Your Inventory."}
+              </span>
+            </div>
           </div>
 
           <div className="flex space-x-2 max-md:hidden">
