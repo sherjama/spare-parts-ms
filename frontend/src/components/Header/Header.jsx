@@ -10,8 +10,11 @@ const Header = () => {
 
   return (
     <>
-      <div id="main-container" className="w-[95%] bg-transparent h-16 fixed">
-        <div className="w-full h-full flex items-center justify-between ">
+      <div
+        id="main-container"
+        className="w-full m-2 h-16 fixed  flex items-center justify-center  z-50"
+      >
+        <div className="w-1/2 p-2 h-full flex items-center justify-between bg-black/75 backdrop-blur-sm rounded-full ">
           <NavLink
             to={"/"}
             id="left-nav"
@@ -25,7 +28,7 @@ const Header = () => {
             {/* <div className="h-1 w-44 bg-slate-200 max-xl:hidden"></div> */}
 
             <nav
-              className={`h-full flex items-center bg-[#1f1f1f44] px-20  rounded-b-full  border-slate-200 max-md:hidden ${
+              className={`h-full flex items-center bg-gray-800 px-20  rounded-b-full  border-slate-200 max-md:hidden ${
                 path == "/auth/signup" || path == "/auth/login" ? "hidden" : ""
               }`}
             >

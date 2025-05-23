@@ -4,15 +4,27 @@ import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import store from "./store/store.js";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Navigate,
+} from "react-router-dom";
 
-import { AuthPage, ContactPage } from "./index.js";
+import { AuthPage, ContactPage, LandingPage } from "./index.js";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        index: true,
+        element: <Navigate to="/landing" replace />,
+      },
+      {
+        path: "landing",
+        element: <LandingPage />,
+      },
       {
         path: "/auth/:slug",
         element: <AuthPage />,

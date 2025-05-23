@@ -6,13 +6,11 @@ const App = () => {
   return (
     <div
       id="container"
-      className="w-full min-h-screen bg-[url('../public/assets/Posters/Hero1.jpeg')] flex items-center justify-between flex-col bg-cover bg-center bg-no-repeat"
+      className="w-full min-h-screen  flex justify-between flex-col bg-black bg-[url('../public/assets/Posters/HeroBg.jpeg')] bg-cover bg-center overflow-hidden"
     >
       <Header />
 
-      <div className="w-[95%] h-16 bg-transparent"></div>
-
-      <main className="w-[100vw] max-h-min flex items-center justify-center">
+      <main className="w-[100vw] max-h-min flex items-center justify-center ">
         <Outlet />
       </main>
 
