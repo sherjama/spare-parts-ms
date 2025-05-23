@@ -1,9 +1,10 @@
-import React from "react";
-import { Button } from "../../index.js";
+import { Button, Pfp } from "../../index.js";
 import { useNavigate, NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const userStatus = useSelector((state) => state.userdata.status);
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
@@ -55,16 +56,28 @@ const Header = () => {
           </div>
 
           <div className="flex space-x-2 max-md:hidden">
-            <Button
-              className={`p-2 ${
-                path == "/auth/signup" || path == "/auth/login" ? "hidden" : ""
-              } `}
-              text="Get started"
-              bgColor="bg-[#191919]"
-              textColor="text-gray-200"
-              isActive={location.pathname == "/auth/signup" ? true : false}
-              onClick={() => navigate("/auth/signup")}
-            />
+            {!userStatus && (
+              <Button
+                className={`p-2 ${
+                  path == "/auth/signup" || path == "/auth/login"
+                    ? "hidden"
+                    : ""
+                } `}
+                text="Get started"
+                bgColor="bg-[#191919]"
+                textColor="text-gray-200"
+                isActive={location.pathname == "/auth/signup" ? true : false}
+                onClick={() => navigate("/auth/signup")}
+              />
+            )}
+            {userStatus && (
+              <button
+                className="bg-white w-min"
+                onClick={(e) => console.log("chlaa")}
+              >
+                <Pfp className="size-12" />
+              </button>
+            )}
           </div>
         </div>
       </div>

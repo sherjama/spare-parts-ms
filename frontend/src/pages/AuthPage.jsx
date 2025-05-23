@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice.js";
 import authservice from "../services/auth.service.js";
+import { setLoading } from "../store/loadSlice.js";
 
 const AuthPage = () => {
   // react hook form
@@ -71,6 +72,7 @@ const AuthPage = () => {
       setPassMismatch(true);
       return;
     }
+    dispatch(setLoading(false));
     try {
       const user = {
         username: data.username,
@@ -83,6 +85,7 @@ const AuthPage = () => {
       if (isSigned) {
         dispatch(login(isSigned.data.data));
         navigate("/contact");
+        dispatch(setLoading(false));
       }
     } catch (error) {
       toast.info(error.response.data.message, {
@@ -93,14 +96,17 @@ const AuthPage = () => {
 
   // Authentication Login
   const Login = async (data) => {
+    dispatch(setLoading(true));
     try {
       const isLogedInUser = await authservice.Login(data);
 
       if (isLogedInUser) {
         dispatch(Login(isLogedInUser.data.data));
         navigate("/contact");
+        dispatch(setLoading(false));
       }
     } catch (error) {
+      dispatch(setLoading(false));
       toast.info(error.response.data.message, {
         position: "top-center",
       });
@@ -117,7 +123,7 @@ const AuthPage = () => {
   }, [isLogin]);
 
   return (
-    <div className="w-[60vw] mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center backdrop-blur-md bg-white/10 border border-white/30  ">
+    <div className="w-[60vw]  mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center backdrop-blur-md bg-white/10 border border-white/30  ">
       <ToastContainer />
       <div>
         <h1 className="lg:text-5xl text-2xl font-nexar3 text-center mb-4 text-slate-200">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ThreeCircles } from "react-loader-spinner";
 
 const Button = ({
@@ -18,7 +18,6 @@ const Button = ({
           isActive ? "bg-black text-white border-none" : null
         } ${className}  ${bgColor} ${textColor} font-nexar1 px-8 py-2 rounded-full  border-2 border-slate-200 text-md flex items-center justify-center`}
         {...params}
-        onClick={() => setToggle(true)}
       >
         {text}
         {children}
