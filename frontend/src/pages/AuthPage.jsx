@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice.js";
 import authservice from "../services/auth.service.js";
+import { setLoading } from "../store/loadSlice.js";
 
 const AuthPage = () => {
   // react hook form
@@ -35,6 +36,7 @@ const AuthPage = () => {
   const [passMismatch, setPassMismatch] = useState();
   const [PrevImage, setPrevImage] = useState();
   const [image, setImage] = useState();
+  const [toggle, setToggle] = useState(false);
 
   // For check Login or SignUp
   useEffect(() => {
@@ -62,13 +64,15 @@ const AuthPage = () => {
     setPrevImage(file ? URL.createObjectURL(file) : null);
   };
 
-  // Authentication for signing up
-  const signUp = async (data) => {
+  // After Submiting A form
+
+  const Signup = async (data) => {
+    // Authentication for signing up
     if (data.password !== data.confirmPassword) {
       setPassMismatch(true);
       return;
     }
-
+    dispatch(setLoading(false));
     try {
       const user = {
         username: data.username,
@@ -78,10 +82,10 @@ const AuthPage = () => {
         logo: data.logo,
       };
       const isSigned = await authservice.CreateAccount(user);
-
       if (isSigned) {
-        dispatch(login(isSigned?.data));
+        dispatch(login(isSigned.data.data));
         navigate("/contact");
+        dispatch(setLoading(false));
       }
     } catch (error) {
       toast.info(error.response.data.message, {
@@ -90,20 +94,22 @@ const AuthPage = () => {
     }
   };
 
-  // Authentication of user login
-  const login = async (data) => {
+  // Authentication Login
+  const Login = async (data) => {
+    dispatch(setLoading(true));
     try {
-    } catch (error) {}
-  };
+      const isLogedInUser = await authservice.Login(data);
 
-  // After Submiting A form
-  const onSubmit = async (data) => {
-    if (isLogin) {
-      await login(data);
-    }
-
-    if (isSignUp) {
-      await signUp(data);
+      if (isLogedInUser) {
+        dispatch(Login(isLogedInUser.data.data));
+        navigate("/contact");
+        dispatch(setLoading(false));
+      }
+    } catch (error) {
+      dispatch(setLoading(false));
+      toast.info(error.response.data.message, {
+        position: "top-center",
+      });
     }
   };
 
@@ -117,7 +123,7 @@ const AuthPage = () => {
   }, [isLogin]);
 
   return (
-    <div className="w-[60vw] mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center backdrop-blur-md bg-white/10 border border-white/30  ">
+    <div className="w-[60vw]  mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center backdrop-blur-md bg-white/10 border border-white/30  ">
       <ToastContainer />
       <div>
         <h1 className="lg:text-5xl text-2xl font-nexar3 text-center mb-4 text-slate-200">
@@ -137,7 +143,7 @@ const AuthPage = () => {
       <div className="flex w-full justify-evenly items-center flex-wrap gap-4 lg:gap-1">
         {isSignUp && (
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(Signup)}
             className="w-full sm:w-1/2 lg:w-1/3 "
           >
             <div className="w-full  flex items-center justify-center flex-col mb-10">
@@ -152,7 +158,6 @@ const AuthPage = () => {
                     className="hidden"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     onChange={handleImageChange}
-                    // {...register("logo", { required: "Ferm Logo is required" })}
                   />
                 ) : (
                   <img
@@ -168,9 +173,6 @@ const AuthPage = () => {
                   </span>
                 )}
               </label>
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.logo.message}</p>
-              )}
             </div>
 
             <div className="mb-8">
@@ -306,7 +308,7 @@ const AuthPage = () => {
 
         {isLogin && (
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(Login)}
             className="w-full sm:w-1/2 lg:w-1/3"
           >
             <div className="mb-8">

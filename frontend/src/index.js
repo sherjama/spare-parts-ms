@@ -6,7 +6,7 @@ import Button from "./components/Button.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
 import ContactPage from "./pages/Contact.jsx";
 import Input from "./components/Input.jsx";
-import LandingPage from "./pages/LandingPage.jsx";
+import Pfp from "./components/Pfp.jsx";
 
 export {
   Header,
@@ -17,5 +17,5 @@ export {
   AuthPage,
   ContactPage,
   Input,
-  LandingPage,
+  Pfp,
 };
