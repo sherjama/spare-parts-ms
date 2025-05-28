@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 const Header = () => {
   const userStatus = useSelector((state) => state.userdata.status);
+  const userId = useSelector((state) => state.userdata.userdata.user._id);
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
@@ -96,8 +97,10 @@ const Header = () => {
             )}
             {userStatus && (
               <button
-                className="bg-white w-min"
-                onClick={(e) => console.log("chlaa")}
+                className={`${
+                  location.pathname == `/profile/${userId}` ? "hidden" : " "
+                }`}
+                onClick={() => navigate(`/profile/${userId}`)}
               >
                 <Pfp className="size-12" />
               </button>

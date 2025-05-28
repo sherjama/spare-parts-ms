@@ -32,7 +32,7 @@ const App = () => {
         onLoaderFinished={() => setProgress(0)}
       />
 
-      <main className="w-[100vw] max-h-min flex items-center justify-center ">
+      <main className="w-[100vw] min-h-screen flex items-center justify-center ">
         <Outlet />
       </main>
 

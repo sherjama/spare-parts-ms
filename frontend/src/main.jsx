@@ -10,7 +10,14 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import { AuthPage, ContactPage, LandingPage } from "./index.js";
+import {
+  AuthPage,
+  ContactPage,
+  LandingPage,
+  DashboardPage,
+  ProfilePage,
+  Protected,
+} from "./index.js";
 
 const router = createBrowserRouter([
   {
@@ -23,15 +30,43 @@ const router = createBrowserRouter([
       },
       {
         path: "landing",
-        element: <LandingPage />,
+        element: (
+          <Protected authentication={false}>
+            <LandingPage />
+          </Protected>
+        ),
       },
       {
         path: "/auth/:slug",
-        element: <AuthPage />,
+        element: (
+          <Protected authentication={false}>
+            <AuthPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "/dashboard",
+        element: (
+          <Protected authentication>
+            <DashboardPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "/profile/:slug",
+        element: (
+          <Protected authentication>
+            <ProfilePage />
+          </Protected>
+        ),
       },
       {
         path: "/contact",
-        element: <ContactPage />,
+        element: (
+          <Protected authentication>
+            <ContactPage />
+          </Protected>
+        ),
       },
     ],
   },

@@ -84,7 +84,7 @@ const AuthPage = () => {
       const isSigned = await authservice.CreateAccount(user);
       if (isSigned) {
         dispatch(login(isSigned.data.data));
-        navigate("/contact");
+        navigate("/dashboard");
         dispatch(setLoading(false));
       }
     } catch (error) {
@@ -96,15 +96,13 @@ const AuthPage = () => {
 
   // Authentication Login
   const Login = async (data) => {
-    console.log(data);
-
     dispatch(setLoading(true));
     try {
       const isLogedInUser = await authservice.Login(data);
 
       if (isLogedInUser) {
-        dispatch(Login(isLogedInUser.data.data));
-        navigate("/contact");
+        dispatch(login(isLogedInUser.data.data));
+        navigate("/dashboard");
         dispatch(setLoading(false));
       }
     } catch (error) {

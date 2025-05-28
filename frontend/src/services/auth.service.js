@@ -28,20 +28,13 @@ class AuthService {
     }
   }
 
-  async Login({ email, password }) {
-    console.log(email, password);
-
+  async Login(data) {
     try {
-      return await axios.post(
-        `${this.userRoute}/login-user`,
-        {
-          email,
-          password,
+      return await axios.post(`${this.userRoute}/login-user`, data, {
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      });
     } catch (error) {
       console.log("Login : ", error);
       throw error;
