@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const Header = () => {
   const userStatus = useSelector((state) => state.userdata.status);
-  const userId = useSelector((state) => state.userdata.userdata.user._id);
+  const userId = useSelector((state) => state.userdata.userdata?.user._id);
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
