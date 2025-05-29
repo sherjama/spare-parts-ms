@@ -14,7 +14,7 @@ class Shelves {
       });
     } catch (error) {
       console.log("createShelve :", error);
-      return error;
+      throw error;
     }
   }
 
@@ -26,18 +26,26 @@ class Shelves {
       });
     } catch (error) {
       console.log("updateShelveName :", error);
-      return error;
+      throw error;
     }
   }
 
   async deleteShelve(shelfName) {
     try {
-      return await axios.delete(`${this.deleteShelve}/delete-shelf`, {
+      return await axios.delete(`${this.shelveRoute}/delete-shelf`, {
         shelfName,
       });
     } catch (error) {
       console.log("deleteShelve :", error);
-      return error;
+      throw error;
+    }
+  }
+
+  async listShelves() {
+    try {
+      return await axios.get(`${this.shelveRoute}/list-shelf`);
+    } catch (error) {
+      throw error;
     }
   }
 }

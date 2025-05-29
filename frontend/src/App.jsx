@@ -7,12 +7,19 @@ import { setLoading } from "./store/loadSlice.js";
 
 const App = () => {
   const [progress, setProgress] = useState(60);
+  const [ifHeadNotVisible, setifHeadNotVisible] = useState();
   const location = useLocation();
   const isLoading = useSelector((state) => state.Loading.isLoading);
   const userStatus = useSelector((state) => state.userdata.status);
   const dispatch = useDispatch();
+  const path = location.pathname;
 
   useEffect(() => {
+    if (path == "/dashboard") {
+      setifHeadNotVisible(true);
+    } else {
+      setifHeadNotVisible(false);
+    }
     if (!isLoading) {
       setProgress(100);
     }
@@ -26,7 +33,7 @@ const App = () => {
       id="container"
       className="w-full min-h-screen  flex justify-between flex-col bg-black bg-[url('../public/assets/Posters/HeroBg.jpeg')] bg-cover bg-center overflow-hidden"
     >
-      {!location.pathname == "/dashboard" && <Header />}
+      <Header className={`${ifHeadNotVisible ? "hidden" : ""}`} />
       <LoadingBar
         color="#5693CF"
         progress={progress}

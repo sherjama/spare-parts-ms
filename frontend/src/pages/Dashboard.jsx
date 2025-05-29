@@ -6,7 +6,7 @@ const Dashboard = () => {
   const userdata = useSelector((state) => state.userdata.userdata?.user);
 
   return (
-    <div class="w-full h-screen rounded-xl border border-[#2a3a6f] bg-[#121212] p-6 md:p-8">
+    <div class="w-full h-screen  border border-[#2a3a6f] bg-[#121212] p-6 md:p-8">
       <div class="flex flex-col md:flex-row md:space-x-8">
         <aside class="flex flex-col justify-between w-full md:w-56 text-white h-[95vh]">
           <div>
@@ -98,12 +98,8 @@ const Dashboard = () => {
             <div class="flex-1 bg-[#222222] rounded-xl p-6 flex flex-col justify-between">
               <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xs text-[#7a7a7a] font-semibold">
-                  Total Holding
+                  Total Parts
                 </h2>
-                <div class="flex items-center space-x-1 text-xs text-[#7a7a7a] cursor-pointer select-none">
-                  <span>6M</span>
-                  <i class="fas fa-chevron-down text-[8px]"></i>
-                </div>
               </div>
               <div>
                 <p class="text-3xl font-semibold">$ 12 304.11</p>

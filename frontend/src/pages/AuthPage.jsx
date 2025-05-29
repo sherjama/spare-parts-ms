@@ -8,7 +8,10 @@ import { NavLink, useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice.js";
+import { addParts, addShelves } from "../store/stockSlice.js";
 import authservice from "../services/auth.service.js";
+import partsService from "../services/parts.service.js";
+import { shelvesService } from "../services/shelves.service.js";
 import { setLoading } from "../store/loadSlice.js";
 
 const AuthPage = () => {
@@ -65,7 +68,6 @@ const AuthPage = () => {
   };
 
   // After Submiting A form
-
   const Signup = async (data) => {
     // Authentication for signing up
     if (data.password !== data.confirmPassword) {
@@ -107,6 +109,21 @@ const AuthPage = () => {
       }
     } catch (error) {
       dispatch(setLoading(false));
+      toast.info(error.response.data.message, {
+        position: "top-center",
+      });
+    }
+  };
+
+  const addStock = async (userId) => {
+    try {
+      const userStockParts = await partsService.getAllParts(userId);
+      const userStockShelves = await shelvesService.listShelves();
+      if (userStock || userStockShelves) {
+        dispatch(addParts(userStockParts));
+        dispatch(addShelves(userStockShelves));
+      }
+    } catch (error) {
       toast.info(error.response.data.message, {
         position: "top-center",
       });

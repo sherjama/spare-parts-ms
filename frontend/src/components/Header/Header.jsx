@@ -3,7 +3,7 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const Header = () => {
+const Header = ({ className }) => {
   const userStatus = useSelector((state) => state.userdata.status);
   const userId = useSelector((state) => state.userdata.userdata?.user._id);
   const location = useLocation();
@@ -14,7 +14,7 @@ const Header = () => {
     <>
       <div
         id="main-container"
-        className="w-full m-2 h-16 fixed  flex items-center justify-center  z-50"
+        className={`${className} w-full m-2 h-16 fixed  flex items-center justify-center  z-50`}
       >
         <div className="w-1/2 p-2 h-full flex items-center justify-between bg-black/75 backdrop-blur-sm rounded-full ">
           <NavLink
