@@ -50,4 +50,5 @@ class Shelves {
   }
 }
 
-export const shelvesService = new Shelves();
+const shelvesService = new Shelves();
+export default shelvesService;

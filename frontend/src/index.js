@@ -9,6 +9,9 @@ import Pfp from "./components/Pfp.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import ProfilePage from "./pages/Profile.jsx";
 import DashboardPage from "./pages/Dashboard.jsx";
+import authservice from "./services/auth.service.js";
+import partsService from "./services/parts.service.js";
+import shelvesService from "./services/shelves.service.js";
 
 export {
   Header,
@@ -22,4 +25,7 @@ export {
   ProfilePage,
   DashboardPage,
   Protected,
+  authservice,
+  partsService,
+  shelvesService,
 };

@@ -4,6 +4,7 @@ import { Header } from "./index.js";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "./store/loadSlice.js";
+// import Cookies from "js-cookie";
 
 const App = () => {
   const [progress, setProgress] = useState(60);
@@ -14,7 +15,11 @@ const App = () => {
   const dispatch = useDispatch();
   const path = location.pathname;
 
+  // const Tokens = Cookies.get();
+
   useEffect(() => {
+    // console.log(Tokens);
+
     if (path == "/dashboard") {
       setifHeadNotVisible(true);
     } else {

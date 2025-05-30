@@ -3,15 +3,12 @@ import { FcGoogle } from "react-icons/fc";
 import { FaCamera } from "react-icons/fa";
 import { RiFacebookFill } from "react-icons/ri";
 import { useForm } from "react-hook-form";
-import { Button } from "../index.js";
+import { Button, authservice, partsService, shelvesService } from "../index.js";
 import { NavLink, useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice.js";
 import { addParts, addShelves } from "../store/stockSlice.js";
-import authservice from "../services/auth.service.js";
-import partsService from "../services/parts.service.js";
-import { shelvesService } from "../services/shelves.service.js";
 import { setLoading } from "../store/loadSlice.js";
 
 const AuthPage = () => {
@@ -88,6 +85,8 @@ const AuthPage = () => {
         dispatch(login(isSigned.data.data));
         navigate("/dashboard");
         dispatch(setLoading(false));
+
+        await addStock(isLogedInUser.data.data.user._id);
       }
     } catch (error) {
       toast.info(error.response.data.message, {
@@ -106,6 +105,8 @@ const AuthPage = () => {
         dispatch(login(isLogedInUser.data.data));
         navigate("/dashboard");
         dispatch(setLoading(false));
+
+        await addStock(isLogedInUser.data.data.user._id);
       }
     } catch (error) {
       dispatch(setLoading(false));
@@ -119,7 +120,10 @@ const AuthPage = () => {
     try {
       const userStockParts = await partsService.getAllParts(userId);
       const userStockShelves = await shelvesService.listShelves();
-      if (userStock || userStockShelves) {
+      console.log("parts :", userStockParts);
+      console.log("shelve :", userStockShelves);
+
+      if (userStockParts || userStockShelves) {
         dispatch(addParts(userStockParts));
         dispatch(addShelves(userStockShelves));
       }

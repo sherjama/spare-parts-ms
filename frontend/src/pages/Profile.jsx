@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import authservice from "../services/auth.service.js";
 import { logout } from "../store/authSlice.js";
 import { useNavigate } from "react-router-dom";
+import { setLoading } from "../store/loadSlice.js";
+import { ToastContainer, toast } from "react-toastify";
 
 const Profile = () => {
   const userdata = useSelector((state) => state.userdata.userdata.user);
@@ -11,17 +13,24 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
+    dispatch(setLoading(true));
     try {
       const data = await authservice.Logout();
       if (data) {
         dispatch(logout());
+        dispatch(setLoading(false));
         navigate("/landing");
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.info(error.response.data.message, {
+        position: "top-center",
+      });
+    }
   };
 
   return (
     <div className="w-full">
+      <ToastContainer />
       <div className="bg-[#18191f] text-white min-h-screen flex w-full">
         <aside className="w-16 flex flex-col items-center py-8 space-y-8 border-r border-gray-700">
           <button aria-label="Home" className="text-gray-400 hover:text-white">

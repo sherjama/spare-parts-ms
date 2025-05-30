@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const stockSlice = createSlice({
-  name: stock,
+  name: "stock",
   initialState,
   reducers: {
     addParts: (state, action) => {

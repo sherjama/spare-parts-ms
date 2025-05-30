@@ -60,9 +60,11 @@ class Parts {
   }
 
   async getAllParts(userId) {
+    console.log("service : ", userId);
+
     try {
       return await axios.get(`${this.partsRoute}/get-parts`, {
-        userId,
+        params: { userId },
       });
     } catch (error) {
       console.log("getAllParts :", error);
@@ -82,4 +84,6 @@ class Parts {
   }
 }
 
-export const partsService = new Parts();
+const partsService = new Parts();
+
+export default partsService;
