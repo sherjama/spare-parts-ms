@@ -13,7 +13,7 @@ export default function Protected({ children, authentication = true }) {
     if (authentication && !authValue) {
       navigate("/auth/login");
     } else if (!authentication && authValue) {
-      navigate("/landing");
+      navigate("/dashboard");
     }
     setLoading(false);
   }, [authstatus, navigate, authentication]);

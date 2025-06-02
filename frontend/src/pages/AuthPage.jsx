@@ -8,7 +8,6 @@ import { NavLink, useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice.js";
-import { addParts, addShelves } from "../store/stockSlice.js";
 import { setLoading } from "../store/loadSlice.js";
 
 const AuthPage = () => {
@@ -85,8 +84,6 @@ const AuthPage = () => {
         dispatch(login(isSigned.data.data));
         navigate("/dashboard");
         dispatch(setLoading(false));
-
-        await addStock(isLogedInUser.data.data.user._id);
       }
     } catch (error) {
       toast.info(error.response.data.message, {
@@ -105,29 +102,9 @@ const AuthPage = () => {
         dispatch(login(isLogedInUser.data.data));
         navigate("/dashboard");
         dispatch(setLoading(false));
-
-        await addStock(isLogedInUser.data.data.user._id);
       }
     } catch (error) {
       dispatch(setLoading(false));
-      toast.info(error.response.data.message, {
-        position: "top-center",
-      });
-    }
-  };
-
-  const addStock = async (userId) => {
-    try {
-      const userStockParts = await partsService.getAllParts(userId);
-      const userStockShelves = await shelvesService.listShelves();
-      console.log("parts :", userStockParts);
-      console.log("shelve :", userStockShelves);
-
-      if (userStockParts || userStockShelves) {
-        dispatch(addParts(userStockParts));
-        dispatch(addShelves(userStockShelves));
-      }
-    } catch (error) {
       toast.info(error.response.data.message, {
         position: "top-center",
       });

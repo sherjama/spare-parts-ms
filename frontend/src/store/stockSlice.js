@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  Parts: JSON.parse(localStorage.getItem("userParts")),
-  Shelves: JSON.parse(localStorage.getItem("userShelve")),
+  Parts: JSON.parse(localStorage.getItem("userParts")) || [],
+  Shelves: JSON.parse(localStorage.getItem("userShelve")) || [],
+  reloadTrigger: 0,
 };
 
 const stockSlice = createSlice({
@@ -19,8 +20,11 @@ const stockSlice = createSlice({
 
       localStorage.setItem("userShelve", JSON.stringify(action.payload));
     },
+    triggerReload: (state) => {
+      state.reloadTrigger += 1;
+    },
   },
 });
 
-export const { addParts, addShelves } = stockSlice.actions;
+export const { addParts, addShelves, triggerReload } = stockSlice.actions;
 export default stockSlice.reducer;
