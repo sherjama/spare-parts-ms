@@ -12,6 +12,7 @@ import DashboardPage from "./pages/Dashboard.jsx";
 import authservice from "./services/auth.service.js";
 import partsService from "./services/parts.service.js";
 import shelvesService from "./services/shelves.service.js";
+import Shelvebox from "./components/Shelvebox.jsx";
 
 export {
   Header,
@@ -28,4 +29,5 @@ export {
   authservice,
   partsService,
   shelvesService,
+  Shelvebox,
 };

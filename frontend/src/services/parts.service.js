@@ -75,7 +75,7 @@ class Parts {
   async getShelfParts(shelfName) {
     try {
       return await axios.get(`${this.partsRoute}/get-shelf-parts`, {
-        shelfName,
+        params: { shelfName },
       });
     } catch (error) {
       console.log("getShelfParts :", error);

@@ -1,4 +1,4 @@
-import { partsService, shelvesService } from "../index.js";
+import { partsService, shelvesService, Shelvebox } from "../index.js";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { addParts, addShelves } from "../store/stockSlice.js";
@@ -7,14 +7,18 @@ import { useEffect } from "react";
 const Dashboard = () => {
   const userdata = useSelector((state) => state.userdata.userdata?.user);
   const userId = useSelector((state) => state.userdata.userdata.user._id);
-  const Parts = useSelector((state) => state.stock.Parts.data);
+  const Parts = useSelector((state) => state.stock.Parts?.data);
+
+  const Shelves = useSelector((state) => state.stock.Shelves?.data);
   const totalMRP = Array.isArray(Parts)
     ? Parts.reduce((sum, part) => sum + (part.MRP || 0), 0)
     : 0;
-  const reloadTrigger = useSelector((state) => state.stock.reloadTrigger);
+  const reloadTriggerPart = useSelector(
+    (state) => state.stock.reloadTriggerPart
+  );
   const dispatch = useDispatch();
 
-  console.log("Parts from Redux:", Parts);
+  // console.log("Parts from Redux:", Parts);
 
   useEffect(() => {
     const fetchStock = async () => {
@@ -34,8 +38,8 @@ const Dashboard = () => {
     };
 
     if (userId) fetchStock();
-  }, [reloadTrigger, userId, dispatch]);
-  console.log(Parts.data);
+  }, [reloadTriggerPart, userId, dispatch]);
+  // console.log(Parts.data);
 
   return (
     <div className="w-full h-screen  border border-[#2a3a6f] bg-[#121212] p-6 md:p-8">
@@ -155,67 +159,13 @@ const Dashboard = () => {
                   <i className="fas fa-chevron-right text-[10px]"></i>
                 </button>
               </div>
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-                <div className="bg-[#121212] rounded-md p-2 flex flex-col text-xs font-semibold">
-                  <p className="text-[#3aff7a]">$ 1,721.3</p>
-                  <p className="text-[#3aff7a] text-[8px] font-normal">
-                    +3.25%
-                  </p>
-                  <p className="mt-1">AAPL</p>
-                  <p className="text-[#7a7a7a] text-[8px] font-normal">
-                    Units 104
-                  </p>
-                </div>
-                <div className="bg-[#121212] rounded-md p-2 flex flex-col text-xs font-semibold">
-                  <p className="text-[#ff4a4a]">$ 1,521.3</p>
-                  <p className="text-[#ff4a4a] text-[8px] font-normal">
-                    -1.25%
-                  </p>
-                  <p className="mt-1">TSLA</p>
-                  <p className="text-[#7a7a7a] text-[8px] font-normal">
-                    Units 124
-                  </p>
-                </div>
-                <div className="bg-[#121212] rounded-md p-2 flex flex-col text-xs font-semibold">
-                  <p className="text-[#3aff7a]">$ 1,721.3</p>
-                  <p className="text-[#3aff7a] text-[8px] font-normal">
-                    +3.25%
-                  </p>
-                  <p className="mt-1">MSFT</p>
-                  <p className="text-[#7a7a7a] text-[8px] font-normal">
-                    Units 110
-                  </p>
-                </div>
-                <div className="bg-[#121212] rounded-md p-2 flex flex-col text-xs font-semibold">
-                  <p className="text-[#3aff7a]">$ 1,721.3</p>
-                  <p className="text-[#3aff7a] text-[8px] font-normal">
-                    +3.25%
-                  </p>
-                  <p className="mt-1">GOOG</p>
-                  <p className="text-[#7a7a7a] text-[8px] font-normal">
-                    Units 110
-                  </p>
-                </div>
-                <div className="bg-[#121212] rounded-md p-2 flex flex-col text-xs font-semibold">
-                  <p className="text-[#3aff7a]">$ 1,721.3</p>
-                  <p className="text-[#3aff7a] text-[8px] font-normal">
-                    +3.25%
-                  </p>
-                  <p className="mt-1">TSLA</p>
-                  <p className="text-[#7a7a7a] text-[8px] font-normal">
-                    Units 110
-                  </p>
-                </div>
-                <div className="bg-[#121212] rounded-md p-2 flex flex-col text-xs font-semibold">
-                  <p className="text-[#3aff7a]">$ 1,721.3</p>
-                  <p className="text-[#3aff7a] text-[8px] font-normal">
-                    +3.25%
-                  </p>
-                  <p className="mt-1">NVDA</p>
-                  <p className="text-[#7a7a7a] text-[8px] font-normal">
-                    Units 104
-                  </p>
-                </div>
+              <div className="flex">
+                {Parts &&
+                  Shelves.map((shelf, idx) => (
+                    <div className="flex h-ful w-full" key={shelf._id}>
+                      <Shelvebox Shelve={shelf} />
+                    </div>
+                  ))}
               </div>
             </div>
           </div>

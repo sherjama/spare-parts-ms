@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   Parts: JSON.parse(localStorage.getItem("userParts")) || [],
   Shelves: JSON.parse(localStorage.getItem("userShelve")) || [],
-  reloadTrigger: 0,
+  reloadTriggerPart: 0,
+  reloadTriggerShelve: 0,
 };
 
 const stockSlice = createSlice({
@@ -20,11 +21,15 @@ const stockSlice = createSlice({
 
       localStorage.setItem("userShelve", JSON.stringify(action.payload));
     },
-    triggerReload: (state) => {
-      state.reloadTrigger += 1;
+    triggerReloadPart: (state) => {
+      state.reloadTriggerPart += 1;
+    },
+    triggerReloadShelve: (state) => {
+      state.reloadTriggerShelve += 1;
     },
   },
 });
 
-export const { addParts, addShelves, triggerReload } = stockSlice.actions;
+export const { addParts, addShelves, triggerReloadPart, triggerReloadShelve } =
+  stockSlice.actions;
 export default stockSlice.reducer;

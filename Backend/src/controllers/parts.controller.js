@@ -152,7 +152,7 @@ const getAllParts = asyncHandler(async (req, res) => {
 });
 
 const getPartsOfShelf = asyncHandler(async (req, res) => {
-  const { shelfName } = req.body;
+  const { shelfName } = req.query;
 
   if (!shelfName) {
     throw new ApiError(401, "Shelf name is required");
