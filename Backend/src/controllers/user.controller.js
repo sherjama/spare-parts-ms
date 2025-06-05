@@ -196,6 +196,29 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
+const checkAuth = asyncHandler(async (req, res) => {
+  const { refreshToken, accessToken } = req.query;
+
+  if (!refreshToken && !accessToken) {
+    throw new ApiError(400, "All feilds are required");
+  }
+
+  const isExpired = await jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET
+  );
+
+  if (isExpired) {
+    const clearLocalStorage = { message: "Session Expired", clear: true };
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, clearLocalStorage, "Session Expired"));
+  }
+
+  await refreshAccessToken();
+});
+
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
@@ -294,4 +317,5 @@ export {
   getCurrentUser,
   updateAccountDetails,
   changeLogoImage,
+  checkAuth,
 };

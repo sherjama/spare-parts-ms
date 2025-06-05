@@ -8,6 +8,7 @@ import {
   changeLogoImage,
   getCurrentUser,
   updateAccountDetails,
+  checkAuth,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -28,5 +29,6 @@ router
 router
   .route("/change-logo")
   .patch(verifyJWT, upload.single("logo"), changeLogoImage);
+router.route("/check-auth").get(verifyJWT, upload.none(), checkAuth);
 
 export default router;
