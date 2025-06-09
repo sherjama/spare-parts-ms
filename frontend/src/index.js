@@ -13,6 +13,7 @@ import authservice from "./services/auth.service.js";
 import partsService from "./services/parts.service.js";
 import shelvesService from "./services/shelves.service.js";
 import Shelvebox from "./components/Shelvebox.jsx";
+import SessionPage from "./pages/SessionPage.jsx";
 
 export {
   Header,
@@ -30,4 +31,5 @@ export {
   partsService,
   shelvesService,
   Shelvebox,
+  SessionPage,
 };

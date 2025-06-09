@@ -29,6 +29,6 @@ router
 router
   .route("/change-logo")
   .patch(verifyJWT, upload.single("logo"), changeLogoImage);
-router.route("/check-auth").get(verifyJWT, upload.none(), checkAuth);
+router.route("/check-auth").get(upload.none(), checkAuth);
 
 export default router;

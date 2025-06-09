@@ -152,9 +152,9 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
   try {
-    const incomingRefreshToken =
-      req.cookies.refreshToken || req.body.refreshToken;
+    const incomingRefreshToken = req.body.refreshToken;
 
+    console.log("incomming token :", req.body.refreshToken);
     if (!incomingRefreshToken) {
       throw new ApiError(401, "Unauthorized request");
     }
@@ -197,26 +197,40 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 });
 
 const checkAuth = asyncHandler(async (req, res) => {
-  const { refreshToken, accessToken } = req.query;
+  const { refreshToken } = req.query;
 
-  if (!refreshToken && !accessToken) {
+  if (!refreshToken) {
     throw new ApiError(400, "All feilds are required");
   }
 
-  const isExpired = await jwt.verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET
-  );
+  const isValid = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-  if (isExpired) {
+  if (!isValid) {
     const clearLocalStorage = { message: "Session Expired", clear: true };
 
+    console.log(clearLocalStorage);
+
     res
-      .status(200)
+      .status(201)
       .json(new ApiResponse(200, clearLocalStorage, "Session Expired"));
+
+    return;
   }
 
-  await refreshAccessToken();
+  const refreshAccessTokenRequired = {
+    message: "refresh token",
+    clear: false,
+  };
+
+  res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        refreshAccessTokenRequired,
+        "Refresh access token required"
+      )
+    );
 });
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {

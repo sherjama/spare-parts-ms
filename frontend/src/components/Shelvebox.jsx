@@ -8,7 +8,6 @@ const Shelvebox = ({ Shelve }) => {
   const reloadTriggerShelve = useSelector(
     (state) => state.stock.reloadTriggerShelve
   );
-  console.log(Shelve);
 
   useEffect(() => {
     const fetchShelfParts = async () => {

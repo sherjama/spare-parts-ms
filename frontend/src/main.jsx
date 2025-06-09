@@ -16,6 +16,7 @@ import {
   LandingPage,
   DashboardPage,
   ProfilePage,
+  SessionPage,
   Protected,
 } from "./index.js";
 
@@ -68,14 +69,20 @@ const router = createBrowserRouter([
           </Protected>
         ),
       },
+      {
+        path: "/session",
+        element: (
+          <Protected authentication>
+            <SessionPage />
+          </Protected>
+        ),
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </StrictMode>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

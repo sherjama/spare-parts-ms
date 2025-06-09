@@ -90,11 +90,39 @@ class AuthService {
     }
   }
 
-  async RefreshToken() {
+  async RefreshToken(refreshToken) {
+    console.log(refreshToken);
+
     try {
-      return await axios.post(`${this.userRoute}/refresh-token`);
+      return await axios.post(
+        `${this.userRoute}/refresh-token`,
+        { refreshToken },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
     } catch (error) {
       console.log("RefreshToken : ", error);
+      throw error;
+    }
+  }
+
+  async checkSession(refreshToken) {
+    try {
+      const response = await axios.get(`${this.userRoute}/check-auth`, {
+        params: { refreshToken },
+      });
+
+      if (response.data.data.clear) {
+        localStorage.clear();
+      } else {
+        return true;
+      }
+    } catch (error) {
+      console.log("checkSession : ", error);
+
       throw error;
     }
   }

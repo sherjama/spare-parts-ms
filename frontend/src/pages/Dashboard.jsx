@@ -39,7 +39,6 @@ const Dashboard = () => {
 
     if (userId) fetchStock();
   }, [reloadTriggerPart, userId, dispatch]);
-  // console.log(Parts.data);
 
   return (
     <div className="w-full h-screen  border border-[#2a3a6f] bg-[#121212] p-6 md:p-8">

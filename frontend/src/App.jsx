@@ -1,18 +1,47 @@
 import LoadingBar from "react-top-loading-bar";
-import { Outlet, useLocation } from "react-router-dom";
-import { Header } from "./index.js";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Header, authservice } from "./index.js";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const App = () => {
-  const [progress, setProgress] = useState(60);
+  // states
   const [ifHeadNotVisible, setifHeadNotVisible] = useState();
-  const location = useLocation();
+  const [progress, setProgress] = useState(60);
+
+  // from store
+  const status = useSelector((state) => state.userdata?.status);
+  const refreshToken = useSelector(
+    (state) => state.userdata.userdata?.refreshToken
+  );
   const isLoading = useSelector((state) => state.Loading.isLoading);
+  // from router
+  const location = useLocation();
   const path = location.pathname;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (path == "/dashboard") {
+    if (status) {
+      const checkAuthSession = async () => {
+        try {
+          const session = await authservice.checkSession(refreshToken);
+
+          if (session) {
+            navigate("/session");
+          }
+        } catch (error) {
+          toast.info(error?.response?.data?.message || "Server Error", {
+            position: "top-center",
+          });
+        }
+      };
+      checkAuthSession();
+    }
+  });
+
+  useEffect(() => {
+    if (path == "/dashboard" || path == "/session") {
       setifHeadNotVisible(true);
     } else {
       setifHeadNotVisible(false);
