@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import jwt from "jsonwebtoken";
+import { log } from "console";
 
 const options = {
   httpOnly: true,
@@ -154,8 +155,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   try {
     const incomingRefreshToken = req.body.refreshToken;
 
-    console.log("incomming token :", req.body.refreshToken);
     if (!incomingRefreshToken) {
+      console.log(incomingRefreshToken);
+
       throw new ApiError(401, "Unauthorized request");
     }
 
@@ -200,37 +202,36 @@ const checkAuth = asyncHandler(async (req, res) => {
   const { refreshToken } = req.query;
 
   if (!refreshToken) {
-    throw new ApiError(400, "All feilds are required");
+    throw new ApiError(400, "All fields are required");
   }
 
-  const isValid = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-  if (!isValid) {
-    const clearLocalStorage = { message: "Session Expired", clear: true };
+    // Optionally: you can verify user exists using decoded._id
 
-    console.log(clearLocalStorage);
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { message: "Refresh token valid", clear: false },
+          "Refresh access token required"
+        )
+      );
+  } catch (err) {
+    console.error("Refresh token verification failed:", err.message);
 
-    res
-      .status(201)
-      .json(new ApiResponse(200, clearLocalStorage, "Session Expired"));
-
-    return;
+    return res
+      .status(401)
+      .json(
+        new ApiResponse(
+          401,
+          { message: "Session Expired", clear: true },
+          "Invalid or expired refresh token"
+        )
+      );
   }
-
-  const refreshAccessTokenRequired = {
-    message: "refresh token",
-    clear: false,
-  };
-
-  res
-    .status(201)
-    .json(
-      new ApiResponse(
-        201,
-        refreshAccessTokenRequired,
-        "Refresh access token required"
-      )
-    );
 });
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {

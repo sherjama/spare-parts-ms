@@ -91,8 +91,6 @@ class AuthService {
   }
 
   async RefreshToken(refreshToken) {
-    console.log(refreshToken);
-
     try {
       return await axios.post(
         `${this.userRoute}/refresh-token`,
@@ -115,9 +113,14 @@ class AuthService {
         params: { refreshToken },
       });
 
+      console.log(response.data.data.clear);
+
       if (response.data.data.clear) {
         localStorage.clear();
-      } else {
+        return;
+      }
+
+      if (!response.data.data.clear) {
         return true;
       }
     } catch (error) {

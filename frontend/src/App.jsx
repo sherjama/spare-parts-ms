@@ -28,7 +28,10 @@ const App = () => {
           const session = await authservice.checkSession(refreshToken);
 
           if (session) {
-            navigate("/session");
+            const tokenRefreshed = await authservice.RefreshToken(refreshToken);
+            toast.info(error?.response?.data?.message || "Session Refreshed", {
+              position: "top-center",
+            });
           }
         } catch (error) {
           toast.info(error?.response?.data?.message || "Server Error", {
