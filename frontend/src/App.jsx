@@ -4,6 +4,7 @@ import { Header, authservice } from "./index.js";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { triggerReloadPart } from "./store/stockSlice.js";
 
 const App = () => {
   // states
@@ -12,26 +13,21 @@ const App = () => {
 
   // from store
   const status = useSelector((state) => state.userdata?.status);
-  const refreshToken = useSelector(
-    (state) => state.userdata.userdata?.refreshToken
+  const accessToken = useSelector(
+    (state) => state.userdata.userdata?.accessToken
   );
   const isLoading = useSelector((state) => state.Loading.isLoading);
   // from router
   const location = useLocation();
   const path = location.pathname;
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (status) {
       const checkAuthSession = async () => {
         try {
-          const session = await authservice.checkSession(refreshToken);
-
-          if (session) {
-            const tokenRefreshed = await authservice.RefreshToken(refreshToken);
-            toast.info(error?.response?.data?.message || "Session Refreshed", {
-              position: "top-center",
-            });
+          const session = await authservice.checkSession(accessToken);
+          if (!session) {
+            window.location.reload();
           }
         } catch (error) {
           toast.info(error?.response?.data?.message || "Server Error", {
@@ -41,7 +37,7 @@ const App = () => {
       };
       checkAuthSession();
     }
-  });
+  }, [status, accessToken]);
 
   useEffect(() => {
     if (path == "/dashboard" || path == "/session") {

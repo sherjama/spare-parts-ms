@@ -14,10 +14,10 @@ import {
   AuthPage,
   ContactPage,
   LandingPage,
-  DashboardPage,
   ProfilePage,
   SessionPage,
   Protected,
+  ControlPage,
 } from "./index.js";
 
 const router = createBrowserRouter([
@@ -46,10 +46,10 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/dashboard",
+        path: "/controls/:slug",
         element: (
           <Protected authentication>
-            <DashboardPage />
+            <ControlPage />
           </Protected>
         ),
       },

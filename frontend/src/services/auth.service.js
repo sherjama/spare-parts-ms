@@ -107,25 +107,23 @@ class AuthService {
     }
   }
 
-  async checkSession(refreshToken) {
+  async checkSession(accessToken) {
     try {
       const response = await axios.get(`${this.userRoute}/check-auth`, {
-        params: { refreshToken },
+        params: { accessToken },
       });
-
-      console.log(response.data.data.clear);
-
-      if (response.data.data.clear) {
-        localStorage.clear();
-        return;
-      }
 
       if (!response.data.data.clear) {
         return true;
+      } else {
+        localStorage.clear();
+        return false;
       }
     } catch (error) {
-      console.log("checkSession : ", error);
-
+      if (error.response?.data?.data?.clear) {
+        localStorage.clear();
+        return false;
+      }
       throw error;
     }
   }

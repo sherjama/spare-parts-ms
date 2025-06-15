@@ -8,14 +8,18 @@ import Input from "./components/Input.jsx";
 import Pfp from "./components/Pfp.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import ProfilePage from "./pages/Profile.jsx";
-import DashboardPage from "./pages/Dashboard.jsx";
+import ControlPage from "./pages/ControlPage.jsx";
 import authservice from "./services/auth.service.js";
 import partsService from "./services/parts.service.js";
 import shelvesService from "./services/shelves.service.js";
 import Shelvebox from "./components/Shelvebox.jsx";
 import SessionPage from "./pages/SessionPage.jsx";
+import Sidebar from "./components/Sidebar.jsx";
+import AsideButton from "./components/AsideButton.jsx";
+import StockPage from "./pages/StockPage.jsx";
 
 export {
+  AsideButton,
   Header,
   Footer,
   Button,
@@ -25,11 +29,13 @@ export {
   Pfp,
   LandingPage,
   ProfilePage,
-  DashboardPage,
+  ControlPage,
   Protected,
   authservice,
   partsService,
   shelvesService,
   Shelvebox,
   SessionPage,
+  Sidebar,
+  StockPage,
 };

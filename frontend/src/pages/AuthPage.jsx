@@ -100,7 +100,7 @@ const AuthPage = () => {
 
       if (isLogedInUser) {
         dispatch(login(isLogedInUser.data.data));
-        navigate("/dashboard");
+        navigate("/controls/portfolio");
         dispatch(setLoading(false));
       }
     } catch (error) {

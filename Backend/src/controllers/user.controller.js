@@ -199,36 +199,34 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 });
 
 const checkAuth = asyncHandler(async (req, res) => {
-  const { refreshToken } = req.query;
+  console.log("chla");
 
-  if (!refreshToken) {
+  const { accessToken } = req.query;
+
+  if (!accessToken) {
     throw new ApiError(400, "All fields are required");
   }
 
   try {
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-
-    // Optionally: you can verify user exists using decoded._id
+    const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
 
     return res
       .status(200)
       .json(
         new ApiResponse(
           200,
-          { message: "Refresh token valid", clear: false },
-          "Refresh access token required"
+          { message: "Access token valid", clear: false },
+          "Access token valid"
         )
       );
   } catch (err) {
-    console.error("Refresh token verification failed:", err.message);
-
     return res
       .status(401)
       .json(
         new ApiResponse(
           401,
-          { message: "Session Expired", clear: true },
-          "Invalid or expired refresh token"
+          { message: "Session expired", clear: true },
+          "Invalid or expired access token"
         )
       );
   }

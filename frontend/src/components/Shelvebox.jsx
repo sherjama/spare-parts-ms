@@ -27,7 +27,7 @@ const Shelvebox = ({ Shelve }) => {
 
   return (
     <div className="bg-[#121212] rounded-md p-2 flex flex-col font-nexar1 w-32 mr-3">
-      <p className="text-purple-700 text-lg">Shelve : {Shelve?.shelfName}</p>
+      <p className="text-purple-700 text-lg">{Shelve?.shelfName}</p>
       <p className="mt-1 text-gray-300 text-[11px] font-nexar1 flex justify-between items-start ">
         Types :
         <span className=" font-nexar3 text-lg pr-8">{shelfParts?.length}</span>
