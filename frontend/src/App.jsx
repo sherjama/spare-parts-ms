@@ -40,7 +40,7 @@ const App = () => {
   }, [status, accessToken]);
 
   useEffect(() => {
-    if (path == "/dashboard" || path == "/session") {
+    if (path == "/controls/dashboard" || path == "/session") {
       setifHeadNotVisible(true);
     } else {
       setifHeadNotVisible(false);

@@ -17,8 +17,10 @@ import SessionPage from "./pages/SessionPage.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import AsideButton from "./components/AsideButton.jsx";
 import StockPage from "./pages/StockPage.jsx";
+import Dashboard from "./components/Dashboard.jsx";
 
 export {
+  Dashboard,
   AsideButton,
   Header,
   Footer,

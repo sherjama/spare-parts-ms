@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { setLoading } from "../store/loadSlice.js";
 import { useNavigate, NavLink } from "react-router-dom";
 import { partsService, shelvesService, Shelvebox, Pfp } from "../index.js";
-const Portfolio = () => {
+const Dashboard = ({ className }) => {
   const userdata = useSelector((state) => state.userdata.userdata?.user);
   const userId = useSelector((state) => state.userdata.userdata.user._id);
   const Parts = useSelector((state) => state.stock.Parts?.data);
@@ -41,7 +41,9 @@ const Portfolio = () => {
     if (userId) fetchStock();
   }, [reloadTriggerPart, userId, dispatch]);
   return (
-    <main className="flex-1 mt-6 md:mt-0 flex flex-col space-y-6 text-white">
+    <main
+      className={`flex mt-6 md:mt-0  flex-col space-y-6 text-white ${className} bg-[#121212] rounded-3xl p-4`}
+    >
       <ToastContainer />
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
         <div className="flex space-x-2">
@@ -73,7 +75,7 @@ const Portfolio = () => {
           >
             <i className="fas fa-cog text-xs"></i>
           </button>
-          <div
+          {/* <div
             onClick={() => navigate(`/profile/${userId}`)}
             className="flex items-center space-x-2 bg-[#222222] rounded-full px-3 py-1 cursor-pointer"
           >
@@ -82,7 +84,7 @@ const Portfolio = () => {
               <p className="font-nexar1">{userdata.username}</p>
               <p className="text-[#7a7a7a]">{userdata.email}</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
@@ -239,4 +241,4 @@ const Portfolio = () => {
   );
 };
 
-export default Portfolio;
+export default Dashboard;
