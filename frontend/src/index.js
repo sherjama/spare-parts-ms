@@ -16,7 +16,7 @@ import Shelvebox from "./components/Shelvebox.jsx";
 import SessionPage from "./pages/SessionPage.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import AsideButton from "./components/AsideButton.jsx";
-import StockPage from "./pages/StockPage.jsx";
+import StockPage from "./components/Stock.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 
 export {

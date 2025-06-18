@@ -67,18 +67,6 @@ const Profile = () => {
               >
                 <i className="fas fa-crown"></i>
               </button>
-              <div className="flex items-center space-x-3 bg-[#22232a] rounded-full px-3 py-1 cursor-pointer select-none">
-                <Pfp className="size-12" />
-                <div className="text-left">
-                  <p className="text-white text-sm font-nexar2 leading-none">
-                    {userdata.username}
-                  </p>
-                  {/* <p className="text-[#7ed957] text-lg leading-none font-medium">
-                    Premium User
-                  </p> */}
-                </div>
-                <i className="fas fa-chevron-down text-gray-400"></i>
-              </div>
             </div>
           </div>
 

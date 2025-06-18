@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logout } from "../store/authSlice";
 
 class AuthService {
   userRoute;
@@ -107,7 +108,7 @@ class AuthService {
     }
   }
 
-  async checkSession(accessToken) {
+  async checkSession(accessToken, dispatch) {
     try {
       const response = await axios.get(`${this.userRoute}/check-auth`, {
         params: { accessToken },
@@ -117,11 +118,13 @@ class AuthService {
         return true;
       } else {
         localStorage.clear();
+        dispatch(logout());
         return false;
       }
     } catch (error) {
       if (error.response?.data?.data?.clear) {
         localStorage.clear();
+        dispatch(logout());
         return false;
       }
       throw error;

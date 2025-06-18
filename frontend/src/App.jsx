@@ -1,10 +1,9 @@
 import LoadingBar from "react-top-loading-bar";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Header, authservice } from "./index.js";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { triggerReloadPart } from "./store/stockSlice.js";
 
 const App = () => {
   // states
@@ -12,6 +11,7 @@ const App = () => {
   const [progress, setProgress] = useState(60);
 
   // from store
+  const dispatch = useDispatch;
   const status = useSelector((state) => state.userdata?.status);
   const accessToken = useSelector(
     (state) => state.userdata.userdata?.accessToken
@@ -25,7 +25,7 @@ const App = () => {
     if (status) {
       const checkAuthSession = async () => {
         try {
-          const session = await authservice.checkSession(accessToken);
+          const session = await authservice.checkSession(accessToken, dispatch);
           if (!session) {
             window.location.reload();
           }

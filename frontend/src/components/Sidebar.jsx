@@ -7,31 +7,43 @@ const Sidebar = ({ className }) => {
   const userdata = useSelector((state) => state.userdata.userdata?.user);
   const options = [
     { text: "Dashboard", toLink: "/controls/dashboard" },
-    { text: "Stock", toLink: "/controls/stock" },
+    {
+      text: "Stock",
+      options: ["Add Stock", "List Stock"],
+      toLink: "/controls/stock",
+    },
   ];
 
   return (
     <aside
-      className={`flex flex-col justify-between w-full md:w-56 text-white h-[95vh] ${className}`}
+      className={`flex flex-col justify-between text-white h-[95vh] ${className}`}
     >
-      <div className="space-y-16">
+      <div className="space-y-16 ">
         <h1 className="text-white text-xl font-nexar3 mb-1">NEXAR</h1>
 
         <nav className="space-y-3 flex flex-col">
           {options.map((val, idx) => (
-            <AsideButton key={idx} text={val.text} toLink={val.toLink} />
+            <AsideButton
+              key={idx}
+              text={val.text}
+              toLink={val.toLink}
+              options={val.options}
+            />
           ))}
         </nav>
       </div>
-      <div className="mt-10 space-y-3 text-[#7a7a7a] text-xs font-normal">
+
+      <div className="w-full text-[#7a7a7a] text-xs bg-green-300">
         <div
-          onClick={() => navigate(`/profile/${userId}`)}
-          className="flex items-center space-x-2 bg-[#121212] rounded-l-3xl px-3 py-1 cursor-pointer"
+          onClick={() => navigate(`/profile/${userdata._id}`)}
+          className="flex items-start space-x-2 bg-[#121212] rounded-l-3xl p-3 cursor-pointer"
         >
-          <Pfp className="size-8" />
-          <div className="text-xs leading-tight max-w-24 overflow-hidden">
-            <p className="font-nexar1">{userdata.username}</p>
-            <p className="text-[#7a7a7a]">{userdata.email}</p>
+          <div className="flex w-full">
+            <Pfp className="size-8" />
+            <div className="text-xs leading-tight w-min overflow-hidden ">
+              <p className="font-nexar1">{userdata.username}</p>
+              <p className="text-[#7a7a7a] font-nexar1">{userdata.email}</p>
+            </div>
           </div>
         </div>
       </div>

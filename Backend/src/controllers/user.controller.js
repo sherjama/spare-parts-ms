@@ -4,11 +4,12 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import jwt from "jsonwebtoken";
-import { log } from "console";
 
 const options = {
   httpOnly: true,
   secure: true,
+
+  maxAge: 10 * 24 * 60 * 60 * 1000,
 };
 
 const generateAccessAndRefreshToken = async (userId) => {
