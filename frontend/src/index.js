@@ -18,8 +18,10 @@ import Sidebar from "./components/Sidebar.jsx";
 import AsideButton from "./components/AsideButton.jsx";
 import StockPage from "./components/Stock.jsx";
 import Dashboard from "./components/Dashboard.jsx";
+import Box from "./components/Box.jsx";
 
 export {
+  Box,
   Dashboard,
   AsideButton,
   Header,

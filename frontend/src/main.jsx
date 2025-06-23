@@ -14,7 +14,6 @@ import {
   AuthPage,
   ContactPage,
   LandingPage,
-  ProfilePage,
   SessionPage,
   Protected,
   ControlPage,
@@ -53,14 +52,7 @@ const router = createBrowserRouter([
           </Protected>
         ),
       },
-      {
-        path: "/profile/:slug",
-        element: (
-          <Protected authentication>
-            <ProfilePage />
-          </Protected>
-        ),
-      },
+
       {
         path: "/contact",
         element: (

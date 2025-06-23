@@ -14,9 +14,9 @@ const Button = ({
   return (
     <div>
       <button
-        className={`${
+        className={`  ${bgColor} ${textColor} ${
           isActive ? "bg-black text-white border-none" : null
-        } ${className}  ${bgColor} ${textColor} font-nexar1 px-8 py-2 rounded-full  border-2 border-slate-200 text-md flex items-center justify-center`}
+        }  font-nexar1 px-8 py-2 rounded-full  border-2 border-slate-200 text-md flex items-center justify-center ${className}`}
         {...params}
       >
         {text}

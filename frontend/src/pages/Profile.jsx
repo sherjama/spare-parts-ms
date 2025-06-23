@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { setLoading } from "../store/loadSlice.js";
 import { ToastContainer, toast } from "react-toastify";
 
-const Profile = () => {
+const Profile = ({ className }) => {
   const userdata = useSelector((state) => state.userdata.userdata.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className={`${className}`}>
       <ToastContainer />
       <div className="bg-[#18191f] text-white min-h-screen flex w-full">
         <aside className="w-16 flex flex-col items-center py-8 space-y-8 border-r border-gray-700">
@@ -172,52 +172,6 @@ const Profile = () => {
                     </p>
                   </div> */}
                 </div>
-              </div>
-            </div>
-            <div className="bg-[#22232a] rounded-lg p-6 border border-gray-700 w-full max-w-4xl">
-              <h3 className="text-white font-nexar2 mb-4 text-sm">
-                Social Media
-              </h3>
-              <div className="flex space-x-4">
-                <a
-                  aria-label="YouTube"
-                  className="w-8 h-8 rounded-full bg-[#18191f] border border-gray-700 flex items-center justify-center hover:border-red-600 transition"
-                  href="#"
-                >
-                  <img
-                    alt="YouTube logo icon in red and white"
-                    className="w-5 h-5"
-                    height="20"
-                    src="https://storage.googleapis.com/a1aa/image/b248b2a3-802f-4be2-e418-8a4160fd3eab.jpg"
-                    width="20"
-                  />
-                </a>
-                <a
-                  aria-label="Instagram"
-                  className="w-8 h-8 rounded-full bg-[#18191f] border border-gray-700 flex items-center justify-center hover:border-pink-500 transition"
-                  href="#"
-                >
-                  <img
-                    alt="Instagram logo icon in gradient pink and orange"
-                    className="w-5 h-5"
-                    height="20"
-                    src="https://storage.googleapis.com/a1aa/image/ec575759-311e-4e3e-d171-aea31669867e.jpg"
-                    width="20"
-                  />
-                </a>
-                <a
-                  aria-label="TikTok"
-                  className="w-8 h-8 rounded-full bg-[#18191f] border border-gray-700 flex items-center justify-center hover:border-black transition"
-                  href="#"
-                >
-                  <img
-                    alt="TikTok logo icon in black, white, and red"
-                    className="w-5 h-5"
-                    height="20"
-                    src="https://storage.googleapis.com/a1aa/image/8b502b14-19b2-4c69-d7e0-9c6f0c62f0dc.jpg"
-                    width="20"
-                  />
-                </a>
               </div>
             </div>
 
