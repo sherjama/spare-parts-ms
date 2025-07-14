@@ -3,16 +3,41 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Parts } from "../models/parts.models.js";
 import { Shelf } from "../models/shelves.models.js";
+import { createPartHelper } from "../services/createPartHelper.js";
+import { addQtyHelper } from "../services/addPartHelper.js";
 
-const createPart = asyncHandler(async (req, res) => {
-  const { partNumber, partName, shelfName, MRP, Qty } = req.body;
+const buyParts = asyncHandler(async (req, res) => {
+  //sabse pehle vender ki details lenge
+  //parts lenge
+  // agar part he to uski qty add karenge or nhi he to pehle part create karke frr uski qty add karenge
 
-  console.log(partName, partNumber, shelfName, MRP, Qty);
+  const { vendorBillNo, vendorName, parts, date } = req.body;
+
+  for (const part of parts) {
+    const partExisted = await Parts.findOne({ partNumber: part?.partNumber });
+
+    if (!partExisted) {
+      await createPartHelper(part, req.user?._id);
+      // console.log(partExisted);
+    } else {
+      await addQtyHelper(part.partNumber, part.Qty, req.user?._id);
+    }
+  }
 
   if (
-    [partName, partNumber, shelfName, MRP, Qty].some(
-      (val) => String(val).trim() === ""
-    )
+    [vendorBillNo, vendorName, date].some((val) => String(val).trim() == "")
+  ) {
+    throw ApiError(401, "All feilds are required");
+  }
+
+  // console.log(vendorBillNo, vendorName, parts, date);
+});
+
+const createPart = asyncHandler(async (req, res) => {
+  const { partNumber, partName, Price, Qty } = req.body;
+
+  if (
+    [partName, partNumber, Price, Qty].some((val) => String(val).trim() === "")
   ) {
     throw new ApiError(401, "All feilds are required");
   }
@@ -22,22 +47,18 @@ const createPart = asyncHandler(async (req, res) => {
     CreatedBy: req.user?._id,
   });
 
-  const shelf = await Shelf.findOne({ shelfName, CreatedBy: req.user?._id });
-
-  if (!shelf) {
-    throw new ApiError(401, "Shelf Name dosn't exist");
-  }
-
   if (isPartExisted) {
     throw new ApiError(401, "Part number is already Existed");
   }
 
+  const noneShelve = await Shelf.findOne({ CreatedBy: req.user?._id });
+
   const part = await Parts.create({
     partName,
     partNumber,
-    MRP,
+    Price,
     Qty,
-    shelf: shelf?._id,
+    shelf: noneShelve?._id,
     CreatedBy: req.user?._id,
   });
 
@@ -53,10 +74,12 @@ const createPart = asyncHandler(async (req, res) => {
 });
 
 const updatePart = asyncHandler(async (req, res) => {
-  const { partNumber, partName, shelf, MRP } = req.body;
+  const { partNumber, partName, shelf, Price } = req.body;
 
   if (
-    [partNumber, partName, shelf, MRP].some((val) => String(val).trim() === "")
+    [partNumber, partName, shelf, Price].some(
+      (val) => String(val).trim() === ""
+    )
   ) {
     throw new ApiError(401, "All feilds are required");
   }
@@ -66,7 +89,7 @@ const updatePart = asyncHandler(async (req, res) => {
     {
       partName,
       shelf,
-      MRP,
+      Price,
     },
     {
       new: true,
@@ -91,11 +114,13 @@ const addQty = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Part with this part number is not Exist");
   }
 
+  const addedQuantity = part.Qty + Qty;
+
   const updatedPart = await Parts.findByIdAndUpdate(
     part._id,
     {
       $set: {
-        Qty,
+        addedQuantity,
       },
     },
     { new: true }
@@ -187,6 +212,7 @@ const getPartsOfShelf = asyncHandler(async (req, res) => {
 });
 
 export {
+  buyParts,
   createPart,
   updatePart,
   addQty,

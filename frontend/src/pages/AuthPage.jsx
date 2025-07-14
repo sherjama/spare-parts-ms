@@ -82,7 +82,7 @@ const AuthPage = () => {
       const isSigned = await authservice.CreateAccount(user);
       if (isSigned) {
         dispatch(login(isSigned.data.data));
-        navigate("/dashboard");
+        navigate("/controls/portfolio");
         dispatch(setLoading(false));
       }
     } catch (error) {

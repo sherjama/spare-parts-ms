@@ -14,15 +14,22 @@ const buySchema = new Schema(
       required: true,
       trim: true,
     },
-    partNumber: {
-      type: Schema.Types.ObjectId,
-      ref: "Parts",
-    },
+    parts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Parts",
+      },
+    ],
     buyer: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    Number: Number,
+    buyDate: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    Number: 0,
   },
   { timestamps: true }
 );
@@ -36,7 +43,7 @@ buySchema.pre("save", async function (next) {
     number = this.Number + 1;
   }
 
-  this.billNo = `${buyer.username}-${number}`;
+  this.billNo = `${buyer.username}-p-${number}`;
 });
 
 export const Buy = mongoose.model("Buys", buySchema);

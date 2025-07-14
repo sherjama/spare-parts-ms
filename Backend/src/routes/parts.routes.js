@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  buyParts,
   createPart,
   updatePart,
   addQty,
@@ -11,7 +12,7 @@ import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
-
+router.route("/buy-part").post(verifyJWT, upload.none(), buyParts);
 router.route("/create-part").post(verifyJWT, upload.none(), createPart);
 router
   .route("/update-part-details")

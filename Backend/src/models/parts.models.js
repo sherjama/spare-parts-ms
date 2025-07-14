@@ -15,7 +15,7 @@ const partsSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Shelf",
     },
-    MRP: {
+    Price: {
       type: Number,
       required: true,
     },

@@ -1,5 +1,6 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.models.js";
+import { Shelf } from "../models/shelves.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
@@ -75,6 +76,10 @@ const registerUser = asyncHandler(async (req, res) => {
     logo: logo?.url || "",
   });
 
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
+
   const createUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
@@ -83,9 +88,26 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while registering the user");
   }
 
+  await Shelf.create({
+    shelfName: "none",
+    CreatedBy: user._id,
+  });
+
   res
     .status(201)
-    .json(new ApiResponse(201, createUser, "User is successfully created"));
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        201,
+        {
+          user: createUser,
+          accessToken,
+          refreshToken,
+        },
+        "User is successfully created"
+      )
+    );
 });
 
 const loginUser = asyncHandler(async (req, res) => {
