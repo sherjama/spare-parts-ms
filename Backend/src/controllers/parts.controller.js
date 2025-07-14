@@ -3,34 +3,60 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Parts } from "../models/parts.models.js";
 import { Shelf } from "../models/shelves.models.js";
+import { Buy } from "../models/buyReceipt.models.js";
 import { createPartHelper } from "../services/createPartHelper.js";
 import { addQtyHelper } from "../services/addPartHelper.js";
 
 const buyParts = asyncHandler(async (req, res) => {
-  //sabse pehle vender ki details lenge
-  //parts lenge
-  // agar part he to uski qty add karenge or nhi he to pehle part create karke frr uski qty add karenge
-
   const { vendorBillNo, vendorName, parts, date } = req.body;
 
-  for (const part of parts) {
-    const partExisted = await Parts.findOne({ partNumber: part?.partNumber });
+  if (!vendorBillNo || !vendorName || !parts || !Array.isArray(parts)) {
+    throw new ApiError(400, "Invalid request data");
+  }
 
-    if (!partExisted) {
-      await createPartHelper(part, req.user?._id);
-      // console.log(partExisted);
+  const partIds = [];
+
+  for (const part of parts) {
+    let existingPart = await Parts.findOne({ partNumber: part.partNumber });
+
+    if (!existingPart) {
+      const newPart = await createPartHelper(part, req.user._id);
+      partIds.push(newPart._id);
     } else {
-      await addQtyHelper(part.partNumber, part.Qty, req.user?._id);
+      await addQtyHelper(part.partNumber, part.Qty, req.user._id);
+      partIds.push(existingPart._id);
     }
   }
 
-  if (
-    [vendorBillNo, vendorName, date].some((val) => String(val).trim() == "")
-  ) {
-    throw ApiError(401, "All feilds are required");
+  try {
+    const createReceipt = await Buy.create({
+      vendorBillNo,
+      vendorName,
+      parts: partIds,
+      buyer: req.user._id,
+      buyDate: date,
+    });
+
+    if (!createReceipt) {
+      throw new ApiError(501, "Something went wrong while generating invoice");
+    }
+  } catch (err) {
+    if (err.code === 11000) {
+      const field = Object.keys(err.keyPattern)[0];
+      const value = err.keyValue[field];
+      throw new ApiError(
+        400,
+        `Duplicate value: '${value}' already exists for '${field}'`
+      );
+    }
+    throw err;
   }
 
-  // console.log(vendorBillNo, vendorName, parts, date);
+  res
+    .status(201)
+    .json(
+      new ApiResponse(201, createReceipt, "Invoice generated successfully")
+    );
 });
 
 const createPart = asyncHandler(async (req, res) => {

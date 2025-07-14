@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { User } from "./user.models";
+import { User } from "./user.models.js";
 
 const buySchema = new Schema(
   {
@@ -23,27 +23,50 @@ const buySchema = new Schema(
     buyer: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     buyDate: {
       type: String,
       required: true,
       trim: true,
     },
-    Number: 0,
+    billNo: {
+      type: String,
+      trim: true,
+    },
+    billNumberCount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
 
-buySchema.pre("save", async function (next) {
-  const buyer = await User.findById(this.buyer);
-  let number;
-  if (!this.Number <= 0) {
-    number = 1;
-  } else {
-    number = this.Number + 1;
-  }
-
-  this.billNo = `${buyer.username}-p-${number}`;
+const counterSchema = new Schema({
+  _id: {
+    type: String,
+    required: true,
+  },
+  seq: {
+    type: Number,
+    default: 0,
+  },
 });
 
-export const Buy = mongoose.model("Buys", buySchema);
+const Counter = mongoose.model("Counter", counterSchema);
+
+buySchema.pre("save", async function (next) {
+  const buyer = await User.findById(this.buyer);
+  if (!buyer) return next(new Error("Buyer not found"));
+
+  const counter = await Counter.findByIdAndUpdate(
+    { _id: "billNo" },
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true }
+  );
+
+  this.billNo = `${buyer.username}-p-${counter.seq}`;
+  next();
+});
+
+export const Buy = mongoose.model("buys", buySchema);
