@@ -11,7 +11,7 @@ const buyParts = asyncHandler(async (req, res) => {
   const { vendorBillNo, vendorName, parts, date } = req.body;
 
   if (!vendorBillNo || !vendorName || !parts || !Array.isArray(parts)) {
-    throw new ApiError(400, "Invalid request data");
+    throw new ApiError(400, "All feilds are required");
   }
 
   const partIds = [];
@@ -40,6 +40,12 @@ const buyParts = asyncHandler(async (req, res) => {
     if (!createReceipt) {
       throw new ApiError(501, "Something went wrong while generating invoice");
     }
+
+    res
+      .status(201)
+      .json(
+        new ApiResponse(201, createReceipt, "Invoice generated successfully")
+      );
   } catch (err) {
     if (err.code === 11000) {
       const field = Object.keys(err.keyPattern)[0];
@@ -51,12 +57,18 @@ const buyParts = asyncHandler(async (req, res) => {
     }
     throw err;
   }
+});
 
-  res
-    .status(201)
-    .json(
-      new ApiResponse(201, createReceipt, "Invoice generated successfully")
-    );
+const sellParts = asyncHandler(async (req, res) => {
+  const { customerName, address, mobileNumber, parts } = req.body;
+
+  if (!customerName || !address || !mobileNumber || !Array.isArray(parts)) {
+    throw new ApiError(401, "All feilds are required");
+  }
+
+  for (const part of parts) {
+    const sellPart = await Parts.findOne(part.partNumber);
+  }
 });
 
 const createPart = asyncHandler(async (req, res) => {
@@ -239,6 +251,7 @@ const getPartsOfShelf = asyncHandler(async (req, res) => {
 
 export {
   buyParts,
+  sellParts,
   createPart,
   updatePart,
   addQty,

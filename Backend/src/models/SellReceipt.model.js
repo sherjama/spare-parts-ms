@@ -1,4 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { Counter } from "./buyReceipt.models.js";
+import { User } from "./user.models.js";
+import { ApiError } from "../utils/ApiError.js";
 
 const sellSchema = Schema(
   {
@@ -28,21 +31,32 @@ const sellSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    Number: 0,
+    billNo: {
+      type: String,
+      trim: true,
+      required: true,
+      unique: true,
+    },
+    billCount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamp: true }
 );
 
 sellSchema.pre("save", async function (next) {
   const seller = await User.findById(this.seller);
-  let number;
-  if (!this.Number <= 0) {
-    number = 1;
-  } else {
-    number = this.Number + 1;
-  }
+  if (!seller) next(new ApiError(401, "Seller not found"));
 
-  this.billNo = `${seller.username}-I-${number}`;
+  const counter = await Counter.findByIdAndUpdate(
+    { _id: "sellBillNo" },
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true }
+  );
+
+  this.billNo = `${seller.username}-I-${counter.seq}`;
+  next();
 });
 
 export const Sell = mongoose.model("Sells", sellSchema);

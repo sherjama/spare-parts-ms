@@ -7,12 +7,14 @@ import {
   deletePart,
   getAllParts,
   getPartsOfShelf,
+  sellParts,
 } from "../controllers/parts.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 router.route("/buy-part").post(verifyJWT, upload.none(), buyParts);
+router.route("/sell-part").post(verifyJWT, upload.none(), sellParts);
 router.route("/create-part").post(verifyJWT, upload.none(), createPart);
 router
   .route("/update-part-details")
