@@ -15,10 +15,10 @@ const buySchema = new Schema(
       required: true,
       trim: true,
     },
-    parts: [
+    partsDetails: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Parts",
+        ref: "PartList",
       },
     ],
     buyer: {
@@ -66,4 +66,4 @@ buySchema.pre("save", async function (next) {
   next();
 });
 
-export const Buy = mongoose.model("buys", buySchema);
+export const Buy = mongoose.model("Buy", buySchema);

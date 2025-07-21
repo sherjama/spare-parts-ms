@@ -3,7 +3,7 @@ import { Counter } from "./buyReceipt.models.js";
 import { User } from "./user.models.js";
 import { ApiError } from "../utils/ApiError.js";
 
-const sellSchema = Schema(
+const sellSchema = new Schema(
   {
     customerName: {
       type: String,
@@ -21,10 +21,14 @@ const sellSchema = Schema(
       required: true,
       trim: true,
     },
-    parts: [
+    date: {
+      type: String,
+      required: true,
+    },
+    partDetails: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Parts",
+        ref: "PartList",
       },
     ],
     seller: {
@@ -34,12 +38,7 @@ const sellSchema = Schema(
     billNo: {
       type: String,
       trim: true,
-      required: true,
       unique: true,
-    },
-    billCount: {
-      type: Number,
-      default: 0,
     },
   },
   { timestamp: true }
@@ -49,8 +48,8 @@ sellSchema.pre("save", async function (next) {
   const seller = await User.findById(this.seller);
   if (!seller) next(new ApiError(401, "Seller not found"));
 
-  const counter = await Counter.findByIdAndUpdate(
-    { _id: "sellBillNo" },
+  const counter = await Counter.findOneAndUpdate(
+    { user: seller._id },
     { $inc: { seq: 1 } },
     { new: true, upsert: true }
   );
@@ -59,4 +58,4 @@ sellSchema.pre("save", async function (next) {
   next();
 });
 
-export const Sell = mongoose.model("Sells", sellSchema);
+export const Sell = mongoose.model("Sell", sellSchema);

@@ -31,4 +31,4 @@ const partsSchema = new Schema(
   { timestamps: true }
 );
 
-export const Parts = mongoose.model("Parts", partsSchema);
+export const Parts = mongoose.model("Part", partsSchema);
