@@ -10,6 +10,7 @@ const sellSchema = new Schema(
       required: true,
       unique: true,
       trim: true,
+      lowercase: true,
     },
     address: {
       type: String,
@@ -41,10 +42,12 @@ const sellSchema = new Schema(
       unique: true,
     },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 sellSchema.pre("save", async function (next) {
+  if (!this.isNew) return next();
+
   const seller = await User.findById(this.seller);
   if (!seller) next(new ApiError(401, "Seller not found"));
 

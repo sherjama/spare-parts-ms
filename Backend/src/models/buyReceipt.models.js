@@ -14,6 +14,7 @@ const buySchema = new Schema(
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
     partsDetails: [
       {
@@ -53,6 +54,8 @@ const counterSchema = new Schema({
 export const Counter = mongoose.model("Counter", counterSchema);
 
 buySchema.pre("save", async function (next) {
+  if (!this.isNew) return next();
+
   const buyer = await User.findById(this.buyer);
   if (!buyer) return next(new ApiError(401, "Buyer not found"));
 
