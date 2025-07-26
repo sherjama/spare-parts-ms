@@ -8,6 +8,7 @@ import {
   getAllParts,
   getPartsOfShelf,
   sellParts,
+  sellReceipt,
 } from "../controllers/parts.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -17,6 +18,8 @@ const router = Router();
 router.route("/buy-part").post(verifyJWT, upload.none(), buyParts);
 
 router.route("/sell-part").post(verifyJWT, upload.none(), sellParts);
+
+router.route("/sell-receipt").get(verifyJWT, upload.none(), sellReceipt);
 
 router.route("/create-part").post(verifyJWT, upload.none(), createPart);
 

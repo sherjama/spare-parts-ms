@@ -2,7 +2,7 @@ import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/error.middleware.js";
-import ejs from "ejs";
+import path from "path";
 
 const app = express();
 app.set("view engine", "ejs");

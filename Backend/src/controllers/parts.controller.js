@@ -8,6 +8,8 @@ import { Sell } from "../models/SellReceipt.models.js";
 import { PartList } from "../models/partList.models.js";
 import { createPartHelper } from "../services/createPartHelper.js";
 import { addQtyHelper } from "../services/addPartHelper.js";
+import ejs from "ejs";
+import { User } from "../models/user.models.js";
 
 const buyParts = asyncHandler(async (req, res) => {
   const { vendorBillNo, vendorName, parts, date } = req.body;
@@ -175,6 +177,89 @@ const sellParts = asyncHandler(async (req, res) => {
     }
     throw err;
   }
+});
+
+const sellReceipt = asyncHandler(async (req, res) => {
+  const { billNo, discount, other } = req.query;
+
+  const user = await User.findById(req.user?._id);
+
+  if (!user) {
+    throw new ApiError(401, "Something went wrong while geting user details");
+  }
+
+  const sell = await Sell.findOne({ billNo });
+
+  if (!sell) {
+    throw new ApiError(401, "billNo not found");
+  }
+
+  // find selled part receipts details
+  const parts = [];
+  for (const part of sell.partDetails) {
+    const sellDetails = await PartList.findById(part);
+    if (!sellDetails) {
+      throw new ApiError(501, "Something went wrong while getting SellDetails");
+    }
+    parts.push(sellDetails);
+  }
+
+  //find part details
+  const partDetails = [];
+  for (const part of parts) {
+    const partInfo = await Parts.findById(part.partDetails);
+
+    if (!partInfo) {
+      throw new ApiError(
+        501,
+        "Something went wrong while getting part details"
+      );
+    }
+
+    partDetails.push(partInfo);
+  }
+
+  // add part details in part receipts
+  const updatedPartDetails = parts.map((partDoc) => {
+    const part = partDoc._doc || partDoc;
+    const partInfo = partDetails.find(
+      (info) => info._id.toString() === part.partDetails.toString()
+    );
+
+    return {
+      ...part,
+      partInfo: partInfo || null,
+    };
+  });
+
+  const subTotal = updatedPartDetails.reduce((sum, part) => {
+    return sum + (part.totalAmount || 0);
+  }, 0);
+
+  const discountAmount = Number(discount) || 0;
+  const otherAmount = Number(other) || 0;
+
+  const Total = Number(subTotal) + otherAmount - discountAmount;
+
+  ejs.renderFile(
+    "src/views/sellInvoice.ejs",
+    {
+      sell,
+      partDetails: updatedPartDetails,
+      user,
+      sellerName: user.username,
+      subTotal,
+      discount: discountAmount,
+      otherAmount,
+      Total,
+    },
+    (err, html) => {
+      if (err) {
+        return res.status(500).send("Template rendering error: " + err.message);
+      }
+      res.send(html);
+    }
+  );
 });
 
 const createPart = asyncHandler(async (req, res) => {
@@ -358,6 +443,7 @@ const getPartsOfShelf = asyncHandler(async (req, res) => {
 export {
   buyParts,
   sellParts,
+  sellReceipt,
   createPart,
   updatePart,
   addQty,
