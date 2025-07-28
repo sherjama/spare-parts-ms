@@ -31,6 +31,10 @@ const userSchema = new Schema(
       type: String, // cloudinary url
       required: true,
     },
+    logoId: {
+      type: String,
+      required: true,
+    },
     refreshToken: {
       type: String,
     },

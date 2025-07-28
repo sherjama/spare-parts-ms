@@ -3,7 +3,8 @@ import { User } from "../models/user.models.js";
 import { Shelf } from "../models/shelves.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { uploadOnCloudinary } from "../utils/Cloudinary.js";
+import { deleteOnCloudinary, uploadOnCloudinary } from "../utils/Cloudinary.js";
+import { generateInitialsImage } from "../utils/pfpGenerator.js";
 import jwt from "jsonwebtoken";
 
 const options = {
@@ -54,13 +55,7 @@ const registerUser = asyncHandler(async (req, res) => {
     );
   }
 
-  console.log("user controller :", req.file);
-
-  const logoLocalPath = req.file?.path;
-
-  if (!logoLocalPath) {
-    throw new ApiError(401, "logo is required");
-  }
+  const logoLocalPath = generateInitialsImage(username);
 
   const logo = await uploadOnCloudinary(logoLocalPath);
 
@@ -74,6 +69,7 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
     fermName,
     logo: logo?.url || "",
+    logoId: logo?.public_id || "",
   });
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -324,16 +320,22 @@ const changeLogoImage = asyncHandler(async (req, res) => {
   }
 
   const logo = await uploadOnCloudinary(logoLocalPath);
+  console.log(logo);
 
   if (!logo.url) {
     throw new ApiError(401, "Error while uploading logo try again");
   }
+
+  // old logo delete
+  const userLogo = await User.findById(req.user?._id).select("logoId");
+  const resp = await deleteOnCloudinary(userLogo);
 
   const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
         logo: logo.url,
+        logoId: logo.public_id,
       },
     },
     { new: true }
