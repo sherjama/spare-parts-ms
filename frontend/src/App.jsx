@@ -61,7 +61,6 @@ const App = () => {
       id="container"
       className="w-full min-h-screen  flex justify-between flex-col bg-black bg-[url('../public/assets/Posters/HeroBg.jpeg')] bg-cover bg-center overflow-hidden"
     >
-      <Header className={`${ifHeadNotVisible ? "hidden" : ""}`} />
       <LoadingBar
         color="#5693CF"
         progress={progress}

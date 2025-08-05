@@ -291,7 +291,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  const { username, email, fermName } = req.body;
+  const { username, email, fermName, address } = req.body;
 
   const user = await User.findByIdAndUpdate(
     req.user?._id,
@@ -300,6 +300,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         username,
         email,
         fermName,
+        address,
       },
     },
     {
