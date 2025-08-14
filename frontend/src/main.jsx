@@ -17,7 +17,6 @@ import {
   SessionPage,
   Protected,
   ControlPage,
-  HeroSectionOne,
 } from "./index.js";
 
 const router = createBrowserRouter([
@@ -33,7 +32,7 @@ const router = createBrowserRouter([
         path: "landing",
         element: (
           <Protected authentication={false}>
-            <HeroSectionOne />
+            <LandingPage />
           </Protected>
         ),
       },

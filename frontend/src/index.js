@@ -19,7 +19,6 @@ import AsideButton from "./components/AsideButton.jsx";
 import StockPage from "./components/Stock.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import Box from "./components/Box.jsx";
-import HeroSectionOne from "./components/hero-section-demo-1.jsx";
 
 export {
   Box,
@@ -43,5 +42,4 @@ export {
   SessionPage,
   Sidebar,
   StockPage,
-  HeroSectionOne,
 };
