@@ -27,8 +27,15 @@ const userSchema = new Schema(
       required: true,
       trim: true,
     },
+    address: {
+      type: String,
+    },
     logo: {
       type: String, // cloudinary url
+      required: true,
+    },
+    logoId: {
+      type: String,
       required: true,
     },
     refreshToken: {
