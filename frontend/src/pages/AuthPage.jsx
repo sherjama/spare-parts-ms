@@ -102,9 +102,6 @@ const AuthPage = () => {
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-transparent">
-      <h1 className="font-nexar1 text-white absolute top-2 left-2 text-2xl">
-        NEXAR
-      </h1>
       <div className="max-sm:w-72 max-md:w-[380px] md:w-[500px] mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center backdrop-blur-md bg-white/10 border border-white/30  ">
         <ToastContainer />
         <div>

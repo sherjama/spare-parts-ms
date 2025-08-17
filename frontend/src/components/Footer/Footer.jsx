@@ -10,7 +10,7 @@ const Footer = () => {
         <img
           src="../../../public/assets/Logo.png"
           alt="logo"
-          className="size-80"
+          className="size-80 rounded-md "
         />
       </div>
       {/* Navigation Links */}
@@ -22,13 +22,13 @@ const Footer = () => {
           pricing
         </NavLink>
         <NavLink
-          to="/about"
+          to="/aboutUs"
           className="Link_Animation font-nexar3 no-underline"
         >
           about Us
         </NavLink>
         <NavLink
-          to="/contact"
+          to="/contactUs"
           className="Link_Animation font-nexar3 no-underline"
         >
           contact Us

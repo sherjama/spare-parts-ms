@@ -66,6 +66,7 @@ const App = () => {
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
+      {!ifHeadNotVisible && <Header />}
       <main className="w-[100vw] min-h-screen flex items-center justify-center ">
         <Outlet />
       </main>

@@ -3,7 +3,10 @@ import Header from "./components/Header/Header.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import Button from "./components/Button.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
-import ContactPage from "./pages/Contact.jsx";
+import ContactPage from "./pages/ContactUs.jsx";
+import AboutUsPage from "./pages/AboutUs.jsx";
+import PricingPage from "./pages/Pricing.jsx";
+import FeedbackPage from "./pages/Feedback.jsx";
 import Input from "./components/Input.jsx";
 import Pfp from "./components/Pfp.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
@@ -29,6 +32,9 @@ export {
   Button,
   AuthPage,
   ContactPage,
+  AboutUsPage,
+  PricingPage,
+  FeedbackPage,
   Input,
   Pfp,
   LandingPage,

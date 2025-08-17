@@ -17,6 +17,9 @@ import {
   SessionPage,
   Protected,
   ControlPage,
+  AboutUsPage,
+  FeedbackPage,
+  PricingPage,
 } from "./index.js";
 
 const router = createBrowserRouter([
@@ -52,12 +55,35 @@ const router = createBrowserRouter([
           </Protected>
         ),
       },
-
       {
-        path: "/contact",
+        path: "/contactUs",
         element: (
-          <Protected authentication>
+          <Protected authentication={false}>
             <ContactPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "/aboutUs",
+        element: (
+          <Protected authentication={false}>
+            <AboutUsPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "/feedback",
+        element: (
+          <Protected authentication={false}>
+            <FeedbackPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "/pricing",
+        element: (
+          <Protected authentication={false}>
+            <PricingPage />
           </Protected>
         ),
       },

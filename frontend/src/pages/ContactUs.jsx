@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
 import conf from "../conf/conf.js";
 
-const Contact = () => {
+const ContactUs = () => {
   // states
   const [loading, setLoading] = useState(false);
 
@@ -138,4 +138,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactUs;
