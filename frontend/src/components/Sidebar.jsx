@@ -1,7 +1,13 @@
-import { AsideButton } from "../index.js";
+import { Pfp } from "../index.js";
 import { MdDashboard } from "react-icons/md";
 import { GiTempleGate } from "react-icons/gi";
 import { ImProfile } from "react-icons/im";
+import { BsFillHouseGearFill } from "react-icons/bs";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const Sidebar = ({ className }) => {
   const options = [
@@ -20,36 +26,37 @@ const Sidebar = ({ className }) => {
 
   return (
     <aside
-      className={`flex flex-col justify-between text-white h-[95vh] ${className} `}
+      className={`h-full flex flex-col  text-white ${className} bg-black w-full `}
     >
       <div className="space-y-16 ">
-        <h1 className="text-white text-xl font-nexar3 mb-1">NEXAR</h1>
-
-        <nav className="space-y-3 flex flex-col">
-          {options.map((val, idx) => (
-            <AsideButton
-              key={idx}
-              text={val.text}
-              toLink={val.toLink}
-              options={val.options}
-              icon={val.icon}
+        <div className="flex items-center justify-between mt-10 px-2 mb-3">
+          <div className="flex justify-center items-end">
+            <img
+              src="../../../public/assets/Logo.png"
+              alt="logo"
+              className="size-10"
             />
-          ))}
-        </nav>
-      </div>
-
-      <div
-        className="absolute  w-42 bottom-0 left-0
-       text-gray-400 "
-      >
-        <div className="flex items-start space-x-2  rounded-l-3xl p-3 cursor-pointer h-16 ">
-          <AsideButton
-            text="Profile"
-            toLink="/controls/profile"
-            icon={<ImProfile size={23} />}
-          />
+            <h1 className="underline font-nexar2 tracking-widest">EXAR</h1>
+          </div>
+          <div>
+            {" "}
+            <Pfp className="size-10" />
+          </div>
         </div>
+        <span className="w-11/12 h-[5px] bg-gray-950  block m-auto"></span>
       </div>
+      <nav className="mt-4 pl-3">
+        <span className="font-nexar3 text-md  text-gray-300">Dashboard</span>
+        <Collapsible className="bg-black pl-3 pt-3">
+          <CollapsibleTrigger className="text-xl tracking-wide font-nexar1 flex items-center gap-2">
+            <span>
+              <BsFillHouseGearFill />
+            </span>{" "}
+            Inventory
+          </CollapsibleTrigger>
+          <CollapsibleContent></CollapsibleContent>
+        </Collapsible>
+      </nav>
     </aside>
   );
 };

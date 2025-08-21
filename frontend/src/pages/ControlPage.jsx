@@ -9,9 +9,11 @@ const controlPage = () => {
   console.log(params.slug);
 
   return (
-    <div className="w-full h-screen  border border-[#2a3a6f]  bg-[#222222] p-6 md:p-8">
-      <div className="flex ">
-        <Sidebar className="w-[10vw]" />
+    <div className="w-full h-screen  border border-[#2a3a6f]  bg-blue-700 flex items-center">
+      <div className="flex">
+        <div className="w-[15vw] h-screen">
+          <Sidebar />
+        </div>
 
         {params.slug == "dashboard" && <Dashboard className="w-[90vw]" />}
 
