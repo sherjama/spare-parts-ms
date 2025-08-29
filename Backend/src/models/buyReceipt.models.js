@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { User } from "./user.models.js";
 import { ApiError } from "../utils/ApiError.js";
+import { Counter } from "./counter.models.js";
 
 const buySchema = new Schema(
   {
@@ -39,34 +40,5 @@ const buySchema = new Schema(
   },
   { timestamps: true }
 );
-
-const counterSchema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  seq: {
-    type: Number,
-    default: 0,
-  },
-});
-
-export const Counter = mongoose.model("Counter", counterSchema);
-
-buySchema.pre("save", async function (next) {
-  if (!this.isNew) return next();
-
-  const buyer = await User.findById(this.buyer);
-  if (!buyer) return next(new ApiError(401, "Buyer not found"));
-
-  const counter = await Counter.findOneAndUpdate(
-    { user: buyer._id },
-    { $inc: { seq: 1 } },
-    { new: true, upsert: true }
-  );
-
-  this.billNo = `${buyer.username}-p-${counter.seq}`;
-  next();
-});
 
 export const Buy = mongoose.model("Buy", buySchema);

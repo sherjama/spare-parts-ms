@@ -10,39 +10,6 @@ const Sidebar = ({ classNameName }) => {
   const userdata = useSelector((state) => state.userdata.userdata.user);
 
   return (
-    // <aside
-    //   classNameName={`h-full flex flex-col  text-white ${classNameName} bg-black w-full `}
-    // >
-    //   <div classNameName="space-y-16 ">
-    //     <div classNameName="flex items-center justify-between mt-10 px-2 mb-3">
-    //       <div classNameName="flex justify-center items-end">
-    //         <img
-    //           src="../../../public/assets/Logo.png"
-    //           alt="logo"
-    //           classNameName="size-10"
-    //         />
-    //         <h1 classNameName="underline font-nexar2 tracking-widest">EXAR</h1>
-    //       </div>
-    //       <div>
-    //         {" "}
-    //         <Pfp classNameName="size-10" />
-    //       </div>
-    //     </div>
-    //     <span classNameName="w-11/12 h-[5px] bg-gray-950  block m-auto"></span>
-    //   </div>
-    //   <nav classNameName="mt-4 pl-3">
-    //     <span classNameName="font-nexar3 text-md  text-gray-300">Dashboard</span>
-    //     <Collapsible classNameName="bg-black pl-3 pt-3">
-    //       <CollapsibleTrigger classNameName="text-xl tracking-wide font-nexar1 flex items-center gap-2">
-    //         <span>
-    //           <BsFillHouseGearFill />
-    //         </span>{" "}
-    //         Inventory
-    //       </CollapsibleTrigger>
-    //       <CollapsibleContent></CollapsibleContent>
-    //     </Collapsible>
-    //   </nav>
-    // </aside>
     <div className="bg-black h-screen flex flex-col px-2">
       <header className="flex items-center justify-between  pt-2">
         <div className="flex items-center gap-2">

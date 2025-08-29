@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Parts } from "../models/parts.models.js";
+import { Counter } from "../models/counter.models.js";
 import { Shelf } from "../models/shelves.models.js";
 import { Buy } from "../models/buyReceipt.models.js";
 import { Sell } from "../models/SellReceipt.models.js";
@@ -15,7 +16,7 @@ const buyParts = asyncHandler(async (req, res) => {
   const { vendorBillNo, vendorName, parts, date } = req.body;
 
   if (!vendorBillNo || !vendorName || !parts || !Array.isArray(parts)) {
-    throw new ApiError(400, "All feilds are required");
+    throw new ApiError(400, "All fields are required");
   }
 
   const partIds = [];
@@ -27,6 +28,7 @@ const buyParts = asyncHandler(async (req, res) => {
     });
 
     if (!existingPart) {
+      // create part if not exist
       const newPart = await createPartHelper(part, req.user._id);
 
       const PartDetails = await PartList.create({
@@ -44,10 +46,11 @@ const buyParts = asyncHandler(async (req, res) => {
 
       partIds.push(PartDetails._id);
     } else {
+      // add qty if already exist
       await addQtyHelper(part.partNumber, part.Qty, req.user._id);
 
       const PartDetails = await PartList.create({
-        partDetails: part._id,
+        partDetails: existingPart._id,
         Qty: part.Qty,
         unitPrice: part.Price,
       });
@@ -64,12 +67,21 @@ const buyParts = asyncHandler(async (req, res) => {
   }
 
   try {
+    const counter = await Counter.findOneAndUpdate(
+      { user: req.user._id, counterType: "purchase" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    const billNo = `${req.user.username}-P-${counter.seq}`;
+
     const createReceipt = await Buy.create({
       vendorBillNo,
       vendorName,
       partsDetails: partIds,
       buyer: req.user._id,
       buyDate: date,
+      billNo,
     });
 
     if (!createReceipt) {
@@ -79,7 +91,11 @@ const buyParts = asyncHandler(async (req, res) => {
     res
       .status(201)
       .json(
-        new ApiResponse(201, createReceipt, "Invoice generated successfully")
+        new ApiResponse(
+          201,
+          createReceipt,
+          "Purchase invoice generated successfully"
+        )
       );
   } catch (err) {
     if (err.code === 11000) {
@@ -97,8 +113,6 @@ const buyParts = asyncHandler(async (req, res) => {
 const sellParts = asyncHandler(async (req, res) => {
   const { customerName, address, mobileNumber, parts, date } = req.body;
 
-  console.log(customerName, address, mobileNumber, parts, date);
-
   if (
     !customerName ||
     !address ||
@@ -106,10 +120,11 @@ const sellParts = asyncHandler(async (req, res) => {
     !date ||
     !Array.isArray(parts)
   ) {
-    throw new ApiError(401, "All feilds are required");
+    throw new ApiError(401, "All fields are required");
   }
 
   const partIds = [];
+
   try {
     for (const part of parts) {
       const sellPart = await Parts.findOne({
@@ -120,7 +135,7 @@ const sellParts = asyncHandler(async (req, res) => {
       if (!sellPart || sellPart.Qty <= 0) {
         throw new ApiError(
           401,
-          `Part number: ${sellPart.partNumber}, is not available in inventory`
+          `Part number: ${part.partNumber} is not available in inventory`
         );
       }
 
@@ -132,21 +147,21 @@ const sellParts = asyncHandler(async (req, res) => {
 
       partIds.push(PartDetails._id);
 
-      if (!PartDetails) {
-        throw new ApiError(
-          401,
-          "Something went wrong while getting part details"
-        );
-      }
-
       const finalQty = sellPart.Qty - part.Qty;
-
       const updateQty = await sellPart.updateOne({ Qty: finalQty });
 
       if (!updateQty) {
         throw new ApiError(401, "There is a problem while updating part Qty");
       }
     }
+
+    const counter = await Counter.findOneAndUpdate(
+      { user: req.user?._id, counterType: "sell" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    if (!counter) throw new ApiError(401, "Counter problem");
 
     const sellReceipt = await Sell.create({
       customerName,
@@ -155,11 +170,8 @@ const sellParts = asyncHandler(async (req, res) => {
       date,
       partDetails: partIds,
       seller: req.user?._id,
+      billNo: `${req.user.username}-S-${counter.seq}`,
     });
-
-    if (!sellReceipt) {
-      throw new ApiError(401, "there is a problem while creating invoice");
-    }
 
     res
       .status(201)

@@ -123,11 +123,11 @@ const Dashboard = ({ className }) => {
             <table className="w-full table-fixed border-collapse border border-[#3a3a3a]">
               <thead>
                 <tr className="border-b border-[#3a3a3a]">
-                  <th className="text-left px-3 py-2 w-1/4">Stock</th>
-                  <th className="text-left px-3 py-2 w-1/4">Last Price $</th>
-                  <th className="text-left px-3 py-2 w-1/4">Change %</th>
-                  <th className="text-left px-3 py-2 w-1/4">Market Cap $</th>
-                  <th className="text-left px-3 py-2 w-1/4">Volume $</th>
+                  <th className="text-left px-3 py-2 w-1/4">Part Number</th>
+                  <th className="text-left px-3 py-2 w-1/4">Description$</th>
+                  <th className="text-left px-3 py-2 w-1/4">Unit Price</th>
+                  <th className="text-left px-3 py-2 w-1/4">MRP</th>
+                  <th className="text-left px-3 py-2 w-1/4">Qty</th>
                   <th className="text-left px-3 py-2 w-1/4">Last 7 days %</th>
                 </tr>
               </thead>

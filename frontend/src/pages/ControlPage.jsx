@@ -9,13 +9,13 @@ const controlPage = () => {
   console.log(params.slug);
 
   return (
-    <div className="w-full h-screen  border border-[#2a3a6f]  bg-blue-700 flex items-center">
-      <div className="flex">
-        <div className="w-[15vw] h-screen">
+    <div className="w-full h-screen  border border-[#2a3a6f]  bg-blue-700 flex items-center justify-between">
+      <div className="flex ">
+        <div className="w-[15vw] h-screen max-lg:w-0 max-lg:hidden">
           <Sidebar />
         </div>
 
-        {params.slug == "dashboard" && <Dashboard className="w-[90vw]" />}
+        {params.slug == "dashboard" && <Dashboard className="h-screen" />}
 
         {params.slug == `profile` && <ProfilePage className="w-[90vw]" />}
         {params.slug == `stock` && <StockPage className="w-[90vw]" />}
