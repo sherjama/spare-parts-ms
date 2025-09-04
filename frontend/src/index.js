@@ -7,7 +7,6 @@ import ContactPage from "./pages/Contact.jsx";
 import Input from "./components/Input.jsx";
 import Pfp from "./components/Pfp.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
-import ProfilePage from "./pages/Profile.jsx";
 import ControlPage from "./pages/ControlPage.jsx";
 import authservice from "./services/auth.service.js";
 import partsService from "./services/parts.service.js";
@@ -15,13 +14,20 @@ import shelvesService from "./services/shelves.service.js";
 import Shelvebox from "./components/Shelvebox.jsx";
 import SessionPage from "./pages/SessionPage.jsx";
 import Sidebar from "./components/Sidebar.jsx";
-import StockPage from "./components/Stock.jsx";
-import Dashboard from "./components/Dashboard.jsx";
-import Box from "./components/Box.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Inventory from "./pages/Inventory.jsx";
+import Reports from "./pages/Reports.jsx";
+import Settings from "./pages/Settings.jsx";
+import Support from "./pages/Support.jsx";
+import Profile from "./pages/Profile.jsx";
 
 export {
-  Box,
   Dashboard,
+  Inventory,
+  Reports,
+  Settings,
+  Support,
+  Profile,
   Header,
   Footer,
   Button,
@@ -30,7 +36,6 @@ export {
   Input,
   Pfp,
   LandingPage,
-  ProfilePage,
   ControlPage,
   Protected,
   authservice,
@@ -39,5 +44,4 @@ export {
   Shelvebox,
   SessionPage,
   Sidebar,
-  StockPage,
 };

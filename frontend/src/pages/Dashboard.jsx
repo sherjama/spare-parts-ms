@@ -3,7 +3,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { addParts, addShelves } from "../store/stockSlice.js";
 import { useEffect } from "react";
 import { setLoading } from "../store/loadSlice.js";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { partsService, shelvesService, Shelvebox, Pfp } from "../index.js";
 const Dashboard = ({ className }) => {
   const userdata = useSelector((state) => state.userdata.userdata?.user);
@@ -42,7 +42,7 @@ const Dashboard = ({ className }) => {
   }, [reloadTriggerPart, userId, dispatch]);
   return (
     <main
-      className={`flex mt-6 md:mt-0  flex-col space-y-6 text-white ${className} bg-[#121212] rounded-tl-[24px] rounded-tr-[24px] rounded-br-[24px] rounded-bl-[0px] p-4`}
+      className={`flex mt-6 md:mt-0  flex-col space-y-6 text-white ${className} bg-[#121212]  p-4`}
     >
       <ToastContainer />
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
