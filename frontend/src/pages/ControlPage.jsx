@@ -19,14 +19,10 @@ const controlPage = () => {
   console.log(params.slug);
 
   return (
-    <div className="w-full h-screen  flex flex-col">
-      <div className="flex flex-1 overflow-hidden">
-        <div>
-          <Sidebar className="hidden lg:block max-xl:w-[20vw] max-2xl:w-[18vw] border-r border-[#2a3a6f]" />
-        </div>
-
-        {/* Main Content */}
-        <main className="flex-1 overflow-y-auto">
+    <div className="w-full h-screen flex flex-col">
+      <div className="w-full h-screen flex">
+        <Sidebar className="hidden lg:flex max-xl:w-[20vw] max-2xl:w-[18vw] border-r border-[#2a3a6f]" />
+        <main className="flex-1 min-w-0 overflow-y-auto">
           {params.slug === "dashboard" && (
             <Dashboard className="w-full h-screen" />
           )}
