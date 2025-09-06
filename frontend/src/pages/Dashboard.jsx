@@ -3,7 +3,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { addParts, addShelves } from "../store/stockSlice.js";
 import { useEffect } from "react";
 import { setLoading } from "../store/loadSlice.js";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { partsService, shelvesService, Shelvebox, Pfp } from "../index.js";
 const Dashboard = ({ className }) => {
   const userdata = useSelector((state) => state.userdata.userdata?.user);
@@ -42,7 +42,7 @@ const Dashboard = ({ className }) => {
   }, [reloadTriggerPart, userId, dispatch]);
   return (
     <main
-      className={`flex mt-6 md:mt-0  flex-col space-y-6 text-white ${className} bg-[#121212] rounded-tl-[24px] rounded-tr-[24px] rounded-br-[24px] rounded-bl-[0px] p-4`}
+      className={`flex mt-6 md:mt-0  flex-col space-y-6 text-white ${className} bg-[#121212]  p-4`}
     >
       <ToastContainer />
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
@@ -123,11 +123,11 @@ const Dashboard = ({ className }) => {
             <table className="w-full table-fixed border-collapse border border-[#3a3a3a]">
               <thead>
                 <tr className="border-b border-[#3a3a3a]">
-                  <th className="text-left px-3 py-2 w-1/4">Stock</th>
-                  <th className="text-left px-3 py-2 w-1/4">Last Price $</th>
-                  <th className="text-left px-3 py-2 w-1/4">Change %</th>
-                  <th className="text-left px-3 py-2 w-1/4">Market Cap $</th>
-                  <th className="text-left px-3 py-2 w-1/4">Volume $</th>
+                  <th className="text-left px-3 py-2 w-1/4">Part Number</th>
+                  <th className="text-left px-3 py-2 w-1/4">Description$</th>
+                  <th className="text-left px-3 py-2 w-1/4">Unit Price</th>
+                  <th className="text-left px-3 py-2 w-1/4">MRP</th>
+                  <th className="text-left px-3 py-2 w-1/4">Qty</th>
                   <th className="text-left px-3 py-2 w-1/4">Last 7 days %</th>
                 </tr>
               </thead>

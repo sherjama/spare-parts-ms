@@ -1,22 +1,41 @@
 import { useSelector } from "react-redux";
-import { Sidebar, Dashboard, ProfilePage, StockPage } from "../index.js";
+import {
+  Sidebar,
+  Dashboard,
+  Profile,
+  Support,
+  Inventory,
+  Reports,
+  Settings,
+} from "../index.js";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 const controlPage = () => {
   const params = useParams();
   const userId = useSelector((state) => state.userdata.userdata?.user._id);
+  const [sidebarOpen, setSidebarOpen] = useState();
 
   console.log(params.slug);
 
   return (
-    <div className="w-full h-screen  border border-[#2a3a6f]  bg-[#222222] p-6 md:p-8">
-      <div className="flex ">
-        <Sidebar className="w-[10vw]" />
-
-        {params.slug == "dashboard" && <Dashboard className="w-[90vw]" />}
-
-        {params.slug == `profile` && <ProfilePage className="w-[90vw]" />}
-        {params.slug == `stock` && <StockPage className="w-[90vw]" />}
+    <div className="w-full h-screen flex flex-col">
+      <div className="w-full h-screen flex">
+        <Sidebar className="hidden lg:flex max-xl:w-[20vw] max-2xl:w-[18vw] border-r border-[#2a3a6f]" />
+        <main className="flex-1 min-w-0 overflow-y-auto">
+          {params.slug === "dashboard" && (
+            <Dashboard className="w-full h-screen" />
+          )}
+          {params.slug === "inventory" && (
+            <Inventory className="w-full h-screen" />
+          )}
+          {params.slug === "reports" && <Reports className="w-full h-screen" />}
+          {params.slug === "settings" && (
+            <Settings className="w-full h-screen" />
+          )}
+          {params.slug === "support" && <Support className="w-full h-screen" />}
+          {params.slug === "profile" && <Profile className="w-full h-screen" />}
+        </main>
       </div>
     </div>
   );
