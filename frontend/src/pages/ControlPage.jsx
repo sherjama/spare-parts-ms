@@ -9,12 +9,9 @@ import {
   Settings,
 } from "../index.js";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
 
 const controlPage = () => {
   const params = useParams();
-  const userId = useSelector((state) => state.userdata.userdata?.user._id);
-  const [sidebarOpen, setSidebarOpen] = useState();
 
   console.log(params.slug);
 
