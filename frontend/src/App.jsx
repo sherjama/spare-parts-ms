@@ -21,6 +21,14 @@ const App = () => {
   const location = useLocation();
   const path = location.pathname;
 
+  const headvisiblePaths = [
+    "/pricing",
+    "/aboutUs",
+    "/contactUs",
+    "/feedback",
+    "/landing",
+  ];
+
   useEffect(() => {
     if (status) {
       const checkAuthSession = async () => {
@@ -40,15 +48,10 @@ const App = () => {
   }, [status, accessToken]);
 
   useEffect(() => {
-    if (
-      path == "/controls/dashboard" ||
-      path == "/session" ||
-      path == "/controls/profile" ||
-      path == "/controls/stock"
-    ) {
-      setifHeadNotVisible(true);
-    } else {
+    if (headvisiblePaths.includes(path)) {
       setifHeadNotVisible(false);
+    } else {
+      setifHeadNotVisible(true);
     }
 
     if (isLoading) {
