@@ -57,6 +57,7 @@ const App = () => {
     if (isLoading) {
       setProgress(100);
     }
+    console.log(path);
   }, [isLoading, location]);
 
   return (

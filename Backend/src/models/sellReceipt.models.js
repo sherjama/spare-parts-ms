@@ -1,7 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { User } from "./user.models.js";
-import { ApiError } from "../utils/ApiError.js";
-import { Counter } from "./counter.models.js";
 
 const sellSchema = new Schema(
   {

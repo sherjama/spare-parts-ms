@@ -7,6 +7,7 @@ import {
   Inventory,
   Reports,
   Settings,
+  BuyPartsPage,
 } from "../index.js";
 import { useParams } from "react-router-dom";
 
@@ -32,6 +33,9 @@ const controlPage = () => {
           )}
           {params.slug === "support" && <Support className="w-full h-screen" />}
           {params.slug === "profile" && <Profile className="w-full h-screen" />}
+          {params.slug === "purchase-parts" && (
+            <BuyPartsPage className="w-full h-screen" />
+          )}
         </main>
       </div>
     </div>

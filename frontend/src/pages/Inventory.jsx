@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { IoIosCreate } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 const Inventory = () => {
   const [hoveredRow, setHoveredRow] = useState(null);
+  const navigate = useNavigate();
 
   const inventory = [
     { partNumber: "PN-1001", description: "Brake Pad", unitPrice: "$50" },
@@ -22,7 +24,10 @@ const Inventory = () => {
               Browse and purchase spare parts with ease.
             </p>
           </div>
-          <button className="mt-4 bg-indigo-900 hover:bg-indigo-950 text-white rounded-xl py-2 px-4 w-fit transition font-nexar2 tracking-wide">
+          <button
+            onClick={() => navigate("/controls/purchase-parts")}
+            className="mt-4 bg-indigo-900 hover:bg-indigo-950 text-white rounded-xl py-2 px-4 w-fit transition font-nexar2 tracking-wide"
+          >
             Buy Now
           </button>
         </div>
@@ -40,6 +45,7 @@ const Inventory = () => {
           </button>
         </div>
 
+        {/* creaete shelve  */}
         <div className="md:col-span-1 bg-stone-900 rounded-2xl shadow-lg flex items-start justify-evenly flex-col p-4">
           <h2 className="text-2xl font-nexar1 mb-2">Create Shelve</h2>
 

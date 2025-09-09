@@ -23,6 +23,7 @@ import Reports from "./pages/Reports.jsx";
 import Settings from "./pages/Settings.jsx";
 import Support from "./pages/Support.jsx";
 import Profile from "./pages/Profile.jsx";
+import BuyPartsPage from "./components/BuyParts.jsx";
 
 export {
   Dashboard,
@@ -31,6 +32,7 @@ export {
   Settings,
   Support,
   Profile,
+  BuyPartsPage,
   Header,
   Footer,
   Button,
