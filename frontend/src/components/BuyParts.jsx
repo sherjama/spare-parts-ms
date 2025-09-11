@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 
+import partsService from "@/services/parts.service";
+
 export default function BuyPartsPage() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
@@ -23,7 +25,7 @@ export default function BuyPartsPage() {
       vendorBillNo: "",
       vendorName: "",
       date: "",
-      parts: [{ partName: "", partNumber: "", qty: 0, price: 0 }],
+      parts: [{ partName: "", partNumber: "", Qty: 0, Price: 0 }],
     },
   });
 
@@ -32,15 +34,34 @@ export default function BuyPartsPage() {
     name: "parts",
   });
 
-  const onSubmit = (data) => {
+  // date formater
+  const dateFormater = (dateString) => {
+    console.log("chla");
+
+    const rawDate = new Date(dateString);
+
+    const day = String(rawDate.getDate()).padStart(2, "0"); // 11
+    const month = rawDate.toLocaleString("en-US", { month: "short" }); // Sep
+    const year = String(rawDate.getFullYear()).slice(-2); // 25
+
+    setDate(`${day}-${month}-${year}`);
+  };
+
+  const onSubmit = async (data) => {
+    data.date = date;
     console.log("Buy Parts Payload:", data);
-    // call your API here e.g. axios.post("/api/buy", data)
+    try {
+      const res = await partsService.buyParts(data);
+      console.log(res);
+    } catch (error) {
+      throw error;
+    }
     reset();
   };
 
   return (
-    <div className=" flex justify-center py-8 px-3 bg-black">
-      <Card className="w-full shadow-lg h-screen py-5 rounded-2xl px-5 bg-stone-950 border-none">
+    <div className=" flex justify-center py-2 bg-black">
+      <Card className="w-full shadow-lg min-h-screen pt-2 rounded-2xl  bg-gradient-to-b from-[#8d8daa] via-[#dfdfde] to-[#f7f5f2]border-none">
         <CardHeader>
           <CardTitle className="text-2xl font-normal font-nexar1 text-slate-200 ">
             Purchase Inventory
@@ -50,7 +71,7 @@ export default function BuyPartsPage() {
         <CardContent>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col mt-5 w-[75vw] bg-slate-50 rounded-sm min-h-[85vh] "
+            className="flex flex-col mt-5 w-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg rounded-xl min-h-[85vh] "
           >
             {/* Vendor Details */}
             <CardHeader>
@@ -92,7 +113,7 @@ export default function BuyPartsPage() {
                       id="date"
                       className="w-48 justify-between font-normal bg-gray-200 text-black"
                     >
-                      {date ? date.toLocaleDateString() : "Select date"}
+                      {date ? date : "Select date"}
                       <ChevronDownIcon />
                     </Button>
                   </PopoverTrigger>
@@ -106,7 +127,7 @@ export default function BuyPartsPage() {
                       captionLayout="dropdown"
                       className={"bg-slate-300"}
                       onSelect={(date) => {
-                        setDate(date);
+                        dateFormater(date);
                         setOpen(false);
                       }}
                     />
@@ -155,7 +176,7 @@ export default function BuyPartsPage() {
                           type="number"
                           placeholder="Unit Price"
                           step="0.01"
-                          {...register(`parts.${index}.price`, {
+                          {...register(`parts.${index}.Price`, {
                             required: true,
                           })}
                         />
@@ -164,7 +185,7 @@ export default function BuyPartsPage() {
                         <Input
                           type="number"
                           placeholder="Qty"
-                          {...register(`parts.${index}.qty`, {
+                          {...register(`parts.${index}.Qty`, {
                             required: true,
                           })}
                         />
@@ -188,7 +209,7 @@ export default function BuyPartsPage() {
                 <Button
                   type="button"
                   onClick={() =>
-                    append({ partName: "", partNumber: "", qty: 0, price: 0 })
+                    append({ partName: "", partNumber: "", Qty: 0, Price: 0 })
                   }
                   variant="outline"
                   className="flex items-center gap-2"

@@ -15,7 +15,15 @@ import { User } from "../models/user.models.js";
 const buyParts = asyncHandler(async (req, res) => {
   const { vendorBillNo, vendorName, parts, date } = req.body;
 
-  if (!vendorBillNo || !vendorName || !parts || !Array.isArray(parts)) {
+  console.log("backend :", vendorBillNo, vendorName, parts, date);
+
+  if (
+    !vendorBillNo ||
+    !vendorName ||
+    !parts ||
+    !date ||
+    !Array.isArray(parts)
+  ) {
     throw new ApiError(400, "All fields are required");
   }
 

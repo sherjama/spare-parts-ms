@@ -7,6 +7,19 @@ class Parts {
     this.partsRoute = "/api/v1/parts";
   }
 
+  async buyParts({ vendorName, vendorBillNo, date, parts }) {
+    try {
+      return await axios.post(`${this.partsRoute}/buy-part`, {
+        vendorBillNo,
+        vendorName,
+        date,
+        parts,
+      });
+    } catch (error) {
+      console.log("Buy parts :", error);
+    }
+  }
+
   async createPart({ partNumber, partName, shelfName, MRP, Qty }) {
     try {
       return await axios.post(`${this.partsRoute}/create-part`, {
