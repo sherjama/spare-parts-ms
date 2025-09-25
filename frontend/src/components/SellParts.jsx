@@ -18,18 +18,20 @@ import { triggerReloadPart, triggerReloadShelve } from "@/store/stockSlice";
 import partsService from "@/services/parts.service";
 import { useNavigate } from "react-router-dom";
 
-export default function BuyPartsPage() {
+export default function SellPartsPage() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { register, control, handleSubmit, reset } = useForm({
+  const { register, control, handleSubmit, reset, watch } = useForm({
     defaultValues: {
-      vendorBillNo: "",
-      vendorName: "",
+      customerName: "",
+      address: "",
+      mobileNumber: "",
       date: "",
+      discount: 0,
+      other: 0,
       parts: [{ partName: "", partNumber: "", Qty: 0, Price: 0 }],
     },
   });
@@ -45,9 +47,9 @@ export default function BuyPartsPage() {
 
     const rawDate = new Date(dateString);
 
-    const day = String(rawDate.getDate()).padStart(2, "0"); // 11
-    const month = rawDate.toLocaleString("en-US", { month: "short" }); // Sep
-    const year = String(rawDate.getFullYear()).slice(-2); // 25
+    const day = String(rawDate.getDate()).padStart(2, "0");
+    const month = rawDate.toLocaleString("en-US", { month: "short" });
+    const year = String(rawDate.getFullYear()).slice(-2);
 
     setDate(`${day}-${month}-${year}`);
   };
@@ -56,7 +58,7 @@ export default function BuyPartsPage() {
     data.date = date;
     console.log("Buy Parts Payload:", data);
     try {
-      const res = await partsService.buyParts(data);
+      const res = await partsService.sellParts(data);
       if (res) {
         dispatch(triggerReloadPart());
         dispatch(triggerReloadShelve());
@@ -84,10 +86,10 @@ export default function BuyPartsPage() {
             className="flex flex-col w-full rounded-xl min-h-[95vh] mt-2"
             autocomplete="off"
           >
-            {/* Vendor Details */}
+            {/* Customer Details */}
             <CardHeader>
               <CardTitle className="text-2xl font-nexar1 text-gray-800 text-center w-full mx-auto py-3 [word-spacing:0.2em]   rounded-md">
-                Vendor Details
+                Customer Details
               </CardTitle>
             </CardHeader>
             <div
@@ -96,21 +98,21 @@ export default function BuyPartsPage() {
             >
               <div className="flex flex-col  items-center justify-center gap-5 ">
                 <div className="flex items-center gap-5">
-                  <Label htmlFor="vendorBillNo">Vendor Bill No</Label>
+                  <Label htmlFor="customerName">Customer Name</Label>
                   <Input
-                    id="vendorBillNo"
-                    placeholder="Enter vendor bill no"
+                    id="customerName"
+                    placeholder="Enter Customer Name"
                     className="w-96"
-                    {...register("vendorBillNo", { required: true })}
+                    {...register("customerName", { required: true })}
                   />
                 </div>
                 <div className="flex items-center gap-5">
-                  <Label htmlFor="vendorName ">Vendor Name</Label>
+                  <Label htmlFor="Address">Address</Label>
                   <Input
-                    id="vendorName"
-                    placeholder="Enter vendor name"
+                    id="Address"
+                    placeholder="Enter Address"
                     className="w-96"
-                    {...register("vendorName", { required: true })}
+                    {...register("address", { required: true })}
                   />
                 </div>
               </div>
@@ -146,6 +148,15 @@ export default function BuyPartsPage() {
                     />
                   </PopoverContent>
                 </Popover>
+                <div className="flex items-center gap-5">
+                  <Label htmlFor="mobileNumber">Mobile</Label>
+                  <Input
+                    id="mobileNumber"
+                    placeholder="Enter Mobile Number"
+                    className="w-96"
+                    {...register("mobileNumber", { required: true })}
+                  />
+                </div>
               </div>
             </div>
 
@@ -159,6 +170,7 @@ export default function BuyPartsPage() {
                     <th className="px-4 py-2 border">Part Name</th>
                     <th className="px-4 py-2 border">Unit Price</th>
                     <th className="px-4 py-2 border">Qty</th>
+                    <th className="px-4 py-2 border">Amount</th>
                     <th className="px-4 py-2 border text-center">Action</th>
                   </tr>
                 </thead>
@@ -188,7 +200,6 @@ export default function BuyPartsPage() {
                         <Input
                           type="number"
                           placeholder="Unit Price"
-                          step="0.01"
                           {...register(`parts.${index}.Price`, {
                             required: true,
                           })}
@@ -201,6 +212,17 @@ export default function BuyPartsPage() {
                           {...register(`parts.${index}.Qty`, {
                             required: true,
                           })}
+                        />
+                      </td>
+                      <td className="px-4 py-2 border">
+                        <Input
+                          className="text-gray-500"
+                          type="number"
+                          value={
+                            watch(`parts.${index}.Qty`) *
+                              watch(`parts.${index}.Price`) || 0
+                          }
+                          readOnly="true"
                         />
                       </td>
                       <td className="px-4 py-2 border text-center">
@@ -233,10 +255,35 @@ export default function BuyPartsPage() {
             </div>
 
             {/* Submit */}
-            <div className="mt-auto flex justify-center py-6">
-              <Button type="submit" className="">
-                Generate Invoice
-              </Button>
+            <div className="mt-auto flex justify-center mr-40">
+              <div className="w-full flex items-center justify-end">
+                <table className="w-1/6 text-sm text-left border-collapse mt-4">
+                  <thead className="bg-gray-900 text-slate-50 text-xl">
+                    <tr>
+                      <th className="px-4 py-2 border">Discount</th>
+                      <th className="px-4 py-2 border">Other</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-lg">
+                    <tr className="even:bg-gray-800">
+                      <td className="px-4 py-2 border text-center text-gray-50 ">
+                        <Input
+                          placeholder="Discount"
+                          type="number"
+                          {...register(`Discount`)}
+                        />
+                      </td>
+                      <td className="px-4 py-2 border">
+                        <Input
+                          placeholder="Other"
+                          type="number"
+                          {...register(`Other`)}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </form>
         </CardContent>

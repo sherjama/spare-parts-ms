@@ -24,6 +24,7 @@ import Settings from "./pages/Settings.jsx";
 import Support from "./pages/Support.jsx";
 import Profile from "./pages/Profile.jsx";
 import BuyPartsPage from "./components/BuyParts.jsx";
+import SellPartsPage from "./components/SellParts.jsx";
 
 export {
   Dashboard,
@@ -33,6 +34,7 @@ export {
   Support,
   Profile,
   BuyPartsPage,
+  SellPartsPage,
   Header,
   Footer,
   Button,

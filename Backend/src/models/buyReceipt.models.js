@@ -5,7 +5,6 @@ const buySchema = new Schema(
     vendorBillNo: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     vendorName: {

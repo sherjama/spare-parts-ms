@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { IoIosCreate } from "react-icons/io";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Inventory = () => {
   const [hoveredRow, setHoveredRow] = useState(null);
   const navigate = useNavigate();
 
-  const inventory = [
-    { partNumber: "PN-1001", description: "Brake Pad", unitPrice: "$50" },
-    { partNumber: "PN-1002", description: "Air Filter", unitPrice: "$30" },
-    { partNumber: "PN-1003", description: "Clutch Plate", unitPrice: "$120" },
-  ];
+  const inventory = useSelector((state) => state.stock.Parts?.data);
+  const shelves = useSelector((state) => state.stock.Shelves?.data);
+
   return (
     <div className="px-14 pt-6 bg-black min-h-screen text-white font-nexar3">
       <h1 className="text-3xl text-gray-300 font-nexar1 mb-6">Inventory</h1>
@@ -40,7 +39,10 @@ const Inventory = () => {
               Upload your parts and manage your listings.
             </p>
           </div>
-          <button className="mt-4 bg-slate-300 hover:bg-slate-500 text-gray-950 rounded-xl py-2 px-4 w-fit transition font-nexar2 tracking-wide">
+          <button
+            className="mt-4 bg-slate-300 hover:bg-slate-500 text-gray-950 rounded-xl py-2 px-4 w-fit transition font-nexar2 tracking-wide"
+            onClick={() => navigate("/controls/sell-parts")}
+          >
             Sell Now
           </button>
         </div>
@@ -58,12 +60,12 @@ const Inventory = () => {
         </div>
 
         {/* Shelves */}
-        <div className="md:col-span-1 bg-indigo-950 p-6 rounded-2xl shadow">
+        {/* <div className="md:col-span-1 bg-indigo-950 p-6 rounded-2xl shadow">
           <h2 className="text-white text-2xl font-nexar1 text-center">
             View Shelves
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mt-4">
-            {Array.from({ length: 12 }).map((_, idx) => (
+            {shelves.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-[#1E1E1E] rounded-lg h-16 flex items-center justify-center text-gray-400 hover:bg-gray-700 hover:text-white transition"
@@ -72,10 +74,10 @@ const Inventory = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* View inventory  */}
-        <div className="md:col-span-4 gap-4 bg-zinc-950 rounded-2xl shadow">
+        <div className="md:col-span-5 gap-4 bg-zinc-950 rounded-2xl shadow">
           <h2 className="text-white text-3xl font-nexar1 pt-4 pl-4">
             View Inventory
           </h2>
@@ -84,8 +86,8 @@ const Inventory = () => {
           </p>
           {/* table  */}
           <div className="overflow-x-auto rounded-lg border border-gray-700 mt-7 mx-2">
-            <table className="w-full text-sm text-left text-gray-300">
-              <thead className="bg-[#1E1E1E] text-gray-400 uppercase text-md">
+            <table className="w-full  text-left text-gray-300">
+              <thead className="bg-[#1E1E1E] text-gray-400 text-md text-2xl">
                 <tr>
                   <th scope="col" className="px-4 py-2">
                     Sr. No.
@@ -99,10 +101,13 @@ const Inventory = () => {
                   <th scope="col" className="px-4 py-2">
                     Unit Price
                   </th>
+                  <th scope="col" className="px-4 py-2">
+                    Qty
+                  </th>
                   <th scope="col" className="px-4 py-2"></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-xl">
                 {inventory.map((item, index) => (
                   <tr
                     key={index}
@@ -112,8 +117,9 @@ const Inventory = () => {
                   >
                     <td className="px-4 py-2">{index + 1}</td>
                     <td className="px-4 py-2">{item.partNumber}</td>
-                    <td className="px-4 py-2">{item.description}</td>
-                    <td className="px-4 py-2">{item.unitPrice} </td>
+                    <td className="px-4 py-2">{item.partName}</td>
+                    <td className="px-4 py-2">{item.Qty} </td>
+                    <td className="px-4 py-2">{item.Price} </td>
                     <td className="px-4 py-2">
                       {hoveredRow === index && <IoIosCreate size={20} />}
                     </td>

@@ -37,6 +37,14 @@ const sellSchema = new Schema(
       trim: true,
       unique: true,
     },
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    other: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

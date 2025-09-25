@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Purchase Bill</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+        body {
+            font-family: "Roboto", sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="max-w-[800px] mx-auto border border-blue-600 p-4 text-[10px] leading-tight text-gray-900">
+        <div class="font-extrabold text-gray-700 text-[16px] text-center">
+            PURCHASE BILL
+        </div>
+        <div class="relative top-16 float-right w-32 h-16 flex flex-col justify-center items-left">
+            <div class="flex justify-between">
+                <span class="font-bold text-md">Date</span>
+                <span>:</span>
+                <span>
+                    <%= purchase.buyDate %>
+                </span>
+            </div>
+            <div class="flex justify-between">
+                <span class="font-bold text-md">Bill No</span>
+                <span>:</span>
+                <span>
+                    <%= purchase.billNo %>
+                </span>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-start mb-2">
+            <div class="flex flex-col items-center">
+                <img class="mb-1" height="50" width="50" src="<%= user.logo %>" alt="Company Logo" />
+
+            </div>
+        </div>
+
+        <!-- Vendor Info -->
+        <div class="bg-blue-600 text-white text-[9px] font-bold w-[150px] text-center mb-1 select-none">
+            PURCHASED FROM (VENDOR)
+        </div>
+        <div class="text-[9px] mb-2">
+            Vendor Bill No: <%= purchase.vendorBillNo %><br />
+                <%= purchase.vendorName %>
+        </div>
+
+        <!-- Buyer Info -->
+        <div class="bg-gray-800 text-white text-[9px] font-bold w-[130px] text-center mb-1 select-none">
+            RECEIVED BY
+        </div>
+        <span class="text-[9px] font-semibold text-[#1d4ed8]">
+            <%= user.fermName %>
+        </span>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full border border-blue-600 border-collapse text-[9px]">
+                <thead>
+                    <tr class="bg-blue-600 text-white font-bold select-none">
+                        <th class="border border-blue-600 px-1 text-left w-[30px]">
+                            S No.
+                        </th>
+                        <th class="border border-blue-600 px-1 text-left">
+                            Part Number
+                        </th>
+                        <th class="border border-blue-600 px-1 text-left">
+                            Part Name
+                        </th>
+                        <th class="border border-blue-600 px-1 text-left">
+                            Qty
+                        </th>
+                        <th class="border border-blue-600 px-1 text-left">
+                            Unit Price
+                        </th>
+                        <th class="border border-blue-600 px-1 text-left">
+                            Amount
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% partDetails.forEach((item, index)=> { %>
+                        <tr class="<%= index % 2 === 0 ? 'bg-gray-100' : '' %>">
+                            <td class="border border-green-600 px-1">
+                                <%= index + 1 %>
+                            </td>
+                            <td class="border border-green-600 px-1">
+                                <%= item.partInfo.partNumber %>
+                            </td>
+                            <td class="border border-green-600 px-1">
+                                <%= item.partInfo.partName %>
+                            </td>
+                            <td class="border border-green-600 px-1 text-center">
+                                <%= item.Qty %>
+                            </td>
+                            <td class="border border-green-600 px-1 text-right">
+                                ₹ <%= item.unitPrice %>
+                            </td>
+                            <td class="border border-green-600 px-1 text-right">
+                                ₹ <%= item.totalAmount %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary -->
+        <div class="mt-1 flex justify-end text-[9px] w-full max-w-[300px] float-right">
+            <table class="w-full border-collapse border border-transparent">
+                <tbody>
+                    <tr>
+                        <td class="text-right pr-2">Total Purchase</td>
+                        <td class="text-right border border-green-600 px-1">
+                            ₹ <%= Total.toFixed(2)%>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-3 text-[9px] text-center italic font-semibold select-none">
+            Inventory updated successfully
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-[8px] text-center">
+            If you have any queries about this purchase bill, please contact<br />
+            <%= user.email %>
+        </div>
+
+        <div class="mt-2 text-[9px] text-center italic font-semibold select-none">
+            Thank You For Trusting <%= user.fermName %>
+        </div>
+    </div>
+</body>
+
+</html>

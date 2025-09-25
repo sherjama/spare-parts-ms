@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { setLoading } from "../store/loadSlice.js";
 import { useNavigate } from "react-router-dom";
 import { partsService, shelvesService, Shelvebox, Pfp } from "../index.js";
+
 const Dashboard = ({ className }) => {
   const userdata = useSelector((state) => state.userdata.userdata?.user);
   const userId = useSelector((state) => state.userdata.userdata.user._id);
@@ -18,7 +19,6 @@ const Dashboard = ({ className }) => {
     (state) => state.stock.reloadTriggerPart
   );
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStock = async () => {

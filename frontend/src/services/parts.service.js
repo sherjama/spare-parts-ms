@@ -17,6 +17,31 @@ class Parts {
       });
     } catch (error) {
       console.log("Buy parts :", error);
+      throw error;
+    }
+  }
+  async sellParts({
+    address,
+    customerName,
+    date,
+    mobileNumber,
+    discount,
+    other,
+    parts,
+  }) {
+    try {
+      return await axios.post(`${this.partsRoute}/sell-part`, {
+        address,
+        customerName,
+        date,
+        mobileNumber,
+        discount,
+        other,
+        parts,
+      });
+    } catch (error) {
+      console.log("Sell parts :", error);
+      throw error;
     }
   }
 

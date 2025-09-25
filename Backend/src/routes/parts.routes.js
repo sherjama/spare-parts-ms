@@ -9,6 +9,7 @@ import {
   getPartsOfShelf,
   sellParts,
   sellReceipt,
+  purchaseReceipt,
 } from "../controllers/parts.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -20,6 +21,10 @@ router.route("/buy-part").post(verifyJWT, upload.none(), buyParts);
 router.route("/sell-part").post(verifyJWT, upload.none(), sellParts);
 
 router.route("/sell-receipt").get(verifyJWT, upload.none(), sellReceipt);
+
+router
+  .route("/purchase-receipt")
+  .get(verifyJWT, upload.none(), purchaseReceipt);
 
 router.route("/create-part").post(verifyJWT, upload.none(), createPart);
 

@@ -8,6 +8,7 @@ import {
   Reports,
   Settings,
   BuyPartsPage,
+  SellPartsPage,
 } from "../index.js";
 import { useParams } from "react-router-dom";
 
@@ -35,6 +36,9 @@ const controlPage = () => {
           {params.slug === "profile" && <Profile className="w-full h-screen" />}
           {params.slug === "purchase-parts" && (
             <BuyPartsPage className="w-full h-screen" />
+          )}
+          {params.slug === "sell-parts" && (
+            <SellPartsPage className="w-full h-screen" />
           )}
         </main>
       </div>

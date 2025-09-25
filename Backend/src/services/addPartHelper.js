@@ -1,7 +1,7 @@
 import { Parts } from "../models/parts.models.js";
 import { ApiError } from "../utils/ApiError.js";
 
-export const addQtyHelper = async (partNumber, Qty, userId) => {
+export const addQtyHelper = async (partNumber, Qty, unitPrice, userId) => {
   const part = await Parts.findOne({ partNumber, CreatedBy: userId });
 
   console.log(partNumber, Qty, userId);
@@ -10,7 +10,7 @@ export const addQtyHelper = async (partNumber, Qty, userId) => {
     throw new ApiError(401, "Part with this part number is not Exist");
   }
 
-  const addedQuantity = part.Qty + Qty;
+  const addedQuantity = part.Qty + Number(Qty);
 
   console.log("add ....", addedQuantity);
 
@@ -19,6 +19,7 @@ export const addQtyHelper = async (partNumber, Qty, userId) => {
     {
       $set: {
         Qty: addedQuantity,
+        Price: unitPrice,
       },
     },
     { new: true }

@@ -112,7 +112,11 @@ const AuthPage = () => {
 
         <div className="flex w-4/5 justify-evenly items-center flex-wrap max-[1360px]:flex-col gap-4 lg:gap-1">
           {isSignUp && (
-            <form onSubmit={handleSubmit(Signup)} className="w-full ">
+            <form
+              onSubmit={handleSubmit(Signup)}
+              className="w-full "
+              autocomplete="off"
+            >
               <div className="mb-8">
                 <label
                   htmlFor="email"
@@ -246,7 +250,11 @@ const AuthPage = () => {
           )}
 
           {isLogin && (
-            <form onSubmit={handleSubmit(Login)} className="w-full ">
+            <form
+              onSubmit={handleSubmit(Login)}
+              className="w-full "
+              autocomplete="off"
+            >
               <div className="mb-8">
                 <label
                   htmlFor="email"

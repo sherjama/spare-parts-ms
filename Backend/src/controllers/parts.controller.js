@@ -15,8 +15,6 @@ import { User } from "../models/user.models.js";
 const buyParts = asyncHandler(async (req, res) => {
   const { vendorBillNo, vendorName, parts, date } = req.body;
 
-  console.log("backend :", vendorBillNo, vendorName, parts, date);
-
   if (
     !vendorBillNo ||
     !vendorName ||
@@ -119,13 +117,16 @@ const buyParts = asyncHandler(async (req, res) => {
 });
 
 const sellParts = asyncHandler(async (req, res) => {
-  const { customerName, address, mobileNumber, parts, date } = req.body;
+  const { customerName, address, mobileNumber, parts, date, discount, other } =
+    req.body;
 
   if (
     !customerName ||
     !address ||
     !mobileNumber ||
     !date ||
+    !discount ||
+    !other ||
     !Array.isArray(parts)
   ) {
     throw new ApiError(401, "All fields are required");
@@ -176,6 +177,8 @@ const sellParts = asyncHandler(async (req, res) => {
       address,
       mobileNumber,
       date,
+      discount,
+      other,
       partDetails: partIds,
       seller: req.user?._id,
       billNo: `${req.user.username}-S-${counter.seq}`,
@@ -199,8 +202,82 @@ const sellParts = asyncHandler(async (req, res) => {
   }
 });
 
+const purchaseReceipt = asyncHandler(async (req, res) => {
+  const { billNo } = req.query;
+
+  const user = await User.findById(req.user?._id);
+
+  if (!user) {
+    throw new ApiError(401, "Something went wrong while geting user details");
+  }
+
+  const purchase = await Buy.findOne({ billNo });
+
+  if (!purchase) {
+    throw new ApiError(401, "billNo not found");
+  }
+
+  // find purchased parts receipts details
+  const parts = [];
+  for (const part of purchase.partsDetails) {
+    const purchaseDetails = await PartList.findById(part);
+    if (!purchaseDetails) {
+      throw new ApiError(501, "Something went wrong while getting SellDetails");
+    }
+    parts.push(purchaseDetails);
+  }
+
+  //find part details
+  const partDetails = [];
+  for (const part of parts) {
+    const partInfo = await Parts.findById(part.partDetails);
+
+    if (!partInfo) {
+      throw new ApiError(
+        501,
+        "Something went wrong while getting part details"
+      );
+    }
+
+    partDetails.push(partInfo);
+  }
+
+  // add part details in part receipts
+  const updatedPartDetails = parts.map((partDoc) => {
+    const part = partDoc._doc || partDoc;
+    const partInfo = partDetails.find(
+      (info) => info._id.toString() === part.partDetails.toString()
+    );
+
+    return {
+      ...part,
+      partInfo: partInfo || null,
+    };
+  });
+
+  const Total = updatedPartDetails.reduce((sum, part) => {
+    return sum + (part.totalAmount || 0);
+  }, 0);
+
+  ejs.renderFile(
+    "src/views/purchaseInvoice.ejs",
+    {
+      purchase,
+      partDetails: updatedPartDetails,
+      user,
+      Total,
+    },
+    (err, html) => {
+      if (err) {
+        return res.status(500).send("Template rendering error: " + err.message);
+      }
+      res.send(html);
+    }
+  );
+});
+
 const sellReceipt = asyncHandler(async (req, res) => {
-  const { billNo, discount, other } = req.query;
+  const { billNo } = req.query;
 
   const user = await User.findById(req.user?._id);
 
@@ -251,6 +328,8 @@ const sellReceipt = asyncHandler(async (req, res) => {
       partInfo: partInfo || null,
     };
   });
+
+  const { discount, other } = sell;
 
   const subTotal = updatedPartDetails.reduce((sum, part) => {
     return sum + (part.totalAmount || 0);
@@ -463,6 +542,7 @@ const getPartsOfShelf = asyncHandler(async (req, res) => {
 export {
   buyParts,
   sellParts,
+  purchaseReceipt,
   sellReceipt,
   createPart,
   updatePart,
