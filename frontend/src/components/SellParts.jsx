@@ -32,7 +32,7 @@ export default function SellPartsPage() {
       date: "",
       discount: 0,
       other: 0,
-      parts: [{ partName: "", partNumber: "", Qty: 0, Price: 0 }],
+      parts: Array(1).fill({ partName: "", partNumber: "", Qty: 0, Price: 0 }),
     },
   });
 
@@ -43,8 +43,6 @@ export default function SellPartsPage() {
 
   // date formater
   const dateFormater = (dateString) => {
-    console.log("chla");
-
     const rawDate = new Date(dateString);
 
     const day = String(rawDate.getDate()).padStart(2, "0");
@@ -55,25 +53,28 @@ export default function SellPartsPage() {
   };
 
   const onSubmit = async (data) => {
-    data.date = date;
-    console.log("Buy Parts Payload:", data);
-    try {
-      const res = await partsService.sellParts(data);
-      if (res) {
-        dispatch(triggerReloadPart());
-        dispatch(triggerReloadShelve());
-        toast.success("Parts Added Into Inventory Successfully", {
-          position: "top-center",
-          autoClose: 2500,
-        });
-        setTimeout(() => navigate("/controls/dashboard"), 2500);
-      }
-    } catch (error) {
-      toast.info(error?.response?.data?.message || "Server Error", {
-        position: "top-center",
-      });
-    }
+    console.log("slkasjl", data);
+
+    // data.date = date;
+    // console.log("Buy Parts Payload:", data);
+    // try {
+    //   const res = await partsService.sellParts(data);
+    //   if (res) {
+    //     dispatch(triggerReloadPart());
+    //     dispatch(triggerReloadShelve());
+    //     toast.success("Parts Added Into Inventory Successfully", {
+    //       position: "top-center",
+    //       autoClose: 2500,
+    //     });
+    //     setTimeout(() => navigate("/controls/dashboard"), 2500);
+    //   }
+    // } catch (error) {
+    //   toast.info(error?.response?.data?.message || "Server Error", {
+    //     position: "top-center",
+    //   });
+    // }
     reset();
+    setDate("Select date");
   };
 
   return (
@@ -83,8 +84,8 @@ export default function SellPartsPage() {
         <CardContent>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col w-full rounded-xl min-h-[95vh] mt-2"
-            autocomplete="off"
+            className="flex flex-col w-full rounded-xl min-h-[95vh] mt-2 items-center"
+            autoComplete="off"
           >
             {/* Customer Details */}
             <CardHeader>
@@ -92,72 +93,92 @@ export default function SellPartsPage() {
                 Customer Details
               </CardTitle>
             </CardHeader>
-            <div
-              className="flex items-start justify-between gap-5 px-2 py-5 rounded-md w-full
-            "
-            >
-              <div className="flex flex-col  items-center justify-center gap-5 ">
-                <div className="flex items-center gap-5">
-                  <Label htmlFor="customerName">Customer Name</Label>
-                  <Input
-                    id="customerName"
-                    placeholder="Enter Customer Name"
-                    className="w-96"
-                    {...register("customerName", { required: true })}
-                  />
-                </div>
-                <div className="flex items-center gap-5">
-                  <Label htmlFor="Address">Address</Label>
-                  <Input
-                    id="Address"
-                    placeholder="Enter Address"
-                    className="w-96"
-                    {...register("address", { required: true })}
-                  />
-                </div>
-              </div>
-              {/* date  */}
-              <div className="flex gap-3 items-center w-[60%]">
-                <Label htmlFor="date" className="px-1">
-                  Date
-                </Label>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="date"
-                      className="w-48 justify-between font-normal bg-gray-200 text-black"
-                    >
-                      {date ? date : "Select date"}
-                      <ChevronDownIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto overflow-hidden p-0"
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      captionLayout="dropdown"
-                      className={"bg-slate-300"}
-                      onSelect={(date) => {
-                        dateFormater(date);
-                        setOpen(false);
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-                <div className="flex items-center gap-5">
-                  <Label htmlFor="mobileNumber">Mobile</Label>
-                  <Input
-                    id="mobileNumber"
-                    placeholder="Enter Mobile Number"
-                    className="w-96"
-                    {...register("mobileNumber", { required: true })}
-                  />
-                </div>
-              </div>
+
+            <div className="px-2 py-5 rounded-md w-full">
+              <table>
+                <tbody>
+                  {/* Name  */}
+                  <tr>
+                    <th>
+                      <Label htmlFor="customerName">Customer Name : </Label>
+                    </th>
+                    <td>
+                      <Input
+                        id="customerName"
+                        placeholder="Enter Customer Name"
+                        className="w-96"
+                        {...register("customerName", { required: true })}
+                      />
+                    </td>
+                  </tr>
+                  {/* Address  */}
+                  <tr>
+                    <th className="text-right">
+                      <Label htmlFor="Address">Address : </Label>
+                    </th>
+                    <td>
+                      <Input
+                        id="Address"
+                        placeholder="Enter Address"
+                        className="w-96"
+                        {...register("address", { required: true })}
+                      />
+                    </td>
+                  </tr>
+
+                  {/* mobileNumber  */}
+                  <tr>
+                    <th className="text-right">
+                      <Label htmlFor="mobileNumber">Mobile : </Label>
+                    </th>
+                    <td>
+                      <Input
+                        id="mobileNumber"
+                        placeholder="Enter Mobile Number"
+                        className="w-96"
+                        {...register("mobileNumber", { required: true })}
+                      />
+                    </td>
+                  </tr>
+                  {/* date  */}
+                  <tr>
+                    <th className="text-right">
+                      <Label htmlFor="date" className="px-1">
+                        Invoice Date :
+                      </Label>
+                    </th>
+                    <td>
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            id="date"
+                            className="w-48 justify-between font-normal bg-gray-200 text-black"
+                          >
+                            {date ? date : "Select date"}
+                            <ChevronDownIcon />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className="w-auto overflow-hidden p-0"
+                          align="start"
+                        >
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            captionLayout="dropdown"
+                            className={"bg-slate-300"}
+                            onSelect={(date) => {
+                              dateFormater(date);
+                              setOpen(false);
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {/* Parts Section */}
@@ -222,7 +243,7 @@ export default function SellPartsPage() {
                             watch(`parts.${index}.Qty`) *
                               watch(`parts.${index}.Price`) || 0
                           }
-                          readOnly="true"
+                          readOnly
                         />
                       </td>
                       <td className="px-4 py-2 border text-center">
@@ -254,36 +275,54 @@ export default function SellPartsPage() {
               </div>
             </div>
 
-            {/* Submit */}
-            <div className="mt-auto flex justify-center mr-40">
-              <div className="w-full flex items-center justify-end">
-                <table className="w-1/6 text-sm text-left border-collapse mt-4">
-                  <thead className="bg-gray-900 text-slate-50 text-xl">
-                    <tr>
-                      <th className="px-4 py-2 border">Discount</th>
-                      <th className="px-4 py-2 border">Other</th>
-                    </tr>
-                  </thead>
+            <div className="mt-auto ">
+              <div className="w-96 flex flex-col items-center justify-center">
+                <table className="w-2/3 text-sm text-left border-collapse">
                   <tbody className="text-lg">
-                    <tr className="even:bg-gray-800">
-                      <td className="px-4 py-2 border text-center text-gray-50 ">
+                    <tr className="even:bg-gray-800 border">
+                      <th className="px-4  bg-gray-900 text-slate-50 text-xl text-left">
+                        Discount
+                      </th>
+                      <td className=" text-center text-gray-50 bg-gray-900">
                         <Input
                           placeholder="Discount"
                           type="number"
-                          {...register(`Discount`)}
+                          {...register("discount")}
                         />
                       </td>
-                      <td className="px-4 py-2 border">
+                    </tr>
+                    <tr className="even:bg-gray-800 border">
+                      <th className="px-4  bg-gray-900 text-slate-50 text-xl text-left">
+                        Other
+                      </th>
+                      <td className=" text-center text-gray-50">
                         <Input
                           placeholder="Other"
                           type="number"
-                          {...register(`Other`)}
+                          {...register("other")}
                         />
+                      </td>
+                    </tr>
+                    <tr className="even:bg-gray-800 border">
+                      <th className="px-4  bg-gray-900 text-slate-50 text-xl text-left">
+                        Total
+                      </th>
+                      <td className=" text-center text-gray-50">
+                        <Input placeholder="Other" type="number" readOnly />
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            <div className="flex ">
+              <Button
+                className="w-28 mt-4 text-lg font-nexar2 bg-gray-900 font-normal  text-white"
+                type="submit"
+              >
+                Submit
+              </Button>
             </div>
           </form>
         </CardContent>
