@@ -11,19 +11,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { triggerReloadPart, triggerReloadShelve } from "@/store/stockSlice";
-import partsService from "@/services/parts.service";
-import { useNavigate } from "react-router-dom";
 
 export default function SellPartsPage() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
+  const [total, setTotal] = useState(0);
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { register, control, handleSubmit, reset, watch } = useForm({
     defaultValues: {
       customerName: "",
@@ -52,7 +47,9 @@ export default function SellPartsPage() {
     setDate(`${day}-${month}-${year}`);
   };
 
+  //On Submit
   const onSubmit = async (data) => {
+    data.date = date;
     console.log("slkasjl", data);
 
     // data.date = date;
@@ -76,6 +73,24 @@ export default function SellPartsPage() {
     reset();
     setDate("Select date");
   };
+
+  const allFields = watch();
+
+  useEffect(() => {
+    const parts = allFields.parts || [];
+    const discount = parseFloat(allFields.discount) || 0;
+    const other = parseFloat(allFields.other) || 0;
+
+    let partsTotal = 0;
+    parts.forEach((part) => {
+      const qty = parseFloat(part.Qty) || 0;
+      const price = parseFloat(part.Price) || 0;
+      partsTotal += qty * price;
+    });
+
+    const finalTotal = partsTotal + other - discount;
+    setTotal(finalTotal >= 0 ? finalTotal : 0);
+  }, [allFields]);
 
   return (
     <div className=" flex justify-center items-center">
@@ -308,7 +323,12 @@ export default function SellPartsPage() {
                         Total
                       </th>
                       <td className=" text-center text-gray-50">
-                        <Input placeholder="Other" type="number" readOnly />
+                        <Input
+                          value={total.toFixed(2)}
+                          placeholder="other"
+                          type="number"
+                          readOnly
+                        />
                       </td>
                     </tr>
                   </tbody>
