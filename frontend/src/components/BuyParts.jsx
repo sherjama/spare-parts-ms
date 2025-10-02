@@ -25,7 +25,7 @@ export default function BuyPartsPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { register, control, handleSubmit, reset } = useForm({
+  const { register, control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       vendorBillNo: "",
       vendorName: "",
@@ -51,6 +51,13 @@ export default function BuyPartsPage() {
 
     setDate(`${day}-${month}-${year}`);
   };
+
+  // const handlePartName = (e, index) => {
+  //   let part = inventory.filter((part) => part.partNumber === e.target.value);
+  //   let partName = part?.length < 1 ? "" : part[0].partName;
+
+  //   setValue(`parts.${index}.partName`, `${partName}`);
+  // };
 
   const onSubmit = async (data) => {
     data.date = date;

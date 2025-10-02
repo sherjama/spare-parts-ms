@@ -1,4 +1,5 @@
 import { useForm, useFieldArray } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronDownIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -22,6 +23,8 @@ export default function SellPartsPage() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
   const [total, setTotal] = useState(0);
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const inventory = useSelector((state) => state.stock.Parts);
@@ -78,6 +81,8 @@ export default function SellPartsPage() {
           position: "top-center",
           autoClose: 2500,
         });
+
+        setTimeout(() => navigate("/controls/dashboard"), 2000);
       }
     } catch (error) {
       console.log(error);

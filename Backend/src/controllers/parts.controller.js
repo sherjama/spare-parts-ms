@@ -15,6 +15,8 @@ import { User } from "../models/user.models.js";
 const buyParts = asyncHandler(async (req, res) => {
   const { vendorBillNo, vendorName, parts, date } = req.body;
 
+  console.log(req.user._id);
+
   if (
     !vendorBillNo ||
     !vendorName ||
@@ -53,7 +55,7 @@ const buyParts = asyncHandler(async (req, res) => {
       partIds.push(PartDetails._id);
     } else {
       // add qty if already exist
-      await addQtyHelper(part.partNumber, part.Qty, req.user._id);
+      await addQtyHelper(part.partNumber, part.Qty, part.Price, req.user._id);
 
       const PartDetails = await PartList.create({
         partDetails: existingPart._id,
