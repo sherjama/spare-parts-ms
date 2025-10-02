@@ -12,14 +12,21 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
+
+import partsService from "@/services/parts.service";
+import { triggerReloadPart, triggerReloadShelve } from "@/store/stockSlice";
 
 export default function SellPartsPage() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
   const [total, setTotal] = useState(0);
 
-  const { register, control, handleSubmit, reset, watch } = useForm({
+  const dispatch = useDispatch();
+  const inventory = useSelector((state) => state.stock.Parts);
+
+  const { register, control, handleSubmit, reset, watch, setValue } = useForm({
     defaultValues: {
       customerName: "",
       address: "",
@@ -27,7 +34,7 @@ export default function SellPartsPage() {
       date: "",
       discount: 0,
       other: 0,
-      parts: Array(1).fill({ partName: "", partNumber: "", Qty: 0, Price: 0 }),
+      parts: Array(1).fill({ partName: "", partName: "", Qty: 0, Price: 0 }),
     },
   });
 
@@ -47,29 +54,38 @@ export default function SellPartsPage() {
     setDate(`${day}-${month}-${year}`);
   };
 
+  // Part Name Finder
+  const handlePartName = (e, index) => {
+    let part = inventory.filter((part) => part.partNumber === e.target.value);
+    let partName = part?.length < 1 ? "" : part[0].partName;
+
+    setValue(`parts.${index}.partName`, `${partName}`);
+  };
+
   //On Submit
   const onSubmit = async (data) => {
     data.date = date;
-    console.log("slkasjl", data);
+    console.log("load", data);
 
-    // data.date = date;
-    // console.log("Buy Parts Payload:", data);
-    // try {
-    //   const res = await partsService.sellParts(data);
-    //   if (res) {
-    //     dispatch(triggerReloadPart());
-    //     dispatch(triggerReloadShelve());
-    //     toast.success("Parts Added Into Inventory Successfully", {
-    //       position: "top-center",
-    //       autoClose: 2500,
-    //     });
-    //     setTimeout(() => navigate("/controls/dashboard"), 2500);
-    //   }
-    // } catch (error) {
-    //   toast.info(error?.response?.data?.message || "Server Error", {
-    //     position: "top-center",
-    //   });
-    // }
+    try {
+      const res = await partsService.sellParts(data);
+      if (res) {
+        console.log(res);
+
+        dispatch(triggerReloadPart());
+        dispatch(triggerReloadShelve());
+        toast.success("Parts sell Successfully", {
+          position: "top-center",
+          autoClose: 2500,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.info(error?.response?.data?.message || "Server Error", {
+        position: "top-center",
+      });
+    }
     reset();
     setDate("Select date");
   };
@@ -222,14 +238,14 @@ export default function SellPartsPage() {
                           {...register(`parts.${index}.partNumber`, {
                             required: true,
                           })}
+                          onChange={(e) => handlePartName(e, index)}
                         />
                       </td>
                       <td className="px-4 py-2 border">
                         <Input
                           placeholder="Part Name"
-                          {...register(`parts.${index}.partName`, {
-                            required: true,
-                          })}
+                          {...register(`parts.${index}.partName`)}
+                          readOnly
                         />
                       </td>
                       <td className="px-4 py-2 border">
@@ -239,6 +255,7 @@ export default function SellPartsPage() {
                           {...register(`parts.${index}.Price`, {
                             required: true,
                           })}
+                          min="0"
                         />
                       </td>
                       <td className="px-4 py-2 border">
@@ -248,6 +265,7 @@ export default function SellPartsPage() {
                           {...register(`parts.${index}.Qty`, {
                             required: true,
                           })}
+                          min="0"
                         />
                       </td>
                       <td className="px-4 py-2 border">
@@ -303,6 +321,7 @@ export default function SellPartsPage() {
                           placeholder="Discount"
                           type="number"
                           {...register("discount")}
+                          min="0"
                         />
                       </td>
                     </tr>
@@ -315,6 +334,7 @@ export default function SellPartsPage() {
                           placeholder="Other"
                           type="number"
                           {...register("other")}
+                          min="0"
                         />
                       </td>
                     </tr>

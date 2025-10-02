@@ -148,6 +148,12 @@ const sellParts = asyncHandler(async (req, res) => {
         );
       }
 
+      if (part.Qty > sellPart.Qty) {
+        throw new ApiError(
+          401,
+          `Current Available Quantity in Inventory for Part Number ${part.partNumber} is : ${sellPart.Qty}. So, Quantity cannot be entered more than the Available Quantity`
+        );
+      }
       const PartDetails = await PartList.create({
         partDetails: sellPart._id,
         Qty: part.Qty,

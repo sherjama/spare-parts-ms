@@ -7,8 +7,8 @@ const Inventory = () => {
   const [hoveredRow, setHoveredRow] = useState(null);
   const navigate = useNavigate();
 
-  const inventory = useSelector((state) => state.stock.Parts?.data);
-  const shelves = useSelector((state) => state.stock.Shelves?.data);
+  const inventory = useSelector((state) => state.stock.Parts);
+  const shelves = useSelector((state) => state.stock.Shelves);
 
   return (
     <div className="px-14 pt-6 bg-black min-h-screen text-white font-nexar3">
@@ -99,10 +99,10 @@ const Inventory = () => {
                     Description
                   </th>
                   <th scope="col" className="px-4 py-2">
-                    Unit Price
+                    Qty
                   </th>
                   <th scope="col" className="px-4 py-2">
-                    Qty
+                    Unit Price
                   </th>
                   <th scope="col" className="px-4 py-2"></th>
                 </tr>

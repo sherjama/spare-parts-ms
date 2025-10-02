@@ -27,8 +27,8 @@ const Dashboard = ({ className }) => {
         const userShelves = await shelvesService.listShelves();
 
         if (userParts || userShelves) {
-          dispatch(addParts(userParts.data));
-          dispatch(addShelves(userShelves.data));
+          dispatch(addParts(userParts.data.data));
+          dispatch(addShelves(userShelves.data.data));
           dispatch(setLoading(false));
         }
       } catch (error) {
