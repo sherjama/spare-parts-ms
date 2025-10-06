@@ -5,7 +5,7 @@ import { Parts } from "../models/parts.models.js";
 import { Counter } from "../models/counter.models.js";
 import { Shelf } from "../models/shelves.models.js";
 import { Buy } from "../models/buyReceipt.models.js";
-import { Sell } from "../models/SellReceipt.models.js";
+import { Sell } from "../models/sellReceipt.models.js";
 import { PartList } from "../models/partList.models.js";
 import { createPartHelper } from "../services/createPartHelper.js";
 import { addQtyHelper } from "../services/addPartHelper.js";

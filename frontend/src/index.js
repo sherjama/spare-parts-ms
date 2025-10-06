@@ -25,6 +25,7 @@ import Support from "./pages/Support.jsx";
 import Profile from "./pages/Profile.jsx";
 import BuyPartsPage from "./components/BuyParts.jsx";
 import SellPartsPage from "./components/SellParts.jsx";
+import AddShelvePage from "./components/AddShelve.jsx";
 
 export {
   Dashboard,
@@ -54,4 +55,5 @@ export {
   Shelvebox,
   SessionPage,
   Sidebar,
+  AddShelvePage,
 };

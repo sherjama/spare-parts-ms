@@ -7,7 +7,7 @@ class Shelves {
     this.shelveRoute = "/api/v1/shelf";
   }
 
-  async createShelve({ shelfName }) {
+  async createShelve(shelfName) {
     try {
       return await axios.post(`${this.shelveRoute}/create-shelf`, {
         shelfName,
@@ -33,7 +33,7 @@ class Shelves {
   async deleteShelve(shelfName) {
     try {
       return await axios.delete(`${this.shelveRoute}/delete-shelf`, {
-        shelfName,
+        data: { shelfName },
       });
     } catch (error) {
       console.log("deleteShelve :", error);

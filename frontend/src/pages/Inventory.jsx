@@ -2,19 +2,30 @@ import React, { useState } from "react";
 import { IoIosCreate } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import AddShelve from "@/components/AddShelve";
 
 const Inventory = () => {
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [toggle, setToggle] = useState(false);
   const navigate = useNavigate();
 
   const inventory = useSelector((state) => state.stock.Parts);
   const shelves = useSelector((state) => state.stock.Shelves);
 
+  console.log(shelves);
+
   return (
     <div className="px-14 pt-6 bg-black min-h-screen text-white font-nexar3">
+      <div className={`w-full h-full absolute top-[35%] left-[40%] z-30`}>
+        {toggle && <AddShelve setToggle={setToggle} />}
+      </div>
       <h1 className="text-3xl text-gray-300 font-nexar1 mb-6">Inventory</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div
+        className={`grid grid-cols-1 md:grid-cols-5 gap-6 ${
+          toggle ? "opacity-25" : "opacity-100"
+        }`}
+      >
         {/* Buy Parts */}
         <div className="md:col-span-2 bg-gray-900 rounded-2xl p-6 shadow-lg flex flex-col justify-between ">
           <div>
@@ -54,7 +65,10 @@ const Inventory = () => {
           <p className="text-gray-300 text-sm font-nexar1">
             Create shelves to organize stock
           </p>
-          <button className="bg-stone-500 hover:bg-stone-600 text-white rounded-xl py-2 px-3 transition mt-2">
+          <button
+            className="bg-stone-500 hover:bg-stone-600 text-white rounded-xl py-2 px-3 transition mt-2"
+            onClick={() => setToggle((prev) => !prev)}
+          >
             + Add Now
           </button>
         </div>
@@ -99,6 +113,9 @@ const Inventory = () => {
                     Description
                   </th>
                   <th scope="col" className="px-4 py-2">
+                    Shelve
+                  </th>
+                  <th scope="col" className="px-4 py-2">
                     Qty
                   </th>
                   <th scope="col" className="px-4 py-2">
@@ -118,6 +135,10 @@ const Inventory = () => {
                     <td className="px-4 py-2">{index + 1}</td>
                     <td className="px-4 py-2">{item.partNumber}</td>
                     <td className="px-4 py-2">{item.partName}</td>
+                    <td className="px-4 py-2">
+                      {shelves.find((shelf) => shelf._id === item.shelf)
+                        ?.shelfName || "Not Found"}
+                    </td>
                     <td className="px-4 py-2">{item.Qty} </td>
                     <td className="px-4 py-2">{item.Price} </td>
                     <td className="px-4 py-2">

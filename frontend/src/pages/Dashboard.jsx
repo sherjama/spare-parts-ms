@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { addParts, addShelves } from "../store/stockSlice.js";
+import { purchase, sell } from "../store/reportSlice.js";
 import { useEffect } from "react";
 import { setLoading } from "../store/loadSlice.js";
 import { useNavigate } from "react-router-dom";
 import { partsService, shelvesService, Shelvebox, Pfp } from "../index.js";
+import reportsService from "@/services/reports.service.js";
 
 const Dashboard = ({ className }) => {
   const userdata = useSelector((state) => state.userdata.userdata?.user);
@@ -21,14 +23,18 @@ const Dashboard = ({ className }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchStock = async () => {
+    const fetchData = async () => {
       try {
         const userParts = await partsService.getAllParts(userId);
         const userShelves = await shelvesService.listShelves();
+        const userPurchaseBills = await reportsService.getPurchaseBill();
+        const userSellBills = await reportsService.getSellBill();
 
-        if (userParts || userShelves) {
+        if (userParts || userShelves || userPurchaseBills || userSellBills) {
           dispatch(addParts(userParts.data.data));
           dispatch(addShelves(userShelves.data.data));
+          dispatch(purchase(userPurchaseBills.data.data));
+          dispatch(sell(userSellBills.data.data));
           dispatch(setLoading(false));
         }
       } catch (error) {
@@ -38,7 +44,7 @@ const Dashboard = ({ className }) => {
       }
     };
 
-    if (userId) fetchStock();
+    if (userId) fetchData();
   }, [reloadTriggerPart, userId, dispatch]);
   return (
     <main

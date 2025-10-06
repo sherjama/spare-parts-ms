@@ -9,6 +9,7 @@ import {
   Settings,
   BuyPartsPage,
   SellPartsPage,
+  AddShelvePage,
 } from "../index.js";
 import { useParams } from "react-router-dom";
 
@@ -39,6 +40,11 @@ const controlPage = () => {
           )}
           {params.slug === "sell-parts" && (
             <SellPartsPage className="w-full h-screen" />
+          )}
+          {params.slug === "add-shelve" && (
+            <div className="w-full h-full flex items-center justify-center">
+              <AddShelvePage className="bg-red-600" />
+            </div>
           )}
         </main>
       </div>

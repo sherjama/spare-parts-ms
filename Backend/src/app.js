@@ -24,10 +24,12 @@ app.use(cookieParser());
 import userRouter from "./routes/user.routes.js";
 import partsRouter from "./routes/parts.routes.js";
 import shelfRouter from "./routes/shelf.routes.js";
+import reportsRouter from "./routes/reports.routes.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/parts", partsRouter);
 app.use("/api/v1/shelf", shelfRouter);
+app.use("/api/v1/reports", reportsRouter);
 
 //for error
 app.use(errorHandler);
