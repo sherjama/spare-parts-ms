@@ -27,16 +27,29 @@ const userSchema = new Schema(
       required: true,
       trim: true,
     },
-    address: {
-      type: String,
-    },
     logo: {
-      type: String, // cloudinary url
+      type: String,
       required: true,
     },
     logoId: {
       type: String,
       required: true,
+    },
+    state: {
+      type: String,
+      default: "-",
+    },
+    city: {
+      type: String,
+      default: "-",
+    },
+    region: {
+      type: String,
+      default: "-",
+    },
+    contact: {
+      type: String,
+      default: "-",
     },
     refreshToken: {
       type: String,

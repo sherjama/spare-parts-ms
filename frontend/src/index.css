@@ -2,35 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "tailwindcss";
-
 @theme inline {
-  --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
-
+  --animate-scroll: scroll var(--animation-duration, 40s)
+    var(--animation-direction, forwards) linear infinite;
   @keyframes scroll {
     to {
       transform: translate(calc(-50% - 0.5rem));
     }
   }
-
   --animate-aurora: aurora 60s linear infinite;
-
   @keyframes aurora {
     from {
-      background-position:
-        50% 50%,
-        50% 50%;
+      background-position: 50% 50%, 50% 50%;
     }
-
     to {
-      background-position:
-        350% 50%,
-        350% 50%;
+      background-position: 350% 50%, 350% 50%;
     }
   }
 }
-
-
 
 @font-face {
   font-family: "Font1";
@@ -118,14 +107,22 @@ input::placeholder {
   --toastify-container-width: fit-content;
   --toastify-toast-width: 320px;
   --toastify-toast-offset: 16px;
-  --toastify-toast-top: max(var(--toastify-toast-offset),
-      env(safe-area-inset-top));
-  --toastify-toast-right: max(var(--toastify-toast-offset),
-      env(safe-area-inset-right));
-  --toastify-toast-left: max(var(--toastify-toast-offset),
-      env(safe-area-inset-left));
-  --toastify-toast-bottom: max(var(--toastify-toast-offset),
-      env(safe-area-inset-bottom));
+  --toastify-toast-top: max(
+    var(--toastify-toast-offset),
+    env(safe-area-inset-top)
+  );
+  --toastify-toast-right: max(
+    var(--toastify-toast-offset),
+    env(safe-area-inset-right)
+  );
+  --toastify-toast-left: max(
+    var(--toastify-toast-offset),
+    env(safe-area-inset-left)
+  );
+  --toastify-toast-bottom: max(
+    var(--toastify-toast-offset),
+    env(safe-area-inset-bottom)
+  );
   --toastify-toast-background: #fff;
   --toastify-toast-padding: 14px;
   --toastify-toast-min-height: 64px;
@@ -145,13 +142,15 @@ input::placeholder {
 
   --toastify-spinner-color: #616161;
   --toastify-spinner-color-empty-area: #e0e0e0;
-  --toastify-color-progress-light: linear-gradient(to right,
-      #4cd964,
-      #5ac8fa,
-      #007aff,
-      #34aadc,
-      #5856d6,
-      #ff2d55);
+  --toastify-color-progress-light: linear-gradient(
+    to right,
+    #4cd964,
+    #5ac8fa,
+    #007aff,
+    #34aadc,
+    #5856d6,
+    #ff2d55
+  );
   --toastify-color-progress-dark: #bb86fc;
   --toastify-color-progress-info: var(--toastify-color-info);
   --toastify-color-progress-success: var(--toastify-color-success);
@@ -160,8 +159,6 @@ input::placeholder {
   /* used to control the opacity of the progress trail */
   --toastify-color-progress-bgo: 0.2;
 }
-
-
 
 @layer base {
   :root {
@@ -219,8 +216,6 @@ input::placeholder {
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {

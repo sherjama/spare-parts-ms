@@ -45,6 +45,30 @@ class Parts {
     }
   }
 
+  async getPurchaseBill(billNo) {
+    try {
+      const receiptUrl = `${
+        this.partsRoute
+      }/purchase-receipt?billNo=${encodeURIComponent(billNo)}`;
+      window.open(receiptUrl, "_blank");
+    } catch (error) {
+      console.log("Get purchase bill: ", error);
+      throw error;
+    }
+  }
+
+  async getSellBill(billNo) {
+    try {
+      const receiptUrl = `${
+        this.partsRoute
+      }/sell-receipt?billNo=${encodeURIComponent(billNo)}`;
+      window.open(receiptUrl, "_blank");
+    } catch (error) {
+      console.log("Get sell bill: ", error);
+      throw error;
+    }
+  }
+
   async createPart({ partNumber, partName, shelfName, MRP, Qty }) {
     try {
       return await axios.post(`${this.partsRoute}/create-part`, {

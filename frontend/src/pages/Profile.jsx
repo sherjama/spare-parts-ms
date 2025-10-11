@@ -6,6 +6,7 @@ import { logout } from "../store/authSlice.js";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "../store/loadSlice.js";
 import { ToastContainer, toast } from "react-toastify";
+import { FaRegEdit } from "react-icons/fa";
 
 const Profile = ({ className }) => {
   const userdata = useSelector((state) => state.userdata.userdata.user);
@@ -27,6 +28,8 @@ const Profile = ({ className }) => {
       });
     }
   };
+
+  const editHandler = async (txt) => {};
 
   return (
     <div className={`${className} bg-[#18191f] text-white flex `}>
@@ -84,72 +87,70 @@ const Profile = ({ className }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-lg text-gray-400">
                 <div>
                   <p className="mb-0.5 text-gray-500 text-sm">Ferm Name</p>
-                  <p className="text-white font-nexar2 text-lg">
-                    {userdata.fermName}
-                  </p>
+                  <div className="flex items-center justify-between ">
+                    <p className="text-white font-nexar2 text-lg">
+                      {userdata.fermName}
+                    </p>
+                    <span onClick={(e) => editHandler("fermName", e)}>
+                      <FaRegEdit />
+                    </span>
+                  </div>
                 </div>
                 <div>
                   <p className="mb-0.5 text-gray-500 text-sm">State</p>
-                  <p className="text-white font-nexar2 text-lg">
-                    {userdata.state}
-                  </p>
+                  <div className="flex items-center justify-between ">
+                    <p className="text-white font-nexar2 text-lg">
+                      {userdata.state}
+                    </p>
+                    <span onClick={(e) => editHandler("state", e)}>
+                      <FaRegEdit />
+                    </span>
+                  </div>
                 </div>
                 <div>
                   <p className="mb-0.5 text-gray-500 text-sm">Email</p>
-                  <p className="text-white font-nexar2 text-lg">
-                    {userdata.email}
-                  </p>
+                  <div className="flex items-center justify-between ">
+                    <p className="text-white font-nexar2 text-lg">
+                      {userdata.email}
+                    </p>
+                    <span onClick={(e) => editHandler("email", e)}>
+                      <FaRegEdit />
+                    </span>
+                  </div>
                 </div>
                 <div>
                   <p className="mb-0.5 text-gray-500 text-sm">City</p>
-                  <p className="text-white font-nexar2 text-lg">
-                    {userdata.city}
-                  </p>
+                  <div className="flex items-center justify-between ">
+                    <p className="text-white font-nexar2 text-lg">
+                      {userdata.city}
+                    </p>
+                    <span onClick={(e) => editHandler("city", e)}>
+                      <FaRegEdit />
+                    </span>
+                  </div>
                 </div>
                 <div>
                   <p className="mb-0.5 text-gray-500 text-sm">Contact no.</p>
-                  <p className="text-white font-nexar2 text-lg">
-                    {userdata.contact}
-                  </p>
-                </div>
-                {/* <div>
-                    <p className="mb-0.5 text-gray-500 text-sm">
-                      My Preferred Music Mood
-                    </p>
+                  <div className="flex items-center justify-between ">
                     <p className="text-white font-nexar2 text-lg">
-                      Melancholic
+                      {userdata.contact}
                     </p>
-                  </div> */}
+                    <span onClick={(e) => editHandler("contact", e)}>
+                      <FaRegEdit />
+                    </span>
+                  </div>
+                </div>
                 <div>
                   <p className="mb-0.5 text-gray-500 text-sm">Region</p>
-                  <p className="text-white font-nexar2 text-lg">
-                    {userdata.country}
-                  </p>
+                  <div className="flex items-center justify-between ">
+                    <p className="text-white font-nexar2 text-lg">
+                      {userdata.region}
+                    </p>
+                    <span onClick={(e) => editHandler("region", e)}>
+                      <FaRegEdit />
+                    </span>
+                  </div>
                 </div>
-                {/* <div>
-                    <p className="mb-0.5 text-gray-500 text-sm">
-                      Availability
-                    </p>
-                    <div className="inline-flex items-center space-x-2 text-sm font-medium text-[#7ed957] bg-[#3a5a22] rounded-full px-3 py-0.5 border border-[#2a3a12]">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#3a5a22] border border-[#2a3a12] flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#7ed957]"></div>
-                      </div>
-                      <span>Available for Collaboration</span>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="mb-0.5 text-gray-500 text-sm">Badges</p>
-                    <p className="text-[#3a9ed9] text-sm flex items-center space-x-1 font-medium">
-                      <i className="fas fa-certificate text-sm"></i>
-                      <span>Top Collaborator</span>
-                    </p>
-                  </div>
-                  <div>
-                    <p className="mb-0.5 text-gray-500 text-sm">Tags</p>
-                    <p className="text-white text-lg font-nexar2">
-                      #Drill, #Melancholic, #Rap-US
-                    </p>
-                  </div> */}
               </div>
             </div>
           </div>
