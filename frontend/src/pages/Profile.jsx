@@ -1,5 +1,5 @@
-import React from "react";
-import { Pfp, Button } from "../index.js";
+import React, { useState } from "react";
+import { Pfp, Button, EditUserDetails } from "../index.js";
 import { useSelector, useDispatch } from "react-redux";
 import authservice from "../services/auth.service.js";
 import { logout } from "../store/authSlice.js";
@@ -9,6 +9,19 @@ import { ToastContainer, toast } from "react-toastify";
 import { FaRegEdit } from "react-icons/fa";
 
 const Profile = ({ className }) => {
+  const [toggle, setToggle] = useState(false);
+  const [fieldName, setFieldName] = useState();
+  const [field, setField] = useState();
+  const fields = [
+    { label: "Username", key: "username" },
+    { label: "City", key: "city" },
+    { label: "Email", key: "email" },
+    { label: "State", key: "state" },
+    { label: "Ferm Name", key: "fermName" },
+    { label: "Region", key: "region" },
+    { label: "Contact", key: "contact" },
+  ];
+
   const userdata = useSelector((state) => state.userdata.userdata.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,11 +42,25 @@ const Profile = ({ className }) => {
     }
   };
 
-  const editHandler = async (txt) => {};
+  const editHandler = async (field, label) => {
+    const currentValue = userdata[field];
+    setToggle((prev) => !prev);
+    setFieldName(label);
+    setField(field);
+  };
 
   return (
     <div className={`${className} bg-[#18191f] text-white flex `}>
       <ToastContainer />
+      {toggle && (
+        <div className="fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <EditUserDetails
+            field={field}
+            setToggle={setToggle}
+            fieldName={fieldName}
+          />
+        </div>
+      )}
       <div className="flex-1 p-6 sm:p-10 space-y-6 ">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
           <div className="flex items-center space-x-4">
@@ -64,15 +91,9 @@ const Profile = ({ className }) => {
           <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-6 sm:space-y-0">
             <div className="flex flex-col items-center bg-[#22232a] rounded-lg p-6 w-full sm:w-1/3 border border-gray-700">
               <h2 className="text-white font-nexar2 text-lg mb-1">
-                {userdata.username}
+                {userdata?.username}
               </h2>
-              {/* <p className="text-[#7ed957] text-lg font-medium mb-4">
-                  Premium User
-                </p> */}
-              <div
-                className="rounded-full bg-[#4a4f59] p-2 border border-gray-600"
-                style={{ "box-shadow": "inset 0 0 10px #3a3f49" }}
-              >
+              <div className="rounded-full bg-[#4a4f59] p-2 border border-gray-600">
                 <Pfp className="size-80" />
               </div>
             </div>
@@ -84,73 +105,16 @@ const Profile = ({ className }) => {
               <h3 className="text-white font-nexar2 mb-4 text-md">
                 Other details
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-lg text-gray-400">
-                <div>
-                  <p className="mb-0.5 text-gray-500 text-sm">Ferm Name</p>
-                  <div className="flex items-center justify-between ">
-                    <p className="text-white font-nexar2 text-lg">
-                      {userdata.fermName}
-                    </p>
-                    <span onClick={(e) => editHandler("fermName", e)}>
-                      <FaRegEdit />
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <p className="mb-0.5 text-gray-500 text-sm">State</p>
-                  <div className="flex items-center justify-between ">
-                    <p className="text-white font-nexar2 text-lg">
-                      {userdata.state}
-                    </p>
-                    <span onClick={(e) => editHandler("state", e)}>
-                      <FaRegEdit />
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <p className="mb-0.5 text-gray-500 text-sm">Email</p>
-                  <div className="flex items-center justify-between ">
-                    <p className="text-white font-nexar2 text-lg">
-                      {userdata.email}
-                    </p>
-                    <span onClick={(e) => editHandler("email", e)}>
-                      <FaRegEdit />
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <p className="mb-0.5 text-gray-500 text-sm">City</p>
-                  <div className="flex items-center justify-between ">
-                    <p className="text-white font-nexar2 text-lg">
-                      {userdata.city}
-                    </p>
-                    <span onClick={(e) => editHandler("city", e)}>
-                      <FaRegEdit />
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <p className="mb-0.5 text-gray-500 text-sm">Contact no.</p>
-                  <div className="flex items-center justify-between ">
-                    <p className="text-white font-nexar2 text-lg">
-                      {userdata.contact}
-                    </p>
-                    <span onClick={(e) => editHandler("contact", e)}>
-                      <FaRegEdit />
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <p className="mb-0.5 text-gray-500 text-sm">Region</p>
-                  <div className="flex items-center justify-between ">
-                    <p className="text-white font-nexar2 text-lg">
-                      {userdata.region}
-                    </p>
-                    <span onClick={(e) => editHandler("region", e)}>
-                      <FaRegEdit />
-                    </span>
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+                {fields.map(({ label, key }) => (
+                  <DataField
+                    key={key}
+                    label={label}
+                    value={userdata[key]}
+                    fieldKey={key}
+                    onEdit={editHandler}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -167,6 +131,23 @@ const Profile = ({ className }) => {
             </div>
           </div>
         </section>
+      </div>
+    </div>
+  );
+};
+
+const DataField = ({ label, value, fieldKey, onEdit }) => {
+  return (
+    <div>
+      <p className="mb-0.5 text-gray-500 text-sm">{label}</p>
+      <div className="flex items-center justify-between ">
+        <p className="text-white font-nexar2 text-lg">{value}</p>
+        <span
+          className="hover:bg-slate-600 p-2 rounded-full"
+          onClick={() => onEdit(fieldKey, label)}
+        >
+          <FaRegEdit />
+        </span>
       </div>
     </div>
   );

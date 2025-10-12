@@ -63,13 +63,11 @@ class AuthService {
     }
   }
 
-  async UpdateUserDetail({ username, email, fermName }) {
+  async UpdateUserDetail(updatedField) {
+    console.log(updatedField);
+
     try {
-      return await axios.patch(`${this.userRoute}/update-user`, {
-        username,
-        email,
-        fermName,
-      });
+      return await axios.patch(`${this.userRoute}/update-user`, updatedField);
     } catch (error) {
       console.log("UpdateUserDetail : ", error);
       throw error;

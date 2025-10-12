@@ -291,17 +291,27 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  const { username, email, fermName, address } = req.body;
+  const updateFields = {};
 
+  const allowedFields = [
+    "username",
+    "email",
+    "fermName",
+    "contact",
+    "state",
+    "city",
+    "region",
+  ];
+
+  allowedFields.forEach((field) => {
+    if (req.body[field] !== undefined) {
+      updateFields[field] = req.body[field];
+    }
+  });
   const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
-      $set: {
-        username,
-        email,
-        fermName,
-        address,
-      },
+      $set: updateFields,
     },
     {
       new: true,
