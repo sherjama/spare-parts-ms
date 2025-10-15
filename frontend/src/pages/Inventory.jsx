@@ -12,8 +12,6 @@ const Inventory = () => {
   const inventory = useSelector((state) => state.stock.Parts);
   const shelves = useSelector((state) => state.stock.Shelves);
 
-  console.log(shelves);
-
   return (
     <div className="px-14 pt-6 bg-black min-h-screen text-white font-nexar3">
       <div className={`w-full h-full absolute top-[35%] left-[40%] z-30`}>

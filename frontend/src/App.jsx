@@ -3,7 +3,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import { Header, authservice } from "./index.js";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 
 const App = () => {
   // states
@@ -11,11 +10,8 @@ const App = () => {
   const [progress, setProgress] = useState(60);
 
   // from store
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
   const status = useSelector((state) => state.userdata?.status);
-  const accessToken = useSelector(
-    (state) => state.userdata.userdata?.accessToken
-  );
   const isLoading = useSelector((state) => state.Loading.isLoading);
   // from router
   const location = useLocation();
@@ -30,22 +26,34 @@ const App = () => {
   ];
 
   useEffect(() => {
-    if (status) {
-      const checkAuthSession = async () => {
-        try {
-          const session = await authservice.checkSession(accessToken, dispatch);
-          if (!session) {
-            window.location.reload();
-          }
-        } catch (error) {
-          toast.info(error?.response?.data?.message || "Server Error", {
-            position: "top-center",
-          });
+    if (!status) return;
+
+    let mounted = true;
+    const checkInterval = 5 * 60 * 1000; // 5 minutes
+
+    const runCheck = async () => {
+      try {
+        const session = await authservice.checkSession(dispatch);
+        if (!session && mounted) {
+          localStorage.clear();
+          window.location.reload();
         }
-      };
-      checkAuthSession();
-    }
-  }, [status, accessToken]);
+      } catch (error) {
+        if (mounted) {
+          localStorage.clear();
+          window.location.reload();
+        }
+      }
+    };
+
+    runCheck();
+    const interval = setInterval(runCheck, checkInterval);
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, [status]);
 
   useEffect(() => {
     if (headvisiblePaths.includes(path)) {
@@ -57,7 +65,6 @@ const App = () => {
     if (isLoading) {
       setProgress(100);
     }
-    console.log(path);
   }, [isLoading, location]);
 
   return (

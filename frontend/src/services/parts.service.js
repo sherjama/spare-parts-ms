@@ -122,8 +122,6 @@ class Parts {
   }
 
   async getAllParts(userId) {
-    console.log("service : ", userId);
-
     try {
       return await axios.get(`${this.partsRoute}/get-parts`, {
         params: { userId },

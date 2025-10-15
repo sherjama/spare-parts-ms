@@ -486,8 +486,6 @@ const deletePart = asyncHandler(async (req, res) => {
 const getAllParts = asyncHandler(async (req, res) => {
   const { userId } = req.query;
 
-  console.log("backend", userId);
-
   if (!userId) {
     throw new ApiError(401, "User Id is required");
   }

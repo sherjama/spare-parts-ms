@@ -1,27 +1,19 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 import { logout } from "../store/authSlice";
 
 class AuthService {
   userRoute;
 
   constructor() {
-    this.userRoute = "/api/v1/users";
+    this.userRoute = "/users";
   }
 
   async CreateAccount({ username, email, password, fermName, logo }) {
     try {
-      return await axios.post(
+      return await axiosInstance.post(
         `${this.userRoute}/register`,
-        {
-          username,
-          email,
-          password,
-          fermName,
-          logo,
-        },
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { username, email, password, fermName, logo },
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
     } catch (error) {
       console.log("CreateAccount : ", error);
@@ -31,10 +23,8 @@ class AuthService {
 
   async Login(data) {
     try {
-      return await axios.post(`${this.userRoute}/login-user`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      return await axiosInstance.post(`${this.userRoute}/login-user`, data, {
+        headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
       console.log("Login : ", error);
@@ -42,9 +32,10 @@ class AuthService {
     }
   }
 
-  async Logout() {
+  async Logout(dispatch) {
     try {
-      return await axios.post(`${this.userRoute}/logout-user`);
+      await axiosInstance.post(`${this.userRoute}/logout-user`);
+      dispatch(logout());
     } catch (error) {
       console.log("Logout : ", error);
       throw error;
@@ -53,7 +44,7 @@ class AuthService {
 
   async ChangePassword({ oldPassword, newPassword }) {
     try {
-      return await axios.patch(`${this.userRoute}/change-password`, {
+      return await axiosInstance.patch(`${this.userRoute}/change-password`, {
         oldPassword,
         newPassword,
       });
@@ -64,10 +55,11 @@ class AuthService {
   }
 
   async UpdateUserDetail(updatedField) {
-    console.log(updatedField);
-
     try {
-      return await axios.patch(`${this.userRoute}/update-user`, updatedField);
+      return await axiosInstance.patch(
+        `${this.userRoute}/update-user`,
+        updatedField
+      );
     } catch (error) {
       console.log("UpdateUserDetail : ", error);
       throw error;
@@ -76,12 +68,10 @@ class AuthService {
 
   async ChangeLogo(logo) {
     try {
-      return await axios.patch(
+      return await axiosInstance.patch(
         `${this.userRoute}/change-logo`,
         { logo },
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
     } catch (error) {
       console.log("ChangeLogo : ", error);
@@ -89,39 +79,22 @@ class AuthService {
     }
   }
 
-  async RefreshToken(refreshToken) {
+  async checkSession(dispatch) {
     try {
-      return await axios.post(
-        `${this.userRoute}/refresh-token`,
-        { refreshToken },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (error) {
-      console.log("RefreshToken : ", error);
-      throw error;
-    }
-  }
-
-  async checkSession(accessToken, dispatch) {
-    try {
-      const response = await axios.get(`${this.userRoute}/check-auth`, {
-        params: { accessToken },
-      });
-
-      if (!response.data.data.clear) {
+      const response = await axiosInstance.get(`/users/check-auth`);
+      if (response.data?.data?.clear === false) {
         return true;
       } else {
-        localStorage.clear();
         dispatch(logout());
         return false;
       }
     } catch (error) {
-      if (error.response?.data?.data?.clear) {
-        localStorage.clear();
+      if (error?.response?.data?.data?.clear) {
+        dispatch(logout());
+        return false;
+      }
+
+      if (error?.response?.status === 401) {
         dispatch(logout());
         return false;
       }
@@ -131,7 +104,7 @@ class AuthService {
 
   async getCurrentUser() {
     try {
-      return await axios.get(`${this.userRoute}/get-current-user`);
+      return await axiosInstance.get(`${this.userRoute}/get-current-user`);
     } catch (error) {
       console.log("getCurrentUser : ", error);
       throw error;

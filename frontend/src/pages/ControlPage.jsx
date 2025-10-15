@@ -16,8 +16,6 @@ import { useParams } from "react-router-dom";
 const controlPage = () => {
   const params = useParams();
 
-  console.log(params.slug);
-
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="w-full h-screen flex">
