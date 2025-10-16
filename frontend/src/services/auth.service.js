@@ -32,10 +32,9 @@ class AuthService {
     }
   }
 
-  async Logout(dispatch) {
+  async Logout() {
     try {
-      await axiosInstance.post(`${this.userRoute}/logout-user`);
-      dispatch(logout());
+      return await axiosInstance.post(`${this.userRoute}/logout-user`);
     } catch (error) {
       console.log("Logout : ", error);
       throw error;
@@ -66,12 +65,11 @@ class AuthService {
     }
   }
 
-  async ChangeLogo(logo) {
+  async ChangeLogo(formData) {
     try {
       return await axiosInstance.patch(
         `${this.userRoute}/change-logo`,
-        { logo },
-        { headers: { "Content-Type": "multipart/form-data" } }
+        formData
       );
     } catch (error) {
       console.log("ChangeLogo : ", error);

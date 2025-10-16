@@ -5,7 +5,7 @@ const Pfp = ({ className = "", cusstomDp = "", ...prop }) => {
 
   return (
     <div
-      className={`${className}  rounded-full  mr-2 bg-slate-900 flex items-center justify-center overflow-hidden`}
+      className={`${className}  rounded-full  bg-slate-900 flex items-center justify-center overflow-hidden`}
       {...prop}
     >
       <img className="object-cover w-full h-full " src={userPfp} alt="dp" />
