@@ -13,8 +13,8 @@ const Inventory = () => {
   const shelves = useSelector((state) => state.stock.Shelves);
 
   return (
-    <div className="px-14 pt-6 bg-black min-h-screen text-white font-nexar3">
-      <div className={`w-full h-full absolute top-[35%] left-[40%] z-30`}>
+    <div className="px-14 py-6 bg-black min-h-screen text-white font-nexar3">
+      <div className={`w-full h-min absolute top-[35%] left-[40%] z-30`}>
         {toggle && <AddShelve setToggle={setToggle} />}
       </div>
       <h1 className="text-3xl text-gray-300 font-nexar1 mb-6">Inventory</h1>
@@ -72,7 +72,7 @@ const Inventory = () => {
         </div>
 
         {/* Shelves */}
-        {/* <div className="md:col-span-1 bg-indigo-950 p-6 rounded-2xl shadow">
+        <div className="h-min md:col-span-1 bg-indigo-950 p-6 rounded-2xl shadow">
           <h2 className="text-white text-2xl font-nexar1 text-center">
             View Shelves
           </h2>
@@ -80,16 +80,16 @@ const Inventory = () => {
             {shelves.map((item, idx) => (
               <div
                 key={idx}
-                className="bg-[#1E1E1E] rounded-lg h-16 flex items-center justify-center text-gray-400 hover:bg-gray-700 hover:text-white transition"
+                className="bg-[#1E1E1E] rounded-lg h-16 flex items-center justify-center text-gray-400 hover:bg-gray-700 hover:text-white transition  overflow-hidden"
               >
-                S{idx + 1}
+                {item.shelfName}
               </div>
             ))}
           </div>
-        </div> */}
+        </div>
 
         {/* View inventory  */}
-        <div className="md:col-span-5 gap-4 bg-zinc-950 rounded-2xl shadow">
+        <div className="md:col-span-4 gap-4 bg-zinc-950 rounded-2xl shadow">
           <h2 className="text-white text-3xl font-nexar1 pt-4 pl-4">
             View Inventory
           </h2>

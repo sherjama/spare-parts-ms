@@ -71,7 +71,7 @@ export default function BuyPartsPage() {
           position: "top-center",
           autoClose: 2500,
         });
-        setTimeout(() => navigate("/controls/dashboard"), 2500);
+        // setTimeout(() => navigate("/controls/dashboard"), 2500);
       }
     } catch (error) {
       toast.info(error?.response?.data?.message || "Server Error", {

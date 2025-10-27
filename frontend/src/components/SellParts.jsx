@@ -37,7 +37,7 @@ export default function SellPartsPage() {
       date: "",
       discount: 0,
       other: 0,
-      parts: Array(1).fill({ partName: "", partName: "", Qty: 0, Price: 0 }),
+      parts: Array(1).fill({ partName: "", partNumber: "", Qty: 0, Price: 0 }),
     },
   });
 

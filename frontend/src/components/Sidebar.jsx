@@ -17,7 +17,6 @@ const Sidebar = ({ className }) => {
   const [toggle, setToggle] = useState(false);
   const userdata = useSelector((state) => state.userdata.userdata.user);
   const sidebarRef = useRef();
-  const searchBarRef = useRef();
 
   const { contextSafe } = useGSAP({ scope: sidebarRef });
 
@@ -39,10 +38,6 @@ const Sidebar = ({ className }) => {
       setToggle(false);
     }
   });
-
-  useEffect(() => {
-    searchBarRef.current?.focus();
-  }, [toggle]);
 
   return (
     <aside
@@ -75,27 +70,6 @@ const Sidebar = ({ className }) => {
           )}
         </button>
       </header>
-
-      <form className="shrink-0 mt-5">
-        <div className="flex items-center justify-center rounded-md overflow-hidden">
-          {toggle && (
-            <button
-              onClick={handleSidebar}
-              className="right-2 bg-indigo-950 rounded-full p-1"
-            >
-              <IoSearch size={25} color="#fff" />
-            </button>
-          )}
-          {!toggle && (
-            <input
-              ref={searchBarRef}
-              className="w-full bg-[#1E1E1E] text-[#666666] placeholder-[#666666] py-1 pl-3 pr-1 text-sm focus:outline-none focus:ring-1 focus:ring-[#060513]"
-              placeholder="Search..."
-              type="search"
-            />
-          )}
-        </div>
-      </form>
 
       <div className="flex-1 min-h-0 overflow-y-auto mt-5 space-y-8 border-t border-[#2A2A2A]">
         <nav className="flex flex-col gap-4">
