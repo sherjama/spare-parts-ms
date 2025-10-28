@@ -84,13 +84,13 @@ class Parts {
     }
   }
 
-  async updatePart({ partNumber, partName, shelf, MRP }) {
+  async updatePart({ partNumber, partName, shelf, Price }) {
     try {
       return await axios.patch(`${this.partsRoute}/update-part-details`, {
         partNumber,
         partName,
         shelf,
-        MRP,
+        Price,
       });
     } catch (error) {
       console.log("updatePart :", error);

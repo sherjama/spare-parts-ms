@@ -6,7 +6,7 @@ import shelvesService from "@/services/shelves.service";
 import { toast, ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 
-const AddShelve = ({ setToggle }) => {
+const AddShelve = ({ setShelveToggle }) => {
   const {
     register,
     handleSubmit,
@@ -23,7 +23,7 @@ const AddShelve = ({ setToggle }) => {
       if (res) {
         dispatch(triggerReloadShelve());
         reset();
-        setToggle(false);
+        setShelveToggle(false);
       }
     } catch (error) {
       toast.error(error.response?.data?.messege || "Server Error", {
@@ -42,7 +42,7 @@ const AddShelve = ({ setToggle }) => {
       >
         <div
           className="w-full flex justify-end p-2 "
-          onClick={() => setToggle(false)}
+          onClick={() => setShelveToggle(false)}
         >
           <ImCross />
         </div>

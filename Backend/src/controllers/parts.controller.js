@@ -412,33 +412,36 @@ const createPart = asyncHandler(async (req, res) => {
 const updatePart = asyncHandler(async (req, res) => {
   const { partNumber, partName, shelf, Price } = req.body;
 
-  if (
-    [partNumber, partName, shelf, Price].some(
-      (val) => String(val).trim() === ""
-    )
-  ) {
-    throw new ApiError(401, "All feilds are required");
+  if (!partNumber) {
+    throw new ApiError(400, "Part number is required");
   }
+
+  const existingPart = await Parts.findOne({
+    partNumber,
+    CreatedBy: req.user?._id,
+  });
+
+  if (!existingPart) {
+    throw new ApiError(404, "Part not found");
+  }
+
+  const updatedData = {
+    partName: partName?.trim() || existingPart.partName,
+    shelf: shelf?.trim() || existingPart.shelf,
+    Price: Price ?? existingPart.Price,
+  };
 
   const updatedPart = await Parts.findOneAndUpdate(
     { partNumber, CreatedBy: req.user?._id },
-    {
-      partName,
-      shelf,
-      Price,
-    },
-    {
-      new: true,
-    }
+    { $set: updatedData },
+    { new: true }
   );
 
-  if (!updatedPart) {
-    throw new ApiError(401, "Something went wrong while Updating part details");
-  }
-
   res
-    .status(201)
-    .json(new ApiResponse(201, updatedPart, "Part is successfully updated"));
+    .status(200)
+    .json(
+      new ApiResponse(200, updatedPart, "Part details updated successfully")
+    );
 });
 
 const addQty = asyncHandler(async (req, res) => {
