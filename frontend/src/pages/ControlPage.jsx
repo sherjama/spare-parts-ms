@@ -9,7 +9,7 @@ import {
   Settings,
   BuyPartsPage,
   SellPartsPage,
-  AddShelvePage,
+  AddShelve,
 } from "../index.js";
 import { useParams } from "react-router-dom";
 
@@ -41,7 +41,7 @@ const controlPage = () => {
           )}
           {params.slug === "add-shelve" && (
             <div className="w-full h-full flex items-center justify-center">
-              <AddShelvePage className="bg-red-600" />
+              <AddShelve className="bg-red-600" />
             </div>
           )}
         </main>
