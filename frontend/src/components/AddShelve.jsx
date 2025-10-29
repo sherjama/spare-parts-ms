@@ -1,10 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { ImCross } from "react-icons/im";
-import { triggerReloadShelve } from "@/store/stockSlice";
 import shelvesService from "@/services/shelves.service";
 import { toast, ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllStock } from "@/store/stockSlice";
 
 const AddShelve = ({ setShelveToggle }) => {
   const {
@@ -15,13 +15,14 @@ const AddShelve = ({ setShelveToggle }) => {
   } = useForm();
 
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.userdata.userdata.user._id);
 
   const onSubmit = async (data) => {
     console.log("Creating shelf:", data.shelfName);
     try {
       const res = await shelvesService.createShelve(data.shelfName);
       if (res) {
-        dispatch(triggerReloadShelve());
+        dispatch(fetchAllStock(userId));
         reset();
         setShelveToggle(false);
       }

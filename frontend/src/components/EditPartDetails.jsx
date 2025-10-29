@@ -4,7 +4,7 @@ import { ImCross } from "react-icons/im";
 import { toast, ToastContainer } from "react-toastify";
 import partsService from "@/services/parts.service";
 import { useDispatch, useSelector } from "react-redux";
-import { triggerReloadPart, triggerReloadShelve } from "@/store/stockSlice";
+import { fetchAllStock } from "@/store/stockSlice";
 
 const EditPartDetails = ({ setPartToggle, partDetails }) => {
   const {
@@ -24,7 +24,7 @@ const EditPartDetails = ({ setPartToggle, partDetails }) => {
     name: false,
     price: false,
   });
-
+  const userId = useSelector((state) => state.userdata.userdata.user._id);
   const Shelves = useSelector((state) => state.stock.Shelves);
   const dispatch = useDispatch();
 
@@ -40,8 +40,7 @@ const EditPartDetails = ({ setPartToggle, partDetails }) => {
       const res = await partsService.updatePart(updatedPart);
 
       if (res?.data?.success) {
-        dispatch(triggerReloadPart());
-        dispatch(triggerReloadShelve());
+        dispatch(fetchAllStock(userId));
         setPartToggle(false);
         reset();
         toast.success("Part details updated successfully!");

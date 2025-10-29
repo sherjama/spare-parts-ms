@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosCreate } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AddShelve, EditPartDetails } from "../index.js";
+import { fetchAllStock } from "@/store/stockSlice.js";
 
 const Inventory = () => {
   const [hoveredRow, setHoveredRow] = useState(null);
@@ -11,15 +12,31 @@ const Inventory = () => {
   const [updateablePart, setUpdateablePart] = useState();
   const navigate = useNavigate();
 
-  const inventory = useSelector((state) => state.stock.Parts);
-  const shelves = useSelector((state) => state.stock.Shelves);
+  const { Parts, Shelves, loading, error } = useSelector(
+    (state) => state.stock
+  );
+
+  const userId = useSelector((state) => state.userdata.userdata.user._id);
+  const dispatch = useDispatch();
 
   const handleUpdatePart = (partNumber) => {
-    let part = inventory.find((part) => part.partNumber == partNumber);
+    let part = Parts.find((part) => part.partNumber == partNumber);
 
     setUpdateablePart(part);
     setPartToggle(true);
   };
+
+  useEffect(() => {
+    if ((!Parts.length || !Shelves.length) && userId) {
+      dispatch(fetchAllStock(userId));
+    }
+  }, [Parts.length, Shelves.length, userId, dispatch]);
+
+  useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
+
+  if (loading) return <p className="text-center text-gray-400">Loading...</p>;
 
   return (
     <div className="px-14 pt-6 bg-black min-h-screen text-white font-nexar3">
@@ -80,7 +97,7 @@ const Inventory = () => {
           </p>
           <button
             className="bg-stone-500 hover:bg-stone-600 text-white rounded-xl py-2 px-3 transition mt-2"
-            onClick={() => setToggle((prev) => !prev)}
+            onClick={() => setShelveToggle((prev) => !prev)}
           >
             + Add Now
           </button>
@@ -92,7 +109,7 @@ const Inventory = () => {
             View Shelves
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mt-4">
-            {shelves.map((item, idx) => (
+            {Shelves.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-[#1E1E1E] rounded-lg h-16 flex items-center justify-center text-gray-400 hover:bg-gray-700 hover:text-white transition overflow-hidden"
@@ -140,7 +157,7 @@ const Inventory = () => {
                 </tr>
               </thead>
               <tbody className="text-xl">
-                {inventory.map((item, index) => (
+                {Parts.map((item, index) => (
                   <tr
                     key={index}
                     className="border-t border-gray-700 hover:bg-[#2A2A2A]"
@@ -151,7 +168,7 @@ const Inventory = () => {
                     <td className="px-2 py-2">{item.partNumber}</td>
                     <td className="px-4 py-2">{item.partName}</td>
                     <td className="px-4 py-2">
-                      {shelves.find((shelf) => shelf._id === item.shelf)
+                      {Shelves.find((shelf) => shelf._id === item.shelf)
                         ?.shelfName || "Not Found"}
                     </td>
                     <td className="px-2 py-2">{item.Qty} </td>

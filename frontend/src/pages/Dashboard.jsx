@@ -1,15 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
+import { fetchAllStock } from "@/store/stockSlice.js";
 import { toast, ToastContainer } from "react-toastify";
-import { addParts, addShelves } from "../store/stockSlice.js";
-import { purchase, sell } from "../store/reportSlice.js";
 import { useEffect } from "react";
-import { setLoading } from "../store/loadSlice.js";
-import { useNavigate } from "react-router-dom";
-import { partsService, shelvesService, Shelvebox, Pfp } from "../index.js";
-import reportsService from "@/services/reports.service.js";
+import { Shelvebox } from "../index.js";
 
 const Dashboard = ({ className }) => {
-  const userdata = useSelector((state) => state.userdata.userdata?.user);
   const userId = useSelector((state) => state.userdata.userdata.user._id);
   const Parts = useSelector((state) => state.stock.Parts?.data);
 
@@ -17,36 +12,21 @@ const Dashboard = ({ className }) => {
   const totalMRP = Array.isArray(Parts)
     ? Parts.reduce((sum, part) => sum + (part.MRP || 0), 0)
     : 0;
-  const reloadTriggerPart = useSelector(
-    (state) => state.stock.reloadTriggerPart
-  );
+
   const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.stock);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userParts = await partsService.getAllParts(userId);
-        const userShelves = await shelvesService.listShelves();
-        const userPurchaseBills = await reportsService.getPurchaseBill();
-        const userSellBills = await reportsService.getSellBill();
+    if (userId) dispatch(fetchAllStock(userId));
+  }, [userId, dispatch]);
 
-        if (userParts || userShelves || userPurchaseBills || userSellBills) {
-          dispatch(addParts(userParts.data.data));
-          dispatch(addShelves(userShelves.data.data));
-          dispatch(purchase(userPurchaseBills.data.data));
-          dispatch(sell(userSellBills.data.data));
-          dispatch(setLoading(false));
-        }
-      } catch (error) {
-        toast.info(error?.response?.data?.message || "Error fetching stock", {
-          position: "top-center",
-        });
-      }
-    };
+  useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
 
-    if (userId) fetchData();
-  }, [reloadTriggerPart, userId, dispatch]);
-  return (
+  return loading ? (
+    <p>Loading...</p>
+  ) : (
     <main
       className={`flex mt-6 md:mt-0  flex-col space-y-6 text-white ${className} bg-[#121212]  p-4`}
     >

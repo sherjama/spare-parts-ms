@@ -123,13 +123,16 @@ const sellParts = asyncHandler(async (req, res) => {
     req.body;
 
   if (
-    !customerName ||
-    !address ||
-    !mobileNumber ||
+    !customerName?.trim() ||
+    !address?.trim() ||
+    !mobileNumber?.trim() ||
     !date ||
-    !discount ||
-    !other ||
-    !Array.isArray(parts)
+    !Array.isArray(parts) ||
+    parts.length === 0 ||
+    discount === undefined ||
+    discount === null ||
+    other === undefined ||
+    other === null
   ) {
     throw new ApiError(401, "All fields are required");
   }

@@ -1,5 +1,4 @@
 import { useForm, useFieldArray } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronDownIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -14,22 +13,29 @@ import {
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
+import { fetchAllStock } from "@/store/stockSlice";
 
 import partsService from "@/services/parts.service";
-import { triggerReloadPart, triggerReloadShelve } from "@/store/stockSlice";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function SellPartsPage() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
   const [total, setTotal] = useState(0);
 
-  const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const inventory = useSelector((state) => state.stock.Parts);
+  const userId = useSelector((state) => state.userdata.userdata.user._id);
 
-  const { register, control, handleSubmit, reset, watch, setValue } = useForm({
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       customerName: "",
       address: "",
@@ -37,7 +43,7 @@ export default function SellPartsPage() {
       date: "",
       discount: 0,
       other: 0,
-      parts: Array(1).fill({ partName: "", partNumber: "", Qty: 0, Price: 0 }),
+      parts: [{ partName: "", partNumber: "", Qty: 0, Price: 0 }],
     },
   });
 
@@ -73,20 +79,13 @@ export default function SellPartsPage() {
     try {
       const res = await partsService.sellParts(data);
       if (res) {
-        console.log(res);
-
-        dispatch(triggerReloadPart());
-        dispatch(triggerReloadShelve());
+        dispatch(fetchAllStock(userId));
         toast.success("Parts sell Successfully", {
           position: "top-center",
           autoClose: 2500,
         });
-
-        setTimeout(() => navigate("/controls/dashboard"), 2000);
       }
     } catch (error) {
-      console.log(error);
-
       toast.info(error?.response?.data?.message || "Server Error", {
         position: "top-center",
       });
@@ -234,56 +233,140 @@ export default function SellPartsPage() {
                 <tbody className="text-lg">
                   {fields.map((field, index) => (
                     <tr key={field.id} className="even:bg-gray-800">
-                      <td className="px-4 py-2 border text-center text-gray-50 ">
+                      {/* Sr No */}
+                      <td className="px-4 py-2 border text-center text-gray-50">
                         {index + 1}
                       </td>
+
+                      {/* Part Number */}
                       <td className="px-4 py-2 border">
                         <Input
                           placeholder="Part Number"
+                          className={`${
+                            errors?.parts?.[index]?.partNumber
+                              ? "border-red-500"
+                              : ""
+                          }`}
                           {...register(`parts.${index}.partNumber`, {
-                            required: true,
+                            required: "Part Number is required",
+                            validate: (value) => {
+                              const found = inventory.find(
+                                (p) => p.partNumber === value
+                              );
+                              return found
+                                ? true
+                                : "Part not found in inventory";
+                            },
                           })}
                           onChange={(e) => handlePartName(e, index)}
                         />
+                        {errors?.parts?.[index]?.partNumber && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {errors.parts[index].partNumber.message}
+                          </p>
+                        )}
                       </td>
+
+                      {/* Part Name */}
                       <td className="px-4 py-2 border">
                         <Input
                           placeholder="Part Name"
-                          {...register(`parts.${index}.partName`)}
                           readOnly
+                          className={`${
+                            errors?.parts?.[index]?.partName
+                              ? "border-red-500"
+                              : ""
+                          }`}
+                          {...register(`parts.${index}.partName`, {
+                            required: "Part Name is required",
+                          })}
                         />
+                        {errors?.parts?.[index]?.partName && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {errors.parts[index].partName.message}
+                          </p>
+                        )}
                       </td>
+
+                      {/* Unit Price */}
                       <td className="px-4 py-2 border">
                         <Input
                           type="number"
                           placeholder="Unit Price"
-                          {...register(`parts.${index}.Price`, {
-                            required: true,
-                          })}
                           min="0"
+                          className={`${
+                            errors?.parts?.[index]?.Price
+                              ? "border-red-500"
+                              : ""
+                          }`}
+                          {...register(`parts.${index}.Price`, {
+                            required: "Unit Price is required",
+                            min: {
+                              value: 1,
+                              message: "Unit Price must be greater than 0",
+                            },
+                          })}
                         />
+                        {errors?.parts?.[index]?.Price && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {errors.parts[index].Price.message}
+                          </p>
+                        )}
                       </td>
+
+                      {/* Quantity */}
                       <td className="px-4 py-2 border">
                         <Input
                           type="number"
                           placeholder="Qty"
-                          {...register(`parts.${index}.Qty`, {
-                            required: true,
-                          })}
                           min="0"
+                          className={`${
+                            errors?.parts?.[index]?.Qty ? "border-red-500" : ""
+                          }`}
+                          {...register(`parts.${index}.Qty`, {
+                            required: "Quantity is required",
+                            min: {
+                              value: 1,
+                              message: "Quantity must be at least 1",
+                            },
+                            validate: (value) => {
+                              const partNumber = watch(
+                                `parts.${index}.partNumber`
+                              );
+                              const part = inventory.find(
+                                (p) => p.partNumber === partNumber
+                              );
+                              if (!part) return true;
+                              const qty = parseFloat(value);
+                              const availableQty = parseFloat(part.Qty);
+                              return (
+                                qty <= availableQty ||
+                                `Available Qty: ${availableQty} only`
+                              );
+                            },
+                          })}
                         />
+                        {errors?.parts?.[index]?.Qty && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {errors.parts[index].Qty.message}
+                          </p>
+                        )}
                       </td>
+
+                      {/* Amount (Auto-calculated) */}
                       <td className="px-4 py-2 border">
                         <Input
                           className="text-gray-500"
                           type="number"
                           value={
-                            watch(`parts.${index}.Qty`) *
-                              watch(`parts.${index}.Price`) || 0
+                            (watch(`parts.${index}.Qty`) || 0) *
+                            (watch(`parts.${index}.Price`) || 0)
                           }
                           readOnly
                         />
                       </td>
+
+                      {/* Delete Button */}
                       <td className="px-4 py-2 border text-center">
                         <Button
                           type="button"

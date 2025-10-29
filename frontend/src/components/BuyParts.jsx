@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { triggerReloadPart, triggerReloadShelve } from "@/store/stockSlice";
+import { fetchAllStock } from "@/store/stockSlice";
 import partsService from "@/services/parts.service";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,7 @@ export default function BuyPartsPage() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
 
-  const navigate = useNavigate();
+  const userId = useSelector((state) => state.userdata.userdata.user._id);
   const dispatch = useDispatch();
 
   const { register, control, handleSubmit, reset, setValue } = useForm({
@@ -41,10 +41,7 @@ export default function BuyPartsPage() {
 
   // date formater
   const dateFormater = (dateString) => {
-    console.log("chla");
-
     const rawDate = new Date(dateString);
-
     const day = String(rawDate.getDate()).padStart(2, "0"); // 11
     const month = rawDate.toLocaleString("en-US", { month: "short" }); // Sep
     const year = String(rawDate.getFullYear()).slice(-2); // 25
@@ -52,26 +49,16 @@ export default function BuyPartsPage() {
     setDate(`${day}-${month}-${year}`);
   };
 
-  // const handlePartName = (e, index) => {
-  //   let part = inventory.filter((part) => part.partNumber === e.target.value);
-  //   let partName = part?.length < 1 ? "" : part[0].partName;
-
-  //   setValue(`parts.${index}.partName`, `${partName}`);
-  // };
-
   const onSubmit = async (data) => {
     data.date = date;
-    console.log("Buy Parts Payload:", data);
     try {
       const res = await partsService.buyParts(data);
       if (res) {
-        dispatch(triggerReloadPart());
-        dispatch(triggerReloadShelve());
+        dispatch(fetchAllStock(userId));
         toast.success("Parts Added Into Inventory Successfully", {
           position: "top-center",
           autoClose: 2500,
         });
-        // setTimeout(() => navigate("/controls/dashboard"), 2500);
       }
     } catch (error) {
       toast.info(error?.response?.data?.message || "Server Error", {
