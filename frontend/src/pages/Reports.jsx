@@ -124,7 +124,7 @@ export default function Reports() {
               activeTab === "buy" ? activeClasses : inactiveClasses
             }`}
           >
-            Buy Reports
+            Purchase Reports
           </Button>
           <Button
             onClick={() => setActiveTab("sell")}

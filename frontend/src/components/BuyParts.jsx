@@ -13,10 +13,9 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchAllStock } from "@/store/stockSlice";
 import partsService from "@/services/parts.service";
-import { useNavigate } from "react-router-dom";
 
 export default function BuyPartsPage() {
   const [open, setOpen] = useState(false);

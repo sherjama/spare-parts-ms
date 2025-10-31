@@ -28,6 +28,7 @@ import SellPartsPage from "./components/SellParts.jsx";
 import AddShelve from "./components/AddShelve.jsx";
 import EditUserDetails from "./components/EditUserDetails.jsx";
 import EditPartDetails from "./components/EditPartDetails.jsx";
+import ViewShelve from "./components/ViewShelve.jsx";
 
 export {
   Dashboard,
@@ -60,4 +61,5 @@ export {
   AddShelve,
   EditUserDetails,
   EditPartDetails,
+  ViewShelve,
 };

@@ -10,6 +10,9 @@ const createShelf = asyncHandler(async (req, res) => {
   if (!shelfName) {
     throw new ApiError(401, "Name of Shelf is required");
   }
+  if (shelfName.trim().toLowerCase() === "none") {
+    throw new ApiError(401, "Default shelf already exist");
+  }
 
   const isShelfExisted = await Shelf.findOne({
     shelfName,
@@ -67,45 +70,68 @@ const changeShelfName = asyncHandler(async (req, res) => {
 });
 
 const deleteShelf = asyncHandler(async (req, res) => {
-  const { shelfName, userId } = req.body;
+  const { shelfName } = req.body;
 
-  if (!shelfName || !userId) {
-    throw new ApiError(401, "All feilds are required");
+  if (!shelfName) throw new ApiError(400, "Shelf name is required");
+
+  const userId = req.user?._id;
+  if (!userId) throw new ApiError(401, "Unauthorized request");
+
+  const normalizedName = shelfName.trim().toLowerCase();
+  if (normalizedName === "none") {
+    throw new ApiError(400, "Default shelf cannot be deleted");
   }
 
   const existedShelf = await Shelf.findOne({
     shelfName,
-    CreatedBy: req.user?._id,
-  });
-
-  if (existedShelf) {
-    const isShelfFilled = await Parts.findOne({
-      shelf: existedShelf._id,
-    });
-
-    if (isShelfFilled) {
-      throw new ApiError(
-        401,
-        "Please empty this Shelf first and then it will be deleted"
-      );
-    }
-  }
-
-  const isValidRequest = userId == req.user?._id;
-
-  if (!isValidRequest) {
-    throw new ApiError(401, "Unauthorized Request");
-  }
-
-  await Shelf.findOneAndDelete({
-    shelfName,
     CreatedBy: userId,
   });
 
-  res
+  if (!existedShelf) {
+    throw new ApiError(
+      404,
+      `Shelf "${shelfName}" not found or already deleted`
+    );
+  }
+
+  // Find default shelf
+  const defaultShelf = await Shelf.findOne({
+    shelfName: "none",
+    CreatedBy: userId,
+  });
+
+  if (!defaultShelf) {
+    throw new ApiError(
+      500,
+      "Default shelf not found. Please recreate 'none' shelf manually."
+    );
+  }
+
+  // Reassign parts (if any)
+  const updatedParts = await Parts.updateMany(
+    { shelf: existedShelf._id },
+    { $set: { shelf: defaultShelf._id } }
+  );
+
+  // Verify safe reassignment
+  const verifyCount = await Parts.countDocuments({ shelf: existedShelf._id });
+  if (verifyCount > 0) {
+    throw new ApiError(
+      500,
+      "Shelf could not be safely emptied. Please try again."
+    );
+  }
+
+  // Delete shelf
+  const deleteResult = await Shelf.deleteOne({ _id: existedShelf._id });
+  if (deleteResult.deletedCount === 0) {
+    throw new ApiError(500, "Failed to delete the shelf. Please retry.");
+  }
+
+  return res
     .status(201)
     .json(
-      new ApiResponse(201, {}, `Shelf ${shelfName} is permanently deleted`)
+      new ApiResponse(201, {}, `Shelf "${shelfName}" is permanently deleted`)
     );
 });
 

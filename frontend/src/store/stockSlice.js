@@ -2,10 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import partsService from "../services/parts.service.js";
 import shelvesService from "../services/shelves.service.js";
 import reportsService from "../services/reports.service.js";
+import { purchase, sell } from "./reportSlice.js";
 
 export const fetchAllStock = createAsyncThunk(
   "stock/fetchAllStock",
-  async (userId, { rejectWithValue }) => {
+  async (userId, { rejectWithValue, dispatch }) => {
     try {
       const [partsRes, shelvesRes, purchaseRes, sellRes] = await Promise.all([
         partsService.getAllParts(userId),
@@ -14,11 +15,12 @@ export const fetchAllStock = createAsyncThunk(
         reportsService.getSellBill(),
       ]);
 
+      dispatch(purchase(purchaseRes.data.data));
+      dispatch(sell(sellRes.data.data));
+
       return {
         parts: partsRes.data.data,
         shelves: shelvesRes.data.data,
-        purchaseBills: purchaseRes.data.data,
-        sellBills: sellRes.data.data,
       };
     } catch (error) {
       return rejectWithValue(
@@ -31,8 +33,6 @@ export const fetchAllStock = createAsyncThunk(
 const initialState = {
   Parts: JSON.parse(localStorage.getItem("userParts")) || [],
   Shelves: JSON.parse(localStorage.getItem("userShelve")) || [],
-  PurchaseBills: [],
-  SellBills: [],
   reloadTriggerPart: 0,
   reloadTriggerShelve: 0,
   loading: false,

@@ -18,7 +18,6 @@ const AddShelve = ({ setShelveToggle }) => {
   const userId = useSelector((state) => state.userdata.userdata.user._id);
 
   const onSubmit = async (data) => {
-    console.log("Creating shelf:", data.shelfName);
     try {
       const res = await shelvesService.createShelve(data.shelfName);
       if (res) {
@@ -27,7 +26,7 @@ const AddShelve = ({ setShelveToggle }) => {
         setShelveToggle(false);
       }
     } catch (error) {
-      toast.error(error.response?.data?.messege || "Server Error", {
+      toast.error(error.response?.data?.message || "Server Error", {
         position: "top-center",
       });
     }
