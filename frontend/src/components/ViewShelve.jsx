@@ -79,7 +79,7 @@ const ViewShelve = ({
       <ToastContainer />
       <div
         ref={popupRef}
-        className="relative w-full max-w-3xl bg-gradient-to-br from-zinc-900 via-zinc-950 to-black border border-indigo-600/30 rounded-3xl shadow-[0_0_25px_rgba(99,102,241,0.4)] p-6 overflow-hidden"
+        className="relative w-full max-w-3xl bg-gradient-to-br dark:from-zinc-900 dark:via-zinc-950 dark:to-black border border-indigo-600/30 rounded-3xl shadow-[0_0_25px_rgba(99,102,241,0.4)] p-6 overflow-hidden from-zinc-500 via-zinc-600 to-slate-950"
       >
         <div
           ref={glowRef}
@@ -124,7 +124,9 @@ const ViewShelve = ({
                     key={index}
                     className="border-t border-gray-800/40 hover:bg-gradient-to-r hover:from-indigo-800/20 hover:to-transparent transition-colors duration-200"
                   >
-                    <td className="py-2 px-4 text-gray-500">{index + 1}</td>
+                    <td className="py-2 px-4 dark:text-gray-500 text-gray-950">
+                      {index + 1}
+                    </td>
                     <td className="py-2 px-4">{part.partNumber}</td>
                     <td className="py-2 px-4">{part.partName}</td>
                     <td className="py-2 px-4 text-right text-indigo-300 font-medium">
@@ -147,7 +149,7 @@ const ViewShelve = ({
             <button
               onClick={handleDeleteShelf}
               disabled={loading}
-              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-colors duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
+              className="px-6 py-3 dark:bg-red-600 bg-red-500 hover:bg-red-700 text-white font-semibold rounded-xl transition-colors duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
             >
               {loading ? "Deleting..." : "Delete Shelf"}
             </button>

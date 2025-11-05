@@ -115,7 +115,7 @@ export default function SellPartsPage() {
   return (
     <div className=" flex justify-center items-center">
       <ToastContainer />
-      <Card className="w-full shadow-lg min-h-screen pt-2 bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#27272a] via-[#52525b] to-[#a1a1aa]border-none">
+      <Card className="w-full shadow-lg min-h-screen pt-2 bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#27272a] via-[#52525b] to-[#a1a1aa] border-none">
         <CardContent>
           <form
             onSubmit={handleSubmit(onSubmit)}

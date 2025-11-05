@@ -41,7 +41,7 @@ class AuthService {
     }
   }
 
-  async ChangePassword({ oldPassword, newPassword }) {
+  async ChangePassword(oldPassword, newPassword) {
     try {
       return await axiosInstance.patch(`${this.userRoute}/change-password`, {
         oldPassword,

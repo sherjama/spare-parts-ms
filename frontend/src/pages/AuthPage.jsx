@@ -115,7 +115,7 @@ const AuthPage = () => {
             <form
               onSubmit={handleSubmit(Signup)}
               className="w-full "
-              autocomplete="off"
+              autoComplete="off"
             >
               <div className="mb-8">
                 <label

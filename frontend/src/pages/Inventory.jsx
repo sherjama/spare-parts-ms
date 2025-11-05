@@ -7,6 +7,7 @@ import {
   EditPartDetails,
   partsService,
   ViewShelve,
+  Heading,
 } from "../index.js";
 import { fetchAllStock } from "@/store/stockSlice.js";
 
@@ -59,7 +60,7 @@ const Inventory = () => {
   if (loading) return <p className="text-center text-gray-400">Loading...</p>;
 
   return (
-    <div className="px-14 pt-6 bg-black min-h-screen text-white font-nexar3">
+    <div className="px-14 pt-6 dark:bg-black bg-slate-400 min-h-screen text-white font-nexar3">
       {/* PopUps  */}
       <div className={`w-min absolute top-[35%] left-[40%] z-30`}>
         {shelveToggle && <AddShelve setShelveToggle={setShelveToggle} />}
@@ -78,14 +79,14 @@ const Inventory = () => {
         )}
       </div>
 
-      <h1 className="text-3xl text-gray-300 font-nexar1 mb-6">Inventory</h1>
+      <Heading title={"Inventory"} />
       <div
         className={`grid grid-cols-1 md:grid-cols-5 gap-6 ${
           partToggle || shelveToggle ? "opacity-25" : "opacity-100"
         }`}
       >
         {/* Buy Parts */}
-        <div className="md:col-span-2 bg-gray-900 rounded-2xl p-6 shadow-lg flex flex-col justify-between ">
+        <div className="md:col-span-2 dark:bg-gray-900  bg-gray-600 rounded-2xl p-6 shadow-lg flex flex-col justify-between ">
           <div>
             <h2 className="text-2xl  mb-2 font-nexar1">Purchase Parts</h2>
             <p className="text-gray-300 text-sm font-nexar1">
@@ -101,7 +102,7 @@ const Inventory = () => {
         </div>
 
         {/* Sell Parts */}
-        <div className="md:col-span-2 bg-pink-900 rounded-2xl p-6 shadow-lg flex flex-col justify-between ">
+        <div className="md:col-span-2 dark:bg-pink-900 bg-red-400 rounded-2xl p-6 shadow-lg flex flex-col justify-between ">
           <div>
             <h2 className="text-2xl mb-2 font-nexar1">Sell Parts</h2>
             <p className="text-gray-300 text-sm font-nexar1">
@@ -117,14 +118,14 @@ const Inventory = () => {
         </div>
 
         {/* creaete shelve  */}
-        <div className="md:col-span-1 bg-stone-900 rounded-2xl shadow-lg flex items-start justify-evenly flex-col p-4">
+        <div className="md:col-span-1 dark:bg-stone-900 bg-stone-500 rounded-2xl shadow-lg flex items-start justify-evenly flex-col p-4">
           <h2 className="text-2xl font-nexar1 mb-2">Create Shelve</h2>
 
           <p className="text-gray-300 text-sm font-nexar1">
             Create shelves to organize stock
           </p>
           <button
-            className="bg-stone-500 hover:bg-stone-600 text-white rounded-xl py-2 px-3 transition mt-2"
+            className="dark:bg-stone-500 bg-stone-800 hover:bg-stone-600 text-white rounded-xl py-2 px-3 transition mt-2"
             onClick={() => setShelveToggle((prev) => !prev)}
           >
             + Add Now

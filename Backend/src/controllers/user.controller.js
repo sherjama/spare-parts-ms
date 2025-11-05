@@ -39,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
       (feilds) => feilds?.trim() === ""
     )
   ) {
-    throw new ApiError(401, "All feilds are required");
+    throw new ApiError(400, "All feilds are required");
   }
 
   const isUserExist = await User.findOne({
@@ -58,7 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const logo = await uploadOnCloudinary(logoLocalPath);
 
   if (!logo) {
-    throw new ApiError(501, "Something went wrong while uploading logo");
+    throw new ApiError(500, "Something went wrong while uploading logo");
   }
 
   const user = await User.create({
@@ -88,7 +88,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   res
-    .status(201)
+    .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, {
       ...options,
@@ -96,7 +96,7 @@ const registerUser = asyncHandler(async (req, res) => {
     })
     .json(
       new ApiResponse(
-        201,
+        200,
         {
           user: createUser,
           accessToken,
@@ -111,19 +111,19 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    throw new ApiError(401, "All feilds are required");
+    throw new ApiError(400, "All feilds are required");
   }
 
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new ApiError(401, "User with this email or username is dosn't exist");
+    throw new ApiError(400, "User with this email or username is dosn't exist");
   }
 
   const isPassValid = await user.isPasswordCorrect(password);
 
   if (!isPassValid) {
-    throw new ApiError(401, "Password is incorrect");
+    throw new ApiError(400, "Password is incorrect");
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -135,7 +135,7 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   res
-    .status(201)
+    .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, {
       ...options,
@@ -143,7 +143,7 @@ const loginUser = asyncHandler(async (req, res) => {
     })
     .json(
       new ApiResponse(
-        201,
+        200,
         {
           user: loggedInUser,
           accessToken,
@@ -254,21 +254,21 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
   const isOldPasswordvalid = await user.isPasswordCorrect(oldPassword);
 
   if (!isOldPasswordvalid) {
-    throw new ApiError(401, "Old password is incorrect");
+    throw new ApiError(400, "Old password is incorrect");
   }
 
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });
 
   return res
-    .status(201)
-    .json(new ApiResponse(201, {}, "password change Successfully"));
+    .status(200)
+    .json(new ApiResponse(200, {}, "password change Successfully"));
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
-  return res.status(201).json(
+  return res.status(200).json(
     new ApiResponse(
-      201,
+      200,
       {
         userdata: req.user,
       },
@@ -306,22 +306,22 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   ).select("-password");
 
   return res
-    .status(201)
-    .json(new ApiResponse(201, user, "Account details update Successfully"));
+    .status(200)
+    .json(new ApiResponse(200, user, "Account details update Successfully"));
 });
 
 const changeLogoImage = asyncHandler(async (req, res) => {
   const logoLocalPath = req.file?.path;
 
   if (!logoLocalPath) {
-    throw new ApiError(401, "logo file is missing");
+    throw new ApiError(400, "logo file is missing");
   }
 
   const logo = await uploadOnCloudinary(logoLocalPath);
   console.log(logo);
 
   if (!logo.url) {
-    throw new ApiError(401, "Error while uploading logo try again");
+    throw new ApiError(400, "Error while uploading logo try again");
   }
 
   // old logo delete
@@ -340,8 +340,8 @@ const changeLogoImage = asyncHandler(async (req, res) => {
   ).select("-password");
 
   return res
-    .status(201)
-    .json(new ApiResponse(201, user, "logo image changed Successfully"));
+    .status(200)
+    .json(new ApiResponse(200, user, "logo image changed Successfully"));
 });
 
 export {

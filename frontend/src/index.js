@@ -29,8 +29,10 @@ import AddShelve from "./components/AddShelve.jsx";
 import EditUserDetails from "./components/EditUserDetails.jsx";
 import EditPartDetails from "./components/EditPartDetails.jsx";
 import ViewShelve from "./components/ViewShelve.jsx";
+import Heading from "./components/Heading.jsx";
 
 export {
+  Heading,
   Dashboard,
   Inventory,
   Reports,

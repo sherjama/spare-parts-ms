@@ -70,7 +70,7 @@ export default function BuyPartsPage() {
   return (
     <div className=" flex justify-center items-center">
       <ToastContainer />
-      <Card className="w-full shadow-lg min-h-screen pt-2 bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#27272a] via-[#52525b] to-[#a1a1aa]border-none">
+      <Card className="w-full shadow-lg min-h-screen pt-2 bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#27272a] via-[#52525b] to-[#a1a1aa] border-none">
         <CardContent>
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -79,7 +79,7 @@ export default function BuyPartsPage() {
           >
             {/* Vendor Details */}
             <CardHeader>
-              <CardTitle className="text-2xl font-nexar1 text-gray-800 text-center w-full mx-auto py-3 [word-spacing:0.2em]   rounded-md">
+              <CardTitle className="text-2xl font-nexar1 text-gray-800  dark:text-gray-300 text-center w-full mx-auto py-3 [word-spacing:0.2em]  rounded-md">
                 Vendor Details
               </CardTitle>
             </CardHeader>

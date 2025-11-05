@@ -13,6 +13,7 @@ const App = () => {
   const dispatch = useDispatch();
   const status = useSelector((state) => state.userdata?.status);
   const isLoading = useSelector((state) => state.Loading.isLoading);
+  const theme = useSelector((state) => state.theme.theme);
   // from router
   const location = useLocation();
   const path = location.pathname;
@@ -66,6 +67,17 @@ const App = () => {
       setProgress(100);
     }
   }, [isLoading, location]);
+
+  useEffect(() => {
+    // Remove both dark and light classes to avoid conflicts
+    document.documentElement.classList.remove("dark", "light");
+
+    // Add the class corresponding to the current theme
+    document.documentElement.classList.add(theme);
+
+    // Optionally, persist the theme in localStorage
+    localStorage.setItem("theme", theme);
+  }, [theme]); // Runs every time the `theme` state changes
 
   return (
     <div

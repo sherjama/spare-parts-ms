@@ -21,6 +21,8 @@
   }
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: "Font1";
   src: url("../public/assets/Font/font1.ttf");

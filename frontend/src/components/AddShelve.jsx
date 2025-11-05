@@ -37,7 +37,7 @@ const AddShelve = ({ setShelveToggle }) => {
       <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-gray-900 p-8 rounded-xl shadow-xl w-full "
+        className="dark:bg-gray-900 bg-gray-700 p-8 rounded-xl shadow-xl w-full "
         autoComplete="off"
       >
         <div
@@ -46,7 +46,7 @@ const AddShelve = ({ setShelveToggle }) => {
         >
           <ImCross />
         </div>
-        <h2 className="text-3xl font-nexar1 text-center ">Create Shelf</h2>
+        <h2 className="mb-5 text-3xl font-nexar1 text-center ">Create Shelf</h2>
 
         {/* Shelf Name Input */}
         <div className="flex flex-col">
