@@ -15,14 +15,18 @@ const partListSchema = new Schema(
       required: true,
     },
     totalAmount: {
-      type: Number,
+      type: Schema.Types.Decimal128,
     },
   },
   { timestamps: true }
 );
 
+// Automatically calculate totalAmount accurately
 partListSchema.pre("save", function (next) {
-  this.totalAmount = this.Qty * this.unitPrice;
+  const total = this.Qty * this.unitPrice;
+
+  // Convert to Decimal128
+  this.totalAmount = mongoose.Types.Decimal128.fromString(total.toString());
   next();
 });
 

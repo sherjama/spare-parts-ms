@@ -23,6 +23,26 @@ class Reports {
       throw error;
     }
   }
+
+  async getTotalSells() {
+    try {
+      const total = await axios.get(`${this.reportsRouter}/get-seles-total`);
+      if (total) return total?.data?.data;
+    } catch (error) {
+      console.log("getTotalSells :", error);
+      throw error;
+    }
+  }
+
+  async getTotalPurchase() {
+    try {
+      const total = await axios.get(`${this.reportsRouter}/get-purchse-total`);
+      if (total) return total?.data?.data;
+    } catch (error) {
+      console.log("getTotalPurchase :", error);
+      throw error;
+    }
+  }
 }
 
 const reportsService = new Reports();

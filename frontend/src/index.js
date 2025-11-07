@@ -14,7 +14,6 @@ import ControlPage from "./pages/ControlPage.jsx";
 import authservice from "./services/auth.service.js";
 import partsService from "./services/parts.service.js";
 import shelvesService from "./services/shelves.service.js";
-import Shelvebox from "./components/Shelvebox.jsx";
 import SessionPage from "./pages/SessionPage.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -29,8 +28,10 @@ import AddShelve from "./components/AddShelve.jsx";
 import EditUserDetails from "./components/EditUserDetails.jsx";
 import EditPartDetails from "./components/EditPartDetails.jsx";
 import ViewShelve from "./components/ViewShelve.jsx";
+import ViewBoxContainer from "./components/ViewBoxContainer.jsx";
 
 export {
+  ViewBoxContainer,
   Dashboard,
   Inventory,
   Reports,
@@ -55,7 +56,6 @@ export {
   authservice,
   partsService,
   shelvesService,
-  Shelvebox,
   SessionPage,
   Sidebar,
   AddShelve,

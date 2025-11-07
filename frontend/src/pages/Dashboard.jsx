@@ -1,28 +1,82 @@
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllStock } from "@/store/stockSlice.js";
 import { toast, ToastContainer } from "react-toastify";
-import { useEffect } from "react";
-import { Shelvebox } from "../index.js";
+import { useEffect, useState } from "react";
+import { ViewBoxContainer } from "../index.js";
+
+// icons
+import { BiSolidCube } from "react-icons/bi";
+import { FiTrendingUp } from "react-icons/fi";
+import { BiSolidPurchaseTagAlt } from "react-icons/bi";
+import reportsService from "@/services/reports.service.js";
 
 const Dashboard = ({ className }) => {
+  const [totalSells, setTotalSells] = useState(0);
+  const [totalPurchase, setTotalPurchase] = useState(0);
   const userId = useSelector((state) => state.userdata.userdata.user._id);
-  const Parts = useSelector((state) => state.stock.Parts?.data);
-
-  const Shelves = useSelector((state) => state.stock.Shelves?.data);
-  const totalMRP = Array.isArray(Parts)
-    ? Parts.reduce((sum, part) => sum + (part.MRP || 0), 0)
-    : 0;
+  const Parts = useSelector((state) => state.stock.Parts);
 
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.stock);
 
+  const formatNumber = (amount) => {
+    if (isNaN(amount)) return "₹ 0";
+    if (amount >= 1e7) return `₹ ${(amount / 1e7).toFixed(2)} Cr`;
+    if (amount >= 1e5) return `₹ ${(amount / 1e5).toFixed(2)} L`;
+    if (amount >= 1e3) return `₹ ${(amount / 1e3).toFixed(2)} K`;
+    return `₹ ${amount}`;
+  };
+
   useEffect(() => {
-    if (userId) dispatch(fetchAllStock(userId));
+    async function getTotalSellAndPurchase() {
+      try {
+        const totalS = await reportsService.getTotalSells();
+        const totalP = await reportsService.getTotalPurchase();
+        if (totalS || totalP) {
+          const formatedTotalS = formatNumber(totalS);
+          const formatedTotalP = formatNumber(totalP);
+          setTotalSells(formatedTotalS);
+          setTotalPurchase(formatedTotalP);
+          console.log(totalP);
+          console.log(formatedTotalP);
+        }
+      } catch (error) {
+        toast.error(error);
+      }
+    }
+    getTotalSellAndPurchase();
+  });
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchAllStock(userId));
+    }
   }, [userId, dispatch]);
 
   useEffect(() => {
     if (error) toast.error(error);
   }, [error]);
+
+  const topAnalysis = [
+    {
+      title: "Total Parts",
+      icon: <BiSolidCube />,
+      data: Parts?.length + " " + "items",
+      className: "",
+    },
+    {
+      title: "Total Sales",
+      icon: <FiTrendingUp color="Green" />,
+      data: totalSells,
+      className: "",
+    },
+    {
+      title: "Total Purchase",
+      icon: <BiSolidPurchaseTagAlt color="Blue" />,
+      data: totalPurchase,
+      className: "",
+    },
+  ];
 
   return loading ? (
     <p>Loading...</p>
@@ -31,73 +85,13 @@ const Dashboard = ({ className }) => {
       className={`flex mt-6 md:mt-0  flex-col space-y-6 text-white ${className} bg-[#121212]  p-4`}
     >
       <ToastContainer />
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-        <div className="flex space-x-2">
-          <button className="bg-[#222222] rounded-full px-4 py-1 text-xs font-semibold hover:bg-[#3a3a3a]">
-            Market
-          </button>
-          <button className="bg-[#3a3a3a] rounded-full px-4 py-1 text-xs font-semibold hover:bg-[#4a4a4a]">
-            Wallets
-          </button>
-          <button className="bg-[#3a3a3a] rounded-full px-4 py-1 text-xs font-semibold hover:bg-[#4a4a4a]">
-            Tools
-          </button>
-        </div>
-        <div className="flex items-center space-x-3 w-full md:w-auto">
-          <input
-            className="flex-1 bg-[#222222] rounded-full px-4 py-2 text-xs placeholder-[#7a7a7a] focus:outline-none"
-            placeholder="Ask stocks anything"
-            type="text"
-          />
-          <button
-            aria-label="Search"
-            className="bg-[#222222] rounded-full p-2 hover:bg-[#3a3a3a]"
-          >
-            <i className="fas fa-search text-xs"></i>
-          </button>
-          <button
-            aria-label="Settings"
-            className="bg-[#222222] rounded-full p-2 hover:bg-[#3a3a3a]"
-          >
-            <i className="fas fa-cog text-xs"></i>
-          </button>
-        </div>
-      </div>
-      <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
-        <div className="flex-1 bg-[#222222] rounded-xl p-6 flex flex-col justify-between">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xs text-[#7a7a7a] font-semibold">
-              Total Parts Value
-            </h2>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6 ">
+        {topAnalysis.map((item, idx) => (
+          <div key={idx}>
+            <ViewBoxContainer data={item} />
           </div>
-          <div>
-            <p className="text-3xl font-semibold">₹ {totalMRP}</p>
-            <p className="text-xs text-[#3aff7a] flex items-center space-x-1 mt-1 font-semibold">
-              <i className="fas fa-arrow-up text-[10px]"></i>
-              <span>+4.85% ($ 530)</span>
-            </p>
-          </div>
-        </div>
-        <div className="flex-1 bg-[#222222] rounded-xl p-4 flex flex-col justify-between">
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="text-xs text-[#7a7a7a] font-semibold">Shelves</h2>
-            <button
-              aria-label="See all portfolio"
-              className="flex items-center space-x-1 text-xs text-[#7a7a7a] hover:text-white"
-            >
-              <span>See all</span>
-              <i className="fas fa-chevron-right text-[10px]"></i>
-            </button>
-          </div>
-          <div className="flex">
-            {Parts &&
-              Shelves.map((shelf, idx) => (
-                <div className="flex h-ful w-full" key={shelf._id}>
-                  <Shelvebox Shelve={shelf} />
-                </div>
-              ))}
-          </div>
-        </div>
+        ))}
       </div>
       <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
         <div
