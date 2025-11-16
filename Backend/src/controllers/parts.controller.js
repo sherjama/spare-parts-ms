@@ -266,9 +266,11 @@ const purchaseReceipt = asyncHandler(async (req, res) => {
     };
   });
 
-  const Total = updatedPartDetails.reduce((sum, part) => {
-    return sum + (part.totalAmount || 0);
-  }, 0);
+  const Total = Number(
+    updatedPartDetails.reduce((sum, part) => {
+      return sum + Number(part.totalAmount || 0);
+    }, 0)
+  );
 
   ejs.renderFile(
     "src/views/purchaseInvoice.ejs",
@@ -342,9 +344,11 @@ const sellReceipt = asyncHandler(async (req, res) => {
 
   const { discount, other } = sell;
 
-  const subTotal = updatedPartDetails.reduce((sum, part) => {
-    return sum + (part.totalAmount || 0);
-  }, 0);
+  const subTotal = Number(
+    updatedPartDetails.reduce((sum, part) => {
+      return sum + (part.totalAmount || 0);
+    }, 0)
+  );
 
   const discountAmount = Number(discount) || 0;
   const otherAmount = Number(other) || 0;

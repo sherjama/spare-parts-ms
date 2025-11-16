@@ -5,7 +5,6 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { PartList } from "../models/partList.models.js";
 import { Parts } from "../models/parts.models.js";
-import mongoose from "mongoose";
 
 const getPurcaseBills = asyncHandler(async (req, res) => {
   const purchase = await Buy.aggregate([
@@ -149,4 +148,65 @@ const getTotalPurchases = asyncHandler(async (req, res) => {
     );
 });
 
-export { getPurcaseBills, getSellBills, getTotalSells, getTotalPurchases };
+const getMostSoldParts = asyncHandler(async (req, res) => {
+  // 1. Expand each partList ID in partDetails array
+  // 2. Lookup into PartList
+  // 3. Unwind the result to object
+  // 4. Lookup actual Parts
+  // 5. Convert array → object
+  // 6. Group and sum quantities
+  // 7. Sort best selling first
+  // 8. Limit 10
+  const mostSold = await Sell.aggregate([
+    { $unwind: "$partDetails" },
+
+    {
+      $lookup: {
+        from: "partlists", // collection name of PartList
+        localField: "partDetails",
+        foreignField: "_id",
+        as: "partListData",
+      },
+    },
+
+    { $unwind: "$partListData" },
+
+    {
+      $lookup: {
+        from: "parts",
+        localField: "partListData.partDetails",
+        foreignField: "_id",
+        as: "partData",
+      },
+    },
+
+    { $unwind: "$partData" },
+
+    {
+      $group: {
+        _id: "$partData._id",
+        partName: { $first: "$partData.partName" },
+        partNumber: { $first: "$partData.partNumber" },
+        totalSold: { $sum: "$partListData.Qty" },
+      },
+    },
+
+    { $sort: { totalSold: -1 } },
+
+    { $limit: 5 },
+  ]);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, mostSold, "Most soled parts fetched successfully")
+    );
+});
+
+export {
+  getPurcaseBills,
+  getSellBills,
+  getTotalSells,
+  getTotalPurchases,
+  getMostSoldParts,
+};

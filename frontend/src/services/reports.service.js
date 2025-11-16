@@ -43,6 +43,18 @@ class Reports {
       throw error;
     }
   }
+
+  async getMostSoldParts() {
+    try {
+      const parts = await axios.get(
+        `${this.reportsRouter}/get-most-sold-parts`
+      );
+      if (parts) return parts?.data?.data;
+    } catch (error) {
+      console.log("getMostSoldParts :", error);
+      throw error;
+    }
+  }
 }
 
 const reportsService = new Reports();
