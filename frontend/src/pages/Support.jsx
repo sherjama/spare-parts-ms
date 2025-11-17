@@ -45,7 +45,7 @@ const Support = () => {
     <div className="min-h-screen bg-gray-900 text-white">
       <ToastContainer />
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-800 py-20 overflow-hidden">
+      <div className="relative bg-gradient-to-r dark:from-gray-900 from-white dark:via-indigo-900 via-indigo-400 to-indigo-800 py-20 overflow-hidden">
         <div className="absolute left-0 top-0 w-64 h-64 opacity-30">
           <svg viewBox="0 0 200 200" className="w-full h-full">
             {Array.from({ length: 10 }).map((_, row) =>

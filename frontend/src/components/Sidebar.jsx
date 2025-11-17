@@ -148,9 +148,9 @@ const Sidebar = ({ className }) => {
           toggle ? " flex items-center flex-col" : " "
         }`}
       >
-        <NavLink to="/controls/profile" className="block">
+        <NavLink to="/controls/profile" className="block no-underline">
           {!toggle ? (
-            <button className="dark:bg-[#1E1E1E] bg-gray-800 rounded-xl pl-2 pr-1 py-1 flex items-center justify-between text-gray-300 text-sm select-none w-full">
+            <button className="dark:bg-[#1E1E1E] bg-gray-800 rounded-xl pl-2 pr-1 py-1 flex items-center justify-between text-gray-300 text-sm select-none w-full ">
               <div className="flex items-center overflow-hidden w-full justify-around ">
                 <span className="w-1/5">
                   <Pfp className="size-8" />
