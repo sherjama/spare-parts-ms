@@ -41,7 +41,7 @@ const Sidebar = ({ className }) => {
 
   return (
     <aside
-      className={`${className} bg-black h-full flex flex-col w-[15vw] px-2`}
+      className={`${className} dark:bg-black bg-gray-200 h-full flex flex-col w-[15vw] px-2`}
       ref={sidebarRef}
     >
       <header className="shrink-0 flex items-center justify-between pt-2">
@@ -54,14 +54,14 @@ const Sidebar = ({ className }) => {
             height="20"
           />
           {!toggle && (
-            <h1 className="text-white font-semibold text-lg select-none">
+            <h1 className="dark:text-white text-gray-950 font-semibold text-lg select-none">
               NEXAR
             </h1>
           )}
         </div>
         <button
           onClick={handleSidebar}
-          className="text-[#B3B3B3] hover:text-white focus:outline-none"
+          className="dark:text-[#B3B3B3] dark:hover:text-white text-black hover:text-gray-950  focus:outline-none"
         >
           {toggle ? (
             <TbLayoutSidebarLeftExpandFilled size={23} />
@@ -73,14 +73,14 @@ const Sidebar = ({ className }) => {
 
       <div className="flex-1 min-h-0 overflow-y-auto mt-5 space-y-8 border-t border-[#2A2A2A]">
         <nav className="flex flex-col gap-4">
-          <h2 className="text-sm font-semibold text-[#666666] tracking-wider select-none mt-3">
+          <h2 className="text-sm font-semibold text-gray-950 dark:text-[#666666] tracking-wider select-none mt-3">
             Panels
           </h2>
           <NavLink
             to="/controls/dashboard"
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 text-md font-nexar3 no-underline ${
-                isActive ? "bg-indigo-950 text-white" : "hover:text-white"
+              `flex items-center gap-3 rounded-md px-3 py-2 dark:text-gray-400 text-gray-950 text-md font-nexar3 no-underline  ${
+                isActive ? "bg-indigo-950 text-white" : " "
               }`
             }
           >
@@ -91,8 +91,8 @@ const Sidebar = ({ className }) => {
           <NavLink
             to="/controls/inventory"
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 text-md font-nexar3 no-underline ${
-                isActive ? "bg-indigo-950 text-white" : "hover:text-white"
+              `flex items-center gap-3 rounded-md px-3 py-2 dark:text-gray-400 text-gray-950 text-md font-nexar3 no-underline  ${
+                isActive ? "bg-indigo-950 text-white" : " "
               }`
             }
           >
@@ -103,8 +103,8 @@ const Sidebar = ({ className }) => {
           <NavLink
             to="/controls/reports"
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 text-md font-nexar3 no-underline ${
-                isActive ? "bg-indigo-950 text-white" : "hover:text-white"
+              `flex items-center gap-3 rounded-md px-3 py-2 dark:text-gray-400 text-gray-950 text-md font-nexar3 no-underline  ${
+                isActive ? "bg-indigo-950 text-white" : " "
               }`
             }
           >
@@ -115,8 +115,8 @@ const Sidebar = ({ className }) => {
           <NavLink
             to="/controls/settings"
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 text-md font-nexar3 no-underline ${
-                isActive ? "bg-indigo-950 text-white" : "hover:text-white"
+              `flex items-center gap-3 rounded-md px-3 py-2 dark:text-gray-400 text-gray-950 text-md font-nexar3 no-underline  ${
+                isActive ? "bg-indigo-950 text-white" : " "
               }`
             }
           >
@@ -132,8 +132,8 @@ const Sidebar = ({ className }) => {
           <NavLink
             to="/controls/support"
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 text-md font-nexar3 no-underline ${
-                isActive ? "bg-indigo-950 text-white" : "hover:text-white"
+              `flex items-center gap-3 rounded-md px-3 py-2 dark:text-gray-400 text-gray-950 text-md font-nexar3 no-underline  ${
+                isActive ? "bg-indigo-950 text-white" : " "
               }`
             }
           >
@@ -148,9 +148,9 @@ const Sidebar = ({ className }) => {
           toggle ? " flex items-center flex-col" : " "
         }`}
       >
-        <NavLink to="/controls/profile" className="block">
+        <NavLink to="/controls/profile" className="block no-underline">
           {!toggle ? (
-            <button className="bg-[#1E1E1E] rounded-xl pl-2 pr-1 py-1 flex items-center justify-between text-gray-300 text-sm select-none w-full">
+            <button className="dark:bg-[#1E1E1E] bg-gray-800 rounded-xl pl-2 pr-1 py-1 flex items-center justify-between text-gray-300 text-sm select-none w-full ">
               <div className="flex items-center overflow-hidden w-full justify-around ">
                 <span className="w-1/5">
                   <Pfp className="size-8" />

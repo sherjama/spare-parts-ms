@@ -3,6 +3,7 @@ import authSlice from "./authSlice.js";
 import loadSlice from "./loadSlice.js";
 import stockSlice from "./stockSlice.js";
 import reportSlice from "./reportSlice.js";
+import themeSlice from "./themeSlice.js";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     Loading: loadSlice,
     stock: stockSlice,
     reports: reportSlice,
+    theme: themeSlice,
   },
 });
 

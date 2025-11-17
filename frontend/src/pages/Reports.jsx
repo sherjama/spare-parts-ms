@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../components/ui/Button.jsx";
-import { Search, Calendar, Eye } from "lucide-react";
+import { Search, Eye } from "lucide-react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import partsService from "@/services/parts.service";
+import { Heading } from "@/index.js";
 
 const ReportsTable = ({ data, activeTab }) => {
   const handleViewBill = async (billNo) => {
@@ -112,8 +113,8 @@ export default function Reports() {
   });
 
   return (
-    <div className="min-h-screen bg-black p-6 sm:p-10">
-      <h1 className="text-3xl text-gray-300 font-nexar1 mb-6">Reports</h1>
+    <div className="min-h-screen bg-gray-400 dark:bg-black p-6 sm:p-10">
+      <Heading title={"Bill Reports"} />
       {/* Tab Navigation & Monthly Spending Chart (Layout Grid) */}
       <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Tabs Container */}
@@ -138,7 +139,7 @@ export default function Reports() {
       </div>
       {/* Search & Filter Bar */}
       <div className="my-6 flex items-center space-x-4">
-        <p className="text-sm font-nexar1 text-gray-600 whitespace-nowrap">
+        <p className="text-sm font-nexar1 dark:text-gray-600 text-gray-950 whitespace-nowrap">
           Search & Filter Bar:
         </p>
         <div className="relative flex-grow">

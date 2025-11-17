@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Pfp, Button, EditUserDetails } from "../index.js";
+import { Pfp, EditUserDetails, Heading } from "../index.js";
 import { useSelector, useDispatch } from "react-redux";
 import authservice from "../services/auth.service.js";
-import { logout, login } from "../store/authSlice.js";
-import { useNavigate } from "react-router-dom";
-import { setLoading } from "../store/loadSlice.js";
 import { ToastContainer, toast } from "react-toastify";
 import { FaRegEdit } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import { login } from "@/store/authSlice.js";
 
 const Profile = ({ className }) => {
   const [toggle, setToggle] = useState(false);
@@ -27,27 +25,6 @@ const Profile = ({ className }) => {
   ];
 
   const userdata = useSelector((state) => state.userdata?.userdata?.user || {});
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const logoutHandler = async () => {
-    dispatch(setLoading(true));
-    try {
-      const data = await authservice.Logout();
-      if (data) {
-        dispatch(logout());
-        dispatch(setLoading(false));
-        navigate("/landing");
-      }
-    } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Something went wrong while logging out",
-        { position: "top-center" }
-      );
-      dispatch(setLoading(false));
-    }
-  };
 
   const editHandler = (field, label) => {
     setToggle(true);
@@ -56,7 +33,9 @@ const Profile = ({ className }) => {
   };
 
   return (
-    <div className={`${className} bg-[#18191f] text-white flex`}>
+    <div
+      className={`${className} dark:bg-[#18191f] text-white flex bg-gray-400`}
+    >
       <ToastContainer />
       {toggle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -75,8 +54,8 @@ const Profile = ({ className }) => {
 
       <div className="flex-1 p-6 sm:p-10 space-y-6">
         <section>
-          <h1 className="text-white text-2xl font-bold">Profile</h1>
-          <p className="text-gray-500 text-lg mt-1 max-w-[400px]">
+          <Heading title={"Profile"} />
+          <p className="dark:text-gray-500 text-gray-950 text-lg mt-1 max-w-[400px]">
             View all your profile details here.
           </p>
           <hr className="border-gray-700 mt-4" />
@@ -96,7 +75,7 @@ const Profile = ({ className }) => {
               </div>
             </div>
 
-            <div className="bg-[#22232a] rounded-lg p-6 w-full lg:w-2/3 border border-gray-700">
+            <div className="dark:bg-[#22232a] bg-gray-900 rounded-lg p-6 w-full lg:w-2/3 border border-gray-700">
               <h3 className="text-white font-nexar2 mb-4 text-md">
                 Other details
               </h3>
@@ -112,16 +91,6 @@ const Profile = ({ className }) => {
                 ))}
               </div>
             </div>
-          </div>
-
-          <div className="w-full h-20 flex items-start justify-end">
-            <Button
-              text="Logout"
-              bgColor="bg-red-500"
-              textColor="text-white"
-              className="uppercase font-nexar3"
-              onClick={logoutHandler}
-            />
           </div>
         </section>
       </div>
@@ -185,7 +154,7 @@ const PrevImage = ({ setImageToggle, setImage }) => {
       setImageToggle(false);
     } catch (error) {
       toast.error(
-        error?.response?.data?.message ||
+        error?.response?.data?.data?.message ||
           "Something went wrong while uploading logo",
         { position: "top-center" }
       );

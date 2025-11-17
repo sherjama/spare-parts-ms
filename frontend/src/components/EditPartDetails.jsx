@@ -58,7 +58,7 @@ const EditPartDetails = ({ setPartToggle, partDetails }) => {
       <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-gray-900 p-8 rounded-xl shadow-xl w-full "
+        className="dark:bg-gray-900 bg-gray-700 p-8 rounded-xl shadow-xl w-full "
         autoComplete="off"
       >
         <div
