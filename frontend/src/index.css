@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+a {
+  @apply no-underline;
+}
+
+a {
+  text-decoration: none !important;
+}
+
 @theme inline {
   --animate-scroll: scroll var(--animation-duration, 40s)
     var(--animation-direction, forwards) linear infinite;

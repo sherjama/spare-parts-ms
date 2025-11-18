@@ -69,15 +69,12 @@ const App = () => {
   }, [isLoading, location]);
 
   useEffect(() => {
-    // Remove both dark and light classes to avoid conflicts
     document.documentElement.classList.remove("dark", "light");
 
-    // Add the class corresponding to the current theme
     document.documentElement.classList.add(theme);
 
-    // Optionally, persist the theme in localStorage
     localStorage.setItem("theme", theme);
-  }, [theme]); // Runs every time the `theme` state changes
+  }, [theme]);
 
   return (
     <div

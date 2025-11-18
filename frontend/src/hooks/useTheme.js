@@ -14,7 +14,6 @@ export function useTheme() {
 
   const setAppTheme = (newTheme) => {
     dispatch(setTheme(newTheme));
-    console.log("chala");
   };
 
   return { theme, setTheme: setAppTheme };
