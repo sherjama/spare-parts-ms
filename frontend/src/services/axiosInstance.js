@@ -1,12 +1,14 @@
 import axios from "axios";
 
+const apiBaseURL = import.meta.env.VITE_API_URL;
+
 const axiosInstance = axios.create({
-  baseURL: "/api/v1",
+  baseURL: apiBaseURL,
   withCredentials: true,
 });
 
 const plainAxios = axios.create({
-  baseURL: "/api/v1",
+  baseURL: apiBaseURL,
   withCredentials: true,
 });
 
@@ -24,6 +26,7 @@ axiosInstance.interceptors.response.use(
     }
 
     const url = originalRequest.url || "";
+
     if (
       url.includes("/users/refresh-token") ||
       url.includes("/users/login-user") ||
