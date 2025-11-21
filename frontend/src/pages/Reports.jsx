@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "../components/ui/Button.jsx";
+import { Button } from "@/components/ui/button.jsx";
 import { Search, Eye } from "lucide-react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
