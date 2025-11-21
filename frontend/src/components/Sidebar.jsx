@@ -39,6 +39,10 @@ const Sidebar = ({ className }) => {
     }
   });
 
+  if (!userdata) {
+    return <div>Loading </div>;
+  }
+
   return (
     <aside
       className={`${className} dark:bg-black bg-gray-200 h-full flex flex-col w-[15vw] px-2`}

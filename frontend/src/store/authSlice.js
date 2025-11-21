@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  status: JSON.parse(localStorage.getItem("status")),
-  userdata: JSON.parse(localStorage.getItem("userdata")),
+  status: JSON.parse(localStorage.getItem("status")) || null,
+  userdata: JSON.parse(localStorage.getItem("userdata")) || null,
 };
 
 const authSlice = createSlice({

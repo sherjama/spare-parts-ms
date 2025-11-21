@@ -25,8 +25,8 @@ const Dashboard = ({ className }) => {
   const [chartData, setChartData] = useState([]);
   const [topSoledParts, setTopSoledParts] = useState([]);
   const userId = useSelector((state) => state.userdata?.userdata?.user?._id);
-  const Parts = useSelector((state) => state.stock.Parts);
-  const Shelves = useSelector((state) => state.stock.Shelves);
+  const Parts = useSelector((state) => state.stock?.Parts);
+  const Shelves = useSelector((state) => state.stock?.Shelves);
 
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.stock);
@@ -132,6 +132,10 @@ const Dashboard = ({ className }) => {
       className: "col-span-1",
     },
   ];
+
+  if (!userId) {
+    return <div>Loading user data...</div>;
+  }
 
   return loading ? (
     <p>Loading...</p>
