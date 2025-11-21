@@ -28,7 +28,7 @@ const AuthPage = () => {
   // States
   const [isLogin, setisLogin] = useState();
   const [isSignUp, setisSignUp] = useState();
-  const [passMismatch, setPassMismatch] = useState();
+  const [passMismatch, setPassMismatch] = useState(false);
 
   // For check Login or SignUp
   useEffect(() => {
@@ -82,7 +82,7 @@ const AuthPage = () => {
 
       if (isLogedInUser) {
         dispatch(login(isLogedInUser.data.data));
-        navigate("/controls/portfolio");
+        navigate("/controls/dashboard");
         dispatch(setLoading(false));
       }
     } catch (error) {
@@ -96,7 +96,7 @@ const AuthPage = () => {
   useEffect(() => {
     return () => {
       reset();
-      setPassMismatch(Boolean);
+      setPassMismatch(false);
     };
   }, [isLogin]);
 

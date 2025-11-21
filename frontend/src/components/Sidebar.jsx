@@ -3,19 +3,20 @@ import { Pfp } from "../index.js";
 import { useSelector } from "react-redux";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-import { IoSearch } from "react-icons/io5";
 import { RxDashboard } from "react-icons/rx";
 import { RiHomeGearFill, RiUserSettingsFill } from "react-icons/ri";
-import { TbReportSearch } from "react-icons/tb";
+import {
+  TbReportSearch,
+  TbLayoutSidebarLeftCollapseFilled,
+  TbLayoutSidebarLeftExpandFilled,
+} from "react-icons/tb";
 import { BiSupport } from "react-icons/bi";
-import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
-import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 
 const Sidebar = ({ className }) => {
   const [toggle, setToggle] = useState(false);
-  const userdata = useSelector((state) => state.userdata.userdata.user);
+  const userdata = useSelector((state) => state.userdata?.userdata?.user);
   const sidebarRef = useRef();
 
   const { contextSafe } = useGSAP({ scope: sidebarRef });
@@ -30,7 +31,6 @@ const Sidebar = ({ className }) => {
       setToggle(true);
     } else {
       // sidebarOpen();
-
       gsap.to(sidebarRef.current, {
         width: "15vw",
         duration: 0.3,
@@ -156,9 +156,9 @@ const Sidebar = ({ className }) => {
                   <Pfp className="size-8" />
                 </span>
                 <div className="w-4/5 flex flex-col text-left overflow-hidden">
-                  <span className="font-nexar3">{userdata.username}</span>
+                  <span className="font-nexar3">{userdata?.username}</span>
                   <span className="text-[9px] text-[#999999]">
-                    {userdata.email}
+                    {userdata?.email}
                   </span>
                 </div>
               </div>

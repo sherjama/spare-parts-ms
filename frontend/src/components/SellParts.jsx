@@ -25,7 +25,7 @@ export default function SellPartsPage() {
 
   const dispatch = useDispatch();
   const inventory = useSelector((state) => state.stock.Parts);
-  const userId = useSelector((state) => state.userdata.userdata.user._id);
+  const userId = useSelector((state) => state.userdata?.userdata?.user?._id);
 
   const {
     register,

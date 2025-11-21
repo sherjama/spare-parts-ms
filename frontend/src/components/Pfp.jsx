@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 
 const Pfp = ({ className = "", cusstomDp = "", ...prop }) => {
-  const userPfp = useSelector((state) => state.userdata.userdata.user.logo);
+  const userPfp = useSelector((state) => state.userdata?.userdata?.user?.logo);
 
   return (
     <div

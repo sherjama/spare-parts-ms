@@ -24,7 +24,7 @@ const Dashboard = ({ className }) => {
   const [lowStock, setLowStock] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [topSoledParts, setTopSoledParts] = useState([]);
-  const userId = useSelector((state) => state.userdata.userdata.user._id);
+  const userId = useSelector((state) => state.userdata?.userdata?.user?._id);
   const Parts = useSelector((state) => state.stock.Parts);
   const Shelves = useSelector((state) => state.stock.Shelves);
 
