@@ -149,28 +149,27 @@ const getTotalPurchases = asyncHandler(async (req, res) => {
 });
 
 const getMostSoldParts = asyncHandler(async (req, res) => {
-  // 1. Expand each partList ID in partDetails array
-  // 2. Lookup into PartList
-  // 3. Unwind the result to object
-  // 4. Lookup actual Parts
-  // 5. Convert array → object
-  // 6. Group and sum quantities
-  // 7. Sort best selling first
-  // 8. Limit 10
+  const userId = req.user?._id;
+
   const mostSold = await Sell.aggregate([
+    // Only include sales of logged-in user
+    { $match: { user: userId } },
+
+    // Expand partDetails array
     { $unwind: "$partDetails" },
 
+    // Lookup partList
     {
       $lookup: {
-        from: "partlists", // collection name of PartList
+        from: "partlists",
         localField: "partDetails",
         foreignField: "_id",
         as: "partListData",
       },
     },
-
     { $unwind: "$partListData" },
 
+    // Lookup actual Parts
     {
       $lookup: {
         from: "parts",
@@ -179,9 +178,9 @@ const getMostSoldParts = asyncHandler(async (req, res) => {
         as: "partData",
       },
     },
-
     { $unwind: "$partData" },
 
+    // Group by Part and sum quantities
     {
       $group: {
         _id: "$partData._id",
@@ -191,15 +190,21 @@ const getMostSoldParts = asyncHandler(async (req, res) => {
       },
     },
 
+    // Sort by totalSold descending
     { $sort: { totalSold: -1 } },
 
+    // Limit top 5
     { $limit: 5 },
   ]);
 
   return res
     .status(200)
     .json(
-      new ApiResponse(200, mostSold, "Most soled parts fetched successfully")
+      new ApiResponse(
+        200,
+        mostSold,
+        "Most sold parts of user fetched successfully"
+      )
     );
 });
 

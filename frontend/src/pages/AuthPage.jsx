@@ -1,14 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, authservice } from "../index.js";
+import {
+  Button,
+  authservice,
+  errorNormalizer as getErrorMessage,
+} from "../index.js";
 import { NavLink, useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice.js";
 import { setLoading } from "../store/loadSlice.js";
 
+/* ---------------- Reusable Input Component ---------------- */
+const InputField = ({
+  id,
+  label,
+  type = "text",
+  placeholder,
+  register,
+  errors,
+  fields,
+}) => {
+  return (
+    <div className="mb-8">
+      {/* Floating Label */}
+      <label
+        htmlFor={id}
+        className={`block text-sm font-nexar1 text-gray-400 transition-all duration-200 
+          ${fields[id] ? "opacity-100 mb-1" : "opacity-0 -mb-3"}`}
+      >
+        {label}
+      </label>
+
+      <input
+        id={id}
+        type={type}
+        {...register(id, { required: `${label} is required` })}
+        placeholder={placeholder}
+        className="w-full p-2 border-b border-gray-400 focus:border-b-blue-500 
+          bg-transparent text-slate-200 outline-none transition"
+      />
+
+      {/* Error Text */}
+      {errors[id] && (
+        <p className="text-red-400 text-sm mt-1">{errors[id].message}</p>
+      )}
+    </div>
+  );
+};
+
 const AuthPage = () => {
-  // react hook form
   const {
     register,
     handleSubmit,
@@ -16,306 +57,190 @@ const AuthPage = () => {
     reset,
     watch,
   } = useForm();
-  const inputFeilds = watch();
 
-  // react router
+  const fields = watch();
   const navigate = useNavigate();
-  const param = useParams();
-
-  // redux
   const dispatch = useDispatch();
+  const { slug } = useParams();
 
-  // States
-  const [isLogin, setisLogin] = useState();
-  const [isSignUp, setisSignUp] = useState();
+  // local states
+  const [isLogin, setIsLogin] = useState(false);
+  const [loading, setLocalLoading] = useState(false);
   const [passMismatch, setPassMismatch] = useState(false);
 
-  // For check Login or SignUp
+  /* ---------------- Detect Form Mode ---------------- */
   useEffect(() => {
-    if (param?.slug == "login") {
-      setisLogin(true);
-      setisSignUp(false);
-    } else {
-      setisSignUp(true);
-      setisLogin(false);
-    }
-  });
-
-  // For reset values of form
-  useEffect(() => {
+    setIsLogin(slug === "login");
     reset();
-  }, [isLogin, isSignUp]);
+    setPassMismatch(false);
+  }, [slug]);
 
-  // After Submiting A form
-  const Signup = async (data) => {
-    // Authentication for signing up
+  /* ---------------- Signup Handler ---------------- */
+  const handleSignup = async (data) => {
     if (data.password !== data.confirmPassword) {
       setPassMismatch(true);
       return;
     }
-    dispatch(setLoading(false));
+
+    setLocalLoading(true);
+    dispatch(setLoading(true));
+
     try {
-      const user = {
+      const payload = {
         username: data.username,
         email: data.email,
         password: data.password,
         fermName: data.fermName,
       };
-      const isSigned = await authservice.CreateAccount(user);
-      if (isSigned) {
-        dispatch(login(isSigned.data.data));
-        navigate("/controls/portfolio");
-        dispatch(setLoading(false));
-      }
-    } catch (error) {
-      toast.info(error.response.data.message, {
-        position: "top-center",
-      });
+
+      const res = await authservice.CreateAccount(payload);
+
+      dispatch(login(res.data.data));
+      navigate("/controls/portfolio");
+    } catch (err) {
+      toast.error(getErrorMessage(err), { position: "top-center" });
     }
+
+    setLocalLoading(false);
+    dispatch(setLoading(false));
   };
 
-  // Authentication Login
-  const Login = async (data) => {
+  /* ---------------- Login Handler ---------------- */
+  const handleLogin = async (data) => {
+    setLocalLoading(true);
     dispatch(setLoading(true));
+
     try {
-      const isLogedInUser = await authservice.Login(data);
+      const res = await authservice.Login(data);
 
-      if (isLogedInUser) {
-        dispatch(login(isLogedInUser.data.data));
-        navigate("/controls/dashboard");
-        dispatch(setLoading(false));
-      }
-    } catch (error) {
-      dispatch(setLoading(false));
-      toast.info(error.response.data.message, {
-        position: "top-center",
-      });
+      dispatch(login(res.data.data));
+      navigate("/controls/dashboard");
+    } catch (err) {
+      toast.error(getErrorMessage(err), { position: "top-center" });
     }
-  };
 
-  useEffect(() => {
-    return () => {
-      reset();
-      setPassMismatch(false);
-    };
-  }, [isLogin]);
+    setLocalLoading(false);
+    dispatch(setLoading(false));
+  };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-transparent">
-      <div className="max-sm:w-72 max-md:w-[380px] md:w-[500px] mt-12 h-min mx-auto p-6 bg-[#191919] rounded-xl shadow-md flex flex-col items-center justify-center backdrop-blur-md bg-white/10 border border-white/30  ">
+    <div className="w-full h-screen flex items-center justify-center">
+      <div
+        className="max-sm:w-72 max-md:w-[380px] md:w-[500px] mt-12 p-6 
+        bg-[#191919] rounded-xl shadow-md backdrop-blur-md bg-white/10 
+        border border-white/30"
+      >
         <ToastContainer />
-        <div>
-          <h1 className="text-5xl font-nexar3 text-center mb-4 text-slate-200">
-            Sign {isLogin ? "In" : "Up"}
-          </h1>
-        </div>
 
-        <div className="flex w-4/5 justify-evenly items-center flex-wrap max-[1360px]:flex-col gap-4 lg:gap-1">
-          {isSignUp && (
-            <form
-              onSubmit={handleSubmit(Signup)}
-              className="w-full "
-              autoComplete="off"
-            >
-              <div className="mb-8">
-                <label
-                  htmlFor="email"
-                  className={`${
-                    inputFeilds.username ? " " : "hidden"
-                  } Auth-label text-sm font-nexar1 text-gray-500`}
-                >
-                  Username
-                </label>
-                <input
-                  id="username"
-                  type="text"
-                  {...register("username", {
-                    required: "username is required",
-                  })}
-                  className="w-full p-2 border-b focus:border-b-blue-500"
-                  placeholder="Username"
-                />
-                {errors.username && (
-                  <p className="text-red-500 text-sm">
-                    {errors.username.message}
-                  </p>
-                )}
-              </div>
+        <h1 className="text-5xl font-nexar3 text-center mb-10 text-slate-200">
+          {isLogin ? "Sign In" : "Sign Up"}
+        </h1>
 
-              <div className="mb-8">
-                <label
-                  htmlFor="email"
-                  className={`${
-                    inputFeilds.email ? " " : "hidden"
-                  } Auth-label text-sm font-nexar1 text-gray-500 `}
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  {...register("email", { required: "Email is required" })}
-                  className="w-full p-2 border-b focus:border-b-blue-500 text-slate-200"
-                  placeholder="Email"
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
-                )}
-              </div>
+        {/* ---------------- SIGNUP FORM ---------------- */}
+        {!isLogin ? (
+          <form onSubmit={handleSubmit(handleSignup)} autoComplete="off">
+            <InputField
+              id="username"
+              label="Username"
+              placeholder="Username"
+              register={register}
+              errors={errors}
+              fields={fields}
+            />
 
-              <div className="mb-8">
-                <label
-                  htmlFor="email"
-                  className={`${
-                    inputFeilds.password ? " " : "hidden"
-                  } Auth-label text-sm font-nexar1 text-gray-500`}
-                >
-                  Choose a password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
-                  className="w-full p-2 border-b focus:border-b-blue-500"
-                  placeholder="Choose a password"
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-sm">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
+            <InputField
+              id="email"
+              label="Email"
+              type="email"
+              placeholder="Email"
+              register={register}
+              errors={errors}
+              fields={fields}
+            />
 
-              <div className="mb-8">
-                <label
-                  htmlFor="email"
-                  className={`${
-                    inputFeilds.confirmPassword ? " " : "hidden"
-                  } Auth-label text-sm font-nexar1 text-gray-500`}
-                >
-                  Confirm password
-                </label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  {...register("confirmPassword", {
-                    required: "Confirm password is required",
-                  })}
-                  className="w-full p-2 border-b focus:border-b-blue-500"
-                  placeholder="Confirm password"
-                />
-                {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm">
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
-                {passMismatch && (
-                  <p className="text-red-500 text-sm">Password mismatch</p>
-                )}
-              </div>
+            <InputField
+              id="password"
+              label="Choose a password"
+              type="password"
+              placeholder="Choose a password"
+              register={register}
+              errors={errors}
+              fields={fields}
+            />
 
-              <div className="mb-8">
-                <label
-                  htmlFor="email"
-                  className={`${
-                    inputFeilds.fermName ? " " : "hidden"
-                  } Auth-label text-sm font-nexar1 text-gray-500`}
-                >
-                  Ferm name
-                </label>
-                <input
-                  id="fermname"
-                  type="text"
-                  {...register("fermName", {
-                    required: "Ferm Name is required",
-                  })}
-                  className="w-full p-2 border-b focus:border-b-blue-500"
-                  placeholder="Ferm Name"
-                />
-                {errors.fermName && (
-                  <p className="text-red-500 text-sm">
-                    {errors.fermName.message}
-                  </p>
-                )}
-              </div>
+            <InputField
+              id="confirmPassword"
+              label="Confirm password"
+              type="password"
+              placeholder="Confirm password"
+              register={register}
+              errors={errors}
+              fields={fields}
+            />
 
-              <Button
-                textColor="text-blue-400"
-                text="Sign Up"
-                className="border-gray-300 font-nexar3"
-              />
-            </form>
-          )}
+            {passMismatch && !errors.confirmPassword && (
+              <p className="text-red-400 text-sm -mt-6 mb-4">
+                Passwords do not match
+              </p>
+            )}
 
-          {isLogin && (
-            <form
-              onSubmit={handleSubmit(Login)}
-              className="w-full "
-              autoComplete="off"
-            >
-              <div className="mb-8">
-                <label
-                  htmlFor="email"
-                  className={`${
-                    inputFeilds.email ? " " : "hidden"
-                  } Auth-label text-sm font-nexar1 text-gray-500`}
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  {...register("email", { required: "Email is required" })}
-                  className="w-full p-2 border-b focus:border-b-blue-500"
-                  placeholder="Email"
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
-                )}
-              </div>
+            <InputField
+              id="fermName"
+              label="Ferm Name"
+              placeholder="Ferm Name"
+              register={register}
+              errors={errors}
+              fields={fields}
+            />
 
-              <div className="mb-8">
-                <label
-                  htmlFor="email"
-                  className={`${
-                    inputFeilds.password ? " " : "hidden"
-                  } Auth-label text-sm font-nexar1 text-gray-500`}
-                >
-                  password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
-                  className="w-full p-2 border-b focus:border-b-blue-500"
-                  placeholder="Choose a password"
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-sm">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
+            <Button
+              loading={loading}
+              text="Sign Up"
+              textColor="text-blue-400"
+              className="border-gray-300 font-nexar3 mt-6"
+              fullWidth
+            />
+          </form>
+        ) : (
+          /* ---------------- LOGIN FORM ---------------- */
+          <form onSubmit={handleSubmit(handleLogin)} autoComplete="off">
+            <InputField
+              id="email"
+              label="Email"
+              type="email"
+              placeholder="Email"
+              register={register}
+              errors={errors}
+              fields={fields}
+            />
 
-              <Button
-                textColor="text-blue-400"
-                text="Login"
-                className="border-gray-300 font-nexar3"
-              />
-            </form>
-          )}
-        </div>
+            <InputField
+              id="password"
+              label="Password"
+              type="password"
+              placeholder="Password"
+              register={register}
+              errors={errors}
+              fields={fields}
+            />
+
+            <Button
+              loading={loading}
+              text="Login"
+              textColor="text-blue-400"
+              className="border-gray-300 font-nexar3 mt-4"
+              fullWidth
+            />
+          </form>
+        )}
+
         <p className="text-center text-sm mt-8 text-slate-200">
-          {isSignUp ? "Already have an account?" : "Don't have an account?"}
+          {isLogin ? "Don’t have an account?" : "Already have an account?"}
           <NavLink
             className="text-blue-500 pl-2"
             to={isLogin ? "/auth/signup" : "/auth/login"}
           >
-            {isLogin ? "SignUp" : "Login"}
+            {isLogin ? "Sign Up" : "Login"}
           </NavLink>
         </p>
       </div>

@@ -34,8 +34,10 @@ import PieChart from "./components/PieChart.jsx";
 import BarChart from "./components/BarChart.jsx";
 import PartAnalytics from "./components/PartAnalytics.jsx";
 import Heading from "./components/Heading.jsx";
+import errorNormalizer from "./utils/errorNormalizer.js";
 
 export {
+  errorNormalizer,
   Heading,
   PartAnalytics,
   PieChart,

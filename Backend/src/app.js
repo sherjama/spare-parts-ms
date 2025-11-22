@@ -8,9 +8,20 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(path.resolve(), "views"));
 
+const allowedOrigins = process.env.CORS_ORIGINS.split(",");
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps, curl, postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS: " + origin));
+      }
+    },
     credentials: true,
   })
 );
