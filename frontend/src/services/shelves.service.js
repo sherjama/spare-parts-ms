@@ -1,15 +1,15 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 class Shelves {
   shelveRoute;
 
   constructor() {
-    this.shelveRoute = "/api/v1/shelf";
+    this.shelveRoute = "/shelf";
   }
 
   async createShelve(shelfName) {
     try {
-      return await axios.post(`${this.shelveRoute}/create-shelf`, {
+      return await axiosInstance.post(`${this.shelveRoute}/create-shelf`, {
         shelfName,
       });
     } catch (error) {
@@ -20,10 +20,13 @@ class Shelves {
 
   async updateShelveName({ oldShelfName, newShelfName }) {
     try {
-      return await axios.patch(`${this.shelveRoute}/update-shelf-name`, {
-        oldShelfName,
-        newShelfName,
-      });
+      return await axiosInstance.patch(
+        `${this.shelveRoute}/update-shelf-name`,
+        {
+          oldShelfName,
+          newShelfName,
+        }
+      );
     } catch (error) {
       console.log("updateShelveName :", error);
       throw error;
@@ -32,7 +35,7 @@ class Shelves {
 
   async deleteShelve(shelfName) {
     try {
-      return await axios.delete(`${this.shelveRoute}/delete-shelf`, {
+      return await axiosInstance.delete(`${this.shelveRoute}/delete-shelf`, {
         data: { shelfName },
       });
     } catch (error) {
@@ -43,12 +46,12 @@ class Shelves {
 
   async listShelves() {
     try {
-      return await axios.get(`${this.shelveRoute}/list-shelf`);
+      return await axiosInstance.get(`${this.shelveRoute}/list-shelf`);
     } catch (error) {
+      console.log("listShelves :", error);
       throw error;
     }
   }
 }
 
-const shelvesService = new Shelves();
-export default shelvesService;
+export default new Shelves();

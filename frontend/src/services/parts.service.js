@@ -1,44 +1,24 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 class Parts {
   partsRoute;
 
   constructor() {
-    this.partsRoute = "/api/v1/parts";
+    this.partsRoute = "/parts";
   }
 
-  async buyParts({ vendorName, vendorBillNo, date, parts }) {
+  async buyParts(payload) {
     try {
-      return await axios.post(`${this.partsRoute}/buy-part`, {
-        vendorBillNo,
-        vendorName,
-        date,
-        parts,
-      });
+      return await axiosInstance.post(`${this.partsRoute}/buy-part`, payload);
     } catch (error) {
       console.log("Buy parts :", error);
       throw error;
     }
   }
-  async sellParts({
-    address,
-    customerName,
-    date,
-    mobileNumber,
-    discount,
-    other,
-    parts,
-  }) {
+
+  async sellParts(payload) {
     try {
-      return await axios.post(`${this.partsRoute}/sell-part`, {
-        address,
-        customerName,
-        date,
-        mobileNumber,
-        discount,
-        other,
-        parts,
-      });
+      return await axiosInstance.post(`${this.partsRoute}/sell-part`, payload);
     } catch (error) {
       console.log("Sell parts :", error);
       throw error;
@@ -47,10 +27,10 @@ class Parts {
 
   async getPurchaseBill(billNo) {
     try {
-      const receiptUrl = `${
+      const url = `${
         this.partsRoute
       }/purchase-receipt?billNo=${encodeURIComponent(billNo)}`;
-      window.open(receiptUrl, "_blank");
+      window.open(url, "_blank");
     } catch (error) {
       console.log("Get purchase bill: ", error);
       throw error;
@@ -59,51 +39,40 @@ class Parts {
 
   async getSellBill(billNo) {
     try {
-      const receiptUrl = `${
-        this.partsRoute
-      }/sell-receipt?billNo=${encodeURIComponent(billNo)}`;
-      window.open(receiptUrl, "_blank");
+      const url = `${this.partsRoute}/sell-receipt?billNo=${encodeURIComponent(
+        billNo
+      )}`;
+      window.open(url, "_blank");
     } catch (error) {
       console.log("Get sell bill: ", error);
       throw error;
     }
   }
 
-  async createPart({ partNumber, partName, shelfName, MRP, Qty }) {
+  async createPart(data) {
     try {
-      return await axios.post(`${this.partsRoute}/create-part`, {
-        partNumber,
-        partName,
-        shelfName,
-        MRP,
-        Qty,
-      });
+      return await axiosInstance.post(`${this.partsRoute}/create-part`, data);
     } catch (error) {
       console.log("createPart :", error);
       return error;
     }
   }
 
-  async updatePart({ partNumber, partName, shelf, Price }) {
+  async updatePart(data) {
     try {
-      return await axios.patch(`${this.partsRoute}/update-part-details`, {
-        partNumber,
-        partName,
-        shelf,
-        Price,
-      });
+      return await axiosInstance.patch(
+        `${this.partsRoute}/update-part-details`,
+        data
+      );
     } catch (error) {
       console.log("updatePart :", error);
       return error;
     }
   }
 
-  async addQuantity({ partNumber, Qty }) {
+  async addQuantity(data) {
     try {
-      return await axios.patch(`${this.partsRoute}/add-Qty`, {
-        partNumber,
-        Qty,
-      });
+      return await axiosInstance.patch(`${this.partsRoute}/add-Qty`, data);
     } catch (error) {
       console.log("addQuantity :", error);
       return error;
@@ -112,8 +81,8 @@ class Parts {
 
   async deletePart(partNumber) {
     try {
-      return await axios.delete(`${this.partsRoute}/delete-part`, {
-        partNumber,
+      return await axiosInstance.delete(`${this.partsRoute}/delete-part`, {
+        data: { partNumber }, // important for DELETE!
       });
     } catch (error) {
       console.log("deletePart :", error);
@@ -123,7 +92,7 @@ class Parts {
 
   async getAllParts(userId) {
     try {
-      return await axios.get(`${this.partsRoute}/get-parts`, {
+      return await axiosInstance.get(`${this.partsRoute}/get-parts`, {
         params: { userId },
       });
     } catch (error) {
@@ -134,7 +103,7 @@ class Parts {
 
   async getShelfParts(shelfName) {
     try {
-      return await axios.get(`${this.partsRoute}/get-shelf-parts`, {
+      return await axiosInstance.get(`${this.partsRoute}/get-shelf-parts`, {
         params: { shelfName },
       });
     } catch (error) {
@@ -144,6 +113,4 @@ class Parts {
   }
 }
 
-const partsService = new Parts();
-
-export default partsService;
+export default new Parts();
