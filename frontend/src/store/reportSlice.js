@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { loadFromLocalStorage } from "../utils/loadLocalStorage.js";
 
 const initialState = {
-  purchaseBills: JSON.parse(localStorage.getItem("purchase-bills")),
-  sellBills: JSON.parse(localStorage.getItem("sell-bills")),
+  purchaseBills: loadFromLocalStorage("purchase-bills", []),
+  sellBills: loadFromLocalStorage("sell-bills", []),
 };
 
 const reportSlice = createSlice({

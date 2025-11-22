@@ -3,6 +3,7 @@ import partsService from "../services/parts.service.js";
 import shelvesService from "../services/shelves.service.js";
 import reportsService from "../services/reports.service.js";
 import { purchase, sell } from "./reportSlice.js";
+import { loadFromLocalStorage } from "../utils/loadLocalStorage.js";
 
 export const fetchAllStock = createAsyncThunk(
   "stock/fetchAllStock",
@@ -21,6 +22,8 @@ export const fetchAllStock = createAsyncThunk(
       return {
         parts: partsRes.data.data,
         shelves: shelvesRes.data.data,
+        purchaseBills: purchaseRes.data.data,
+        sellBills: sellRes.data.data,
       };
     } catch (error) {
       return rejectWithValue(
@@ -31,8 +34,8 @@ export const fetchAllStock = createAsyncThunk(
 );
 
 const initialState = {
-  Parts: JSON.parse(localStorage.getItem("userParts")) || [],
-  Shelves: JSON.parse(localStorage.getItem("userShelve")) || [],
+  Parts: loadFromLocalStorage("userParts", []),
+  Shelves: loadFromLocalStorage("userShelve", []),
   reloadTriggerPart: 0,
   reloadTriggerShelve: 0,
   loading: false,
