@@ -1,4 +1,4 @@
-export default getErrorMessage = (err) => {
+export default function getErrorMessage(err) {
   if (!err) return "Something went wrong";
 
   if (err.response?.data?.message) return err.response.data.message;
@@ -10,4 +10,4 @@ export default getErrorMessage = (err) => {
   if (err.message === "Network Error") return "Cannot connect to server";
 
   return err.message || "Unexpected error occurred";
-};
+}

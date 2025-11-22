@@ -9,6 +9,7 @@ import {
   partsService,
   reportsService,
   PartAnalytics,
+  CenteredLoader,
 } from "../index.js";
 
 // icons
@@ -65,6 +66,8 @@ const Dashboard = ({ className }) => {
     try {
       let data = await reportsService.getMostSoldParts();
       if (data) setTopSoledParts(data);
+      console.log(data);
+
       dispatch(setLoading(false));
     } catch (error) {
       toast.error(error);
@@ -134,11 +137,11 @@ const Dashboard = ({ className }) => {
   ];
 
   if (!userId) {
-    return <div>Loading user data...</div>;
+    return <CenteredLoader />;
   }
 
   return loading ? (
-    <p>Loading...</p>
+    <CenteredLoader />
   ) : (
     <main
       className={`flex mt-6 md:mt-0  flex-col space-y-6 text-white ${className} bg-[#121212]  p-4`}

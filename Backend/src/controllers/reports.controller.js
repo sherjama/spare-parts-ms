@@ -153,7 +153,7 @@ const getMostSoldParts = asyncHandler(async (req, res) => {
 
   const mostSold = await Sell.aggregate([
     // Only include sales of logged-in user
-    { $match: { user: userId } },
+    { $match: { seller: userId } },
 
     // Expand partDetails array
     { $unwind: "$partDetails" },

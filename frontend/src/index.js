@@ -35,8 +35,10 @@ import BarChart from "./components/BarChart.jsx";
 import PartAnalytics from "./components/PartAnalytics.jsx";
 import Heading from "./components/Heading.jsx";
 import errorNormalizer from "./utils/errorNormalizer.js";
+import CenteredLoader from "./components/CenteredLoader.jsx";
 
 export {
+  CenteredLoader,
   errorNormalizer,
   Heading,
   PartAnalytics,
