@@ -8,7 +8,7 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(path.resolve(), "views"));
 
-const allowedOrigins = process.env.CORS_ORIGINS.split(",");
+const allowedOrigins = process.env.CORS_ORIGIN.split(",");
 
 app.use(
   cors({
