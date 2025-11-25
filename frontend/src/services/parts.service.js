@@ -2,9 +2,11 @@ import axiosInstance from "./axiosInstance";
 
 class Parts {
   partsRoute;
+  apiBaseURL;
 
   constructor() {
     this.partsRoute = "/parts";
+    this.apiBaseURL = import.meta.env.VITE_API_URL;
   }
 
   async buyParts(payload) {
@@ -27,7 +29,7 @@ class Parts {
 
   async getPurchaseBill(billNo) {
     try {
-      const url = `${
+      const url = `${this.apiBaseURL}${
         this.partsRoute
       }/purchase-receipt?billNo=${encodeURIComponent(billNo)}`;
       window.open(url, "_blank");
@@ -39,9 +41,9 @@ class Parts {
 
   async getSellBill(billNo) {
     try {
-      const url = `${this.partsRoute}/sell-receipt?billNo=${encodeURIComponent(
-        billNo
-      )}`;
+      const url = `${this.apiBaseURL}${
+        this.partsRoute
+      }/sell-receipt?billNo=${encodeURIComponent(billNo)}`;
       window.open(url, "_blank");
     } catch (error) {
       console.log("Get sell bill: ", error);

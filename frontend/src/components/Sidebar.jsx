@@ -53,7 +53,7 @@ const Sidebar = ({ className }) => {
           <img
             alt="Logo"
             className="w-5 h-5"
-            src="/assets/Logo.png"
+            src="/Logo.png"
             width="20"
             height="20"
           />
