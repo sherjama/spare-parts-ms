@@ -29,24 +29,38 @@ class Parts {
 
   async getPurchaseBill(billNo) {
     try {
-      const url = `${this.apiBaseURL}${
-        this.partsRoute
-      }/purchase-receipt?billNo=${encodeURIComponent(billNo)}`;
-      window.open(url, "_blank");
+      const response = await axiosInstance.get(
+        `${this.partsRoute}/purchase-receipt`,
+        {
+          params: { billNo },
+          responseType: "blob",
+        }
+      );
+
+      const blob = new Blob([response.data], { type: "text/html" });
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, "_blank");
     } catch (error) {
-      console.log("Get purchase bill: ", error);
+      console.log("Get purchase bill error:", error);
       throw error;
     }
   }
 
   async getSellBill(billNo) {
     try {
-      const url = `${this.apiBaseURL}${
-        this.partsRoute
-      }/sell-receipt?billNo=${encodeURIComponent(billNo)}`;
-      window.open(url, "_blank");
+      const response = await axiosInstance.get(
+        `${this.partsRoute}/sell-receipt`,
+        {
+          params: { billNo },
+          responseType: "blob",
+        }
+      );
+
+      const blob = new Blob([response.data], { type: "text/html" });
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, "_blank");
     } catch (error) {
-      console.log("Get sell bill: ", error);
+      console.log("Get sell bill error:", error);
       throw error;
     }
   }
