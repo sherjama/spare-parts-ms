@@ -277,11 +277,15 @@ const purchaseReceipt = asyncHandler(async (req, res) => {
     return sum + Number(part.totalAmount || 0);
   }, 0);
 
+  const formatAmount = (value) =>
+    isNaN(Number(value)) ? "0.00" : Number(value).toFixed(2);
+
   const html = await ejs.renderFile("src/views/purchaseInvoice.ejs", {
     purchase,
     partDetails: updatedPartDetails,
     user,
     Total,
+    formatAmount,
   });
 
   res.send(html);
@@ -301,12 +305,16 @@ const sellReceipt = asyncHandler(async (req, res) => {
   const { discount, other } = sell;
   const totals = calculateTotals(updatedPartDetails, discount, other);
 
+  const formatAmount = (value) =>
+    isNaN(Number(value)) ? "0.00" : Number(value).toFixed(2);
+
   const html = await ejs.renderFile("src/views/sellInvoice.ejs", {
     sell,
     partDetails: updatedPartDetails,
     user,
     sellerName: user.username,
     ...totals,
+    formatAmount,
   });
 
   res.send(html);

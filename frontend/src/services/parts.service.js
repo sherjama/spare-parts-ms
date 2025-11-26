@@ -33,6 +33,7 @@ class Parts {
         `${this.partsRoute}/purchase-receipt`,
         {
           params: { billNo },
+          responseType: "blob",
         }
       );
 
