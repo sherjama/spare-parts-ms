@@ -246,22 +246,6 @@ const getUpdatedPartDetails = async (partIds) => {
   });
 };
 
-const calculateTotals = (partDetails, discount = 0, otherAmount = 0) => {
-  const subTotal = partDetails.reduce((sum, part) => {
-    const val = Number(part?.totalAmount);
-    return isNaN(val) ? sum : sum + val;
-  }, 0);
-
-  const total = subTotal + Number(otherAmount || 0) - Number(discount || 0);
-
-  return {
-    subTotal,
-    discountAmount: Number(discount || 0),
-    otherAmount: Number(otherAmount || 0),
-    Total: total,
-  };
-};
-
 const purchaseReceipt = asyncHandler(async (req, res) => {
   const { billNo } = req.query;
 
@@ -290,6 +274,22 @@ const purchaseReceipt = asyncHandler(async (req, res) => {
 
   res.send(html);
 });
+
+const calculateTotals = (partDetails, discount = 0, otherAmount = 0) => {
+  const subTotal = partDetails.reduce((sum, part) => {
+    const val = Number(part?.totalAmount);
+    return isNaN(val) ? sum : sum + val;
+  }, 0);
+
+  const total = subTotal + Number(otherAmount || 0) - Number(discount || 0);
+
+  return {
+    subTotal,
+    discount: Number(discount || 0),
+    otherAmount: Number(otherAmount || 0),
+    Total: total,
+  };
+};
 
 const sellReceipt = asyncHandler(async (req, res) => {
   const { billNo } = req.query;
