@@ -344,11 +344,10 @@ const sellReceipt = asyncHandler(async (req, res) => {
 
   const { discount, other } = sell;
 
-  const subTotal = Number(
-    updatedPartDetails.reduce((sum, part) => {
-      return sum + (part.totalAmount || 0);
-    }, 0)
-  );
+  const subTotal = updatedPartDetails.reduce((sum, part) => {
+    const val = Number(part?.totalAmount);
+    return isNaN(val) ? sum : sum + val;
+  }, 0);
 
   const discountAmount = Number(discount) || 0;
   const otherAmount = Number(other) || 0;

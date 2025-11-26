@@ -14,11 +14,29 @@ const BarChart = ({ totalPurchase, totalSells }) => {
   const extractLakhs = (v) => {
     if (typeof v === "number") return v;
     if (!v) return 0;
-    return parseFloat(v.replace(/[₹ L]/g, "")) * 100000;
+
+    // Remove currency symbol and spaces
+    v = v.replace(/₹|\s/g, "");
+
+    let num = parseFloat(v);
+
+    // Detect units
+    if (/k$/i.test(v)) {
+      return num * 1000; // Thousand
+    } else if (/l$/i.test(v) || /lac/i.test(v) || /lakh/i.test(v)) {
+      return num * 100000; // Lakh
+    } else if (/cr$/i.test(v)) {
+      return num * 10000000; // Crore
+    }
+
+    return num; // If no unit, return number as is
   };
 
   const purchaseRaw = extractLakhs(totalPurchase);
   const sellsRaw = extractLakhs(totalSells);
+
+  console.log("purchase :", purchaseRaw);
+  console.log("Sells :", sellsRaw);
 
   const data = {
     labels: ["Purchase", "Sales"],
