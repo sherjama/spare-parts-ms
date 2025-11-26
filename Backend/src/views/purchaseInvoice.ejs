@@ -22,6 +22,9 @@
   </head>
 
   <body class="bg-gray-50">
+    <% // Helper function to safely format currency function formatAmount(value)
+    { return isNaN(Number(value)) ? '0.00' : Number(value).toFixed(2); } %>
+
     <div
       class="max-w-[850px] mx-auto bg-white shadow-md border border-gray-300 rounded-md p-6 text-[11px]"
     >
@@ -55,15 +58,15 @@
         <div class="text-[11px] w-40">
           <div class="flex justify-between">
             <span class="font-semibold">Date:</span>
-            <span> <%= purchase.buyDate %> </span>
+            <span><%= purchase.buyDate %></span>
           </div>
           <div class="flex justify-between">
             <span class="font-semibold">Bill No:</span>
-            <span> <%= purchase.billNo %> </span>
+            <span><%= purchase.billNo %></span>
           </div>
           <div class="flex justify-between">
             <span class="font-semibold">Vendor Bill:</span>
-            <span> <%= purchase.vendorBillNo %> </span>
+            <span><%= purchase.vendorBillNo %></span>
           </div>
         </div>
       </div>
@@ -117,23 +120,23 @@
           </thead>
 
           <tbody>
-            <% partDetails.forEach((item, index)=> { %>
+            <% partDetails.forEach((item, index) => { %>
             <tr class="<%= index % 2 === 0 ? 'bg-gray-100' : 'bg-white' %>">
               <td class="border border-gray-300 p-1"><%= index + 1 %></td>
               <td class="border border-gray-300 p-1">
-                <%= item.partInfo.partNumber %>
+                <%= item?.partInfo?.partNumber || '-' %>
               </td>
               <td class="border border-gray-300 p-1">
-                <%= item.partInfo.partName %>
+                <%= item?.partInfo?.partName || '-' %>
               </td>
               <td class="border border-gray-300 p-1 text-center">
-                <%= item.Qty %>
+                <%= Number(item.Qty || 0) %>
               </td>
               <td class="border border-gray-300 p-1 text-right">
-                ₹ <%= item.unitPrice %>
+                ₹ <%= formatAmount(item.unitPrice) %>
               </td>
               <td class="border border-gray-300 p-1 text-right">
-                ₹ <%= item.totalAmount.toFixed(2) %>
+                ₹ <%= formatAmount(item.totalAmount) %>
               </td>
             </tr>
             <% }) %>
@@ -149,7 +152,7 @@
             <td
               class="border border-blue-700 px-2 py-1 font-bold text-right text-gray-800"
             >
-              ₹ <%= Total.toFixed(2) %>
+              ₹ <%= formatAmount(Total) %>
             </td>
           </tr>
         </table>
@@ -160,7 +163,7 @@
         Inventory updated successfully.
         <br />
         For any queries, contact:
-        <span class="font-semibold"> <%= user.email %> </span>
+        <span class="font-semibold"><%= user.email %></span>
       </div>
 
       <p class="mt-3 text-center text-[11px] font-semibold text-blue-700">

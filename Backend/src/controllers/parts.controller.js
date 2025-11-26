@@ -213,166 +213,103 @@ const sellParts = asyncHandler(async (req, res) => {
   }
 });
 
-const purchaseReceipt = asyncHandler(async (req, res) => {
-  const { billNo } = req.query;
+const getUpdatedPartDetails = async (partIds) => {
+  // Fetch all PartList documents concurrently
+  const parts = await Promise.all(partIds.map((id) => PartList.findById(id)));
 
-  const user = await User.findById(req.user?._id);
-
-  if (!user) {
-    throw new ApiError(401, "Something went wrong while geting user details");
+  if (parts.some((p) => !p)) {
+    throw new ApiError(500, "Failed to fetch part details from PartList");
   }
 
-  const purchase = await Buy.findOne({ billNo });
+  // Fetch all Parts documents concurrently
+  const partDetails = await Promise.all(
+    parts.map((part) => Parts.findById(part.partDetails))
+  );
 
-  if (!purchase) {
-    throw new ApiError(401, "billNo not found");
+  if (partDetails.some((p) => !p)) {
+    throw new ApiError(
+      500,
+      "Failed to fetch part details from Parts collection"
+    );
   }
 
-  // find purchased parts receipts details
-  const parts = [];
-  for (const part of purchase.partsDetails) {
-    const purchaseDetails = await PartList.findById(part);
-    if (!purchaseDetails) {
-      throw new ApiError(501, "Something went wrong while getting SellDetails");
-    }
-    parts.push(purchaseDetails);
-  }
-
-  //find part details
-  const partDetails = [];
-  for (const part of parts) {
-    const partInfo = await Parts.findById(part.partDetails);
-
-    if (!partInfo) {
-      throw new ApiError(
-        501,
-        "Something went wrong while getting part details"
-      );
-    }
-
-    partDetails.push(partInfo);
-  }
-
-  // add part details in part receipts
-  const updatedPartDetails = parts.map((partDoc) => {
+  // Merge PartList and Parts info
+  return parts.map((partDoc) => {
     const part = partDoc._doc || partDoc;
     const partInfo = partDetails.find(
       (info) => info._id.toString() === part.partDetails.toString()
     );
-
     return {
       ...part,
       partInfo: partInfo || null,
     };
   });
+};
 
-  const Total = Number(
-    updatedPartDetails.reduce((sum, part) => {
-      return sum + Number(part.totalAmount || 0);
-    }, 0)
-  );
+const calculateTotals = (partDetails, discount = 0, otherAmount = 0) => {
+  const subTotal = partDetails.reduce((sum, part) => {
+    const val = Number(part?.totalAmount);
+    return isNaN(val) ? sum : sum + val;
+  }, 0);
 
-  ejs.renderFile(
-    "src/views/purchaseInvoice.ejs",
-    {
-      purchase,
-      partDetails: updatedPartDetails,
-      user,
-      Total,
-    },
-    (err, html) => {
-      if (err) {
-        return res.status(500).send("Template rendering error: " + err.message);
-      }
-      res.send(html);
-    }
-  );
+  const total = subTotal + Number(otherAmount || 0) - Number(discount || 0);
+
+  return {
+    subTotal,
+    discountAmount: Number(discount || 0),
+    otherAmount: Number(otherAmount || 0),
+    Total: total,
+  };
+};
+
+const purchaseReceipt = asyncHandler(async (req, res) => {
+  const { billNo } = req.query;
+
+  const user = await User.findById(req.user?._id);
+  if (!user) throw new ApiError(401, "User not found");
+
+  const purchase = await Buy.findOne({ billNo });
+  if (!purchase) throw new ApiError(404, "Purchase bill not found");
+
+  const updatedPartDetails = await getUpdatedPartDetails(purchase.partsDetails);
+
+  const Total = updatedPartDetails.reduce((sum, part) => {
+    return sum + Number(part.totalAmount || 0);
+  }, 0);
+
+  const html = await ejs.renderFile("src/views/purchaseInvoice.ejs", {
+    purchase,
+    partDetails: updatedPartDetails,
+    user,
+    Total,
+  });
+
+  res.send(html);
 });
 
 const sellReceipt = asyncHandler(async (req, res) => {
   const { billNo } = req.query;
 
   const user = await User.findById(req.user?._id);
-
-  if (!user) {
-    throw new ApiError(401, "Something went wrong while geting user details");
-  }
+  if (!user) throw new ApiError(401, "User not found");
 
   const sell = await Sell.findOne({ billNo });
+  if (!sell) throw new ApiError(404, "Sell bill not found");
 
-  if (!sell) {
-    throw new ApiError(401, "billNo not found");
-  }
-
-  // find selled part receipts details
-  const parts = [];
-  for (const part of sell.partDetails) {
-    const sellDetails = await PartList.findById(part);
-    if (!sellDetails) {
-      throw new ApiError(501, "Something went wrong while getting SellDetails");
-    }
-    parts.push(sellDetails);
-  }
-
-  //find part details
-  const partDetails = [];
-  for (const part of parts) {
-    const partInfo = await Parts.findById(part.partDetails);
-
-    if (!partInfo) {
-      throw new ApiError(
-        501,
-        "Something went wrong while getting part details"
-      );
-    }
-
-    partDetails.push(partInfo);
-  }
-
-  // add part details in part receipts
-  const updatedPartDetails = parts.map((partDoc) => {
-    const part = partDoc._doc || partDoc;
-    const partInfo = partDetails.find(
-      (info) => info._id.toString() === part.partDetails.toString()
-    );
-
-    return {
-      ...part,
-      partInfo: partInfo || null,
-    };
-  });
+  const updatedPartDetails = await getUpdatedPartDetails(sell.partDetails);
 
   const { discount, other } = sell;
+  const totals = calculateTotals(updatedPartDetails, discount, other);
 
-  const subTotal = updatedPartDetails.reduce((sum, part) => {
-    const val = Number(part?.totalAmount);
-    return isNaN(val) ? sum : sum + val;
-  }, 0);
+  const html = await ejs.renderFile("src/views/sellInvoice.ejs", {
+    sell,
+    partDetails: updatedPartDetails,
+    user,
+    sellerName: user.username,
+    ...totals,
+  });
 
-  const discountAmount = Number(discount) || 0;
-  const otherAmount = Number(other) || 0;
-
-  const Total = Number(subTotal) + otherAmount - discountAmount;
-
-  ejs.renderFile(
-    "src/views/sellInvoice.ejs",
-    {
-      sell,
-      partDetails: updatedPartDetails,
-      user,
-      sellerName: user.username,
-      subTotal,
-      discount: discountAmount,
-      otherAmount,
-      Total,
-    },
-    (err, html) => {
-      if (err) {
-        return res.status(500).send("Template rendering error: " + err.message);
-      }
-      res.send(html);
-    }
-  );
+  res.send(html);
 });
 
 const createPart = asyncHandler(async (req, res) => {
